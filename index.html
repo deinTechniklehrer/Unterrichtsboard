@@ -64,6 +64,10 @@ header{display:flex; align-items:center; gap:8px; height:clamp(40px,7vh,68px); f
   font-size:16px; font-weight:700; color:var(--ink);
 }
 .hbtn svg{width:22px; height:22px; flex:none}
+#btnLang .lcode{font-size:15px; font-weight:800; letter-spacing:.02em; min-width:2ch}
+@media (max-width:1180px){ #btnLang svg{display:none} #btnLang{min-width:clamp(38px,5.4vh,50px); padding:0 8px} }
+@media (max-width:720px){ #btnLang{min-width:0; width:40px; padding:0} #btnLang .lcode{font-size:13px} }
+@media (max-width:420px){ #btnLang{width:36px} }
 .hbtn[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
 body.standalone #btnFS{display:none}
 .hbtn .i-sun{display:none}
@@ -493,6 +497,10 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
       <span class="lbl">Input</span>
     </button>
     <input type="file" id="inputFile" accept="image/*" hidden>
+    <button class="hbtn" id="btnLang" aria-label="Sprache / Language / Langue" data-noi18n>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.8 6 3.8 9.5s-1.2 6.7-3.8 9.5c-2.6-2.8-3.8-6-3.8-9.5S9.4 5.3 12 2.5z"/></svg>
+      <span class="lcode" id="langCode">DE</span>
+    </button>
     <button class="hbtn" id="btnTheme" title="Hell / Dunkel umschalten" aria-label="Hell oder dunkel">
       <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
@@ -685,6 +693,9 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <div class="row">Farben
       <div class="seg"><button class="btn" data-theme-set="light">Hell</button><button class="btn" data-theme-set="dark">Dunkel</button></div>
     </div>
+    <div class="row">Sprache
+      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button></div>
+    </div>
     <label class="row">Signalton, wenn der Timer abläuft <input type="checkbox" class="sw" id="optSound"></label>
     <label class="row">Bildschirm nicht ausschalten <input type="checkbox" class="sw" id="optWake"></label>
 
@@ -809,7 +820,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 /* ================= Zustand & Speichern ================= */
 const KEY = 'klassenboard.v1'; // interner Speichername bleibt, damit gespeicherte Einstellungen erhalten bleiben
-const BOARD_VERSION = '30.10.2026 e';
+const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
   theme: 'light', clean: false, sound: true, wake: true,
   show: { timer: true, plan: false, aufgabe: true, sozial: true, ampel: true, ipad: true, ki: true, raus: true },
@@ -1982,5 +1993,308 @@ setInterval(renderTimer, 200);
 setInterval(clock, 1000);
 })();
 </script>
+<script>
+/* ================= Sprache: Deutsch, English, Français =================
+   Übersetzt die Oberfläche des Boards. Eigene Texte (Aufgaben, eigene Phasen, angepasste Reflexion) bleiben, wie sie eingetippt wurden. */
+(() => {
+'use strict';
+const LKEY = 'unterrichtsboard.lang';
+const LANGS = ['de', 'en', 'fr'];
+const D = {
+  // Kopfzeile
+  'Nur Anzeige': ['Display only', 'Affichage seul'],
+  'Fahrplan': ['Plan', 'Déroulé'],
+  'Reflexion': ['Reflection', 'Réflexion'],
+  'Input': ['Input', 'Image'],
+  'Dunkel': ['Dark', 'Sombre'],
+  'Hell': ['Light', 'Clair'],
+  'Vollbild': ['Full screen', 'Plein écran'],
+  'Einstellungen': ['Settings', 'Réglages'],
+  'Bedienelemente aus- oder einblenden': ['Show or hide the controls', 'Afficher ou masquer les commandes'],
+  'Stundenfahrplan ein- oder ausblenden': ['Show or hide the lesson plan', 'Afficher ou masquer le déroulé'],
+  'Reflexion öffnen': ['Open reflection', 'Ouvrir la réflexion'],
+  'Bild vom Gerät groß zeigen': ['Show an image from this device', 'Afficher une image de l’appareil'],
+  'Input: Bild zeigen': ['Input: show image', 'Afficher une image'],
+  'Hell / Dunkel umschalten': ['Switch light / dark', 'Basculer clair / sombre'],
+  'Hell oder dunkel': ['Light or dark', 'Clair ou sombre'],
+  'Auf hell umschalten': ['Switch to light', 'Passer en mode clair'],
+  'Auf dunkel umschalten': ['Switch to dark', 'Passer en mode sombre'],
+  // Timer
+  'Timer': ['Timer', 'Minuteur'],
+  'bereit': ['ready', 'prêt'],
+  'läuft': ['running', 'en cours'],
+  'pausiert': ['paused', 'en pause'],
+  'Zeit ist um!': ['Time’s up!', 'Temps écoulé !'],
+  'Start': ['Start', 'Démarrer'],
+  'Pause': ['Pause', 'Pause'],
+  'Weiter': ['Next', 'Suivant'],
+  'Zurücksetzen': ['Reset', 'Réinitialiser'],
+  'Timer starten oder pausieren': ['Start or pause the timer', 'Démarrer ou mettre en pause'],
+  'Eine Minute weniger': ['One minute less', 'Une minute de moins'],
+  'Eine Minute mehr': ['One minute more', 'Une minute de plus'],
+  // Stundenfahrplan
+  'Stundenfahrplan': ['Lesson plan', 'Déroulé de la séance'],
+  'Bearbeiten': ['Edit', 'Modifier'],
+  'Zurück': ['Back', 'Retour'],
+  'Eine Phase zurück': ['Previous phase', 'Phase précédente'],
+  'Nächste Phase': ['Next phase', 'Phase suivante'],
+  'Phase hinzufügen': ['Add phase', 'Ajouter une phase'],
+  'Noch keine Phasen.': ['No phases yet.', 'Aucune phase pour l’instant.'],
+  'Tippe auf „Bearbeiten“.': ['Tap “Edit”.', 'Touche « Modifier ».'],
+  'Einstieg': ['Warm-up', 'Introduction'],
+  'Arbeitsphase': ['Work phase', 'Phase de travail'],
+  'Präsentation': ['Presentation', 'Présentation'],
+  'Sicherung': ['Wrap-up', 'Bilan'],
+  'Schreib die Phasen deiner Stunde hinein, wähle zu jeder Phase die Sozialform und trag bei Bedarf die Aufgabe ein. Mit „Weiter“ schiebst du den Pfeil später zur nächsten Phase, Sozialform und Aufgabe wechseln mit.':
+    ['Enter the phases of your lesson, choose a work mode for each phase and add the task if needed. Later, “Next” moves the arrow to the next phase, and the work mode and task change with it.',
+     'Saisis les phases de ta séance, choisis la forme de travail de chaque phase et ajoute la consigne si besoin. Ensuite, « Suivant » fait avancer la flèche, la forme de travail et la consigne changent avec elle.'],
+  '+ Phase hinzufügen': ['+ Add phase', '+ Ajouter une phase'],
+  'Alles leeren': ['Clear all', 'Tout effacer'],
+  'z. B. Einstieg': ['e.g. Warm-up', 'p. ex. Introduction'],
+  'Aufgabe in dieser Phase (optional)': ['Task for this phase (optional)', 'Consigne pour cette phase (facultatif)'],
+  'Keine Sozialform': ['No work mode', 'Pas de forme de travail'],
+  'Nach oben': ['Move up', 'Monter'],
+  'Nach unten': ['Move down', 'Descendre'],
+  'Phase löschen': ['Delete phase', 'Supprimer la phase'],
+  // Aufgabe
+  'Aufgabe': ['Task', 'Consigne'],
+  'Leeren': ['Clear', 'Effacer'],
+  'Tippe hier die Aufgabe ein …': ['Type the task here …', 'Saisis la consigne ici …'],
+  // Sozialform
+  'Sozialform': ['Work mode', 'Forme de travail'],
+  'Sozialform wechseln': ['Change work mode', 'Changer de forme de travail'],
+  'Einzelarbeit': ['Individual work', 'Travail individuel'],
+  'Partnerarbeit': ['Pair work', 'Travail en binôme'],
+  'Gruppenarbeit': ['Group work', 'Travail en groupe'],
+  'Plenum': ['Whole class', 'Classe entière'],
+  'max. 2 SuS': ['max. 2 students', 'max. 2 élèves'],
+  'max. 3 SuS': ['max. 3 students', 'max. 3 élèves'],
+  'Einzel': ['Individual', 'Seul'],
+  'Partner': ['Pairs', 'Binôme'],
+  'Gruppe': ['Group', 'Groupe'],
+  'allein oder zu zweit': ['alone or in pairs', 'seul ou à deux'],
+  'allein, zu zweit oder zu dritt': ['alone, in pairs or in threes', 'seul, à deux ou à trois'],
+  // Lautstärke
+  'Lautstärke': ['Noise level', 'Volume sonore'],
+  'Lautstärkeampel': ['Noise traffic light', 'Feu sonore'],
+  'Ampel umschalten': ['Switch traffic light', 'Changer le feu'],
+  'Alles gut': ['All good', 'Tout va bien'],
+  'Etwas leiser': ['A bit quieter', 'Un peu moins fort'],
+  'Zu laut!': ['Too loud!', 'Trop fort !'],
+  'leise': ['quiet', 'calme'],
+  'laut': ['loud', 'fort'],
+  'Ab wann die Ampel rot wird': ['When the light turns red', 'À partir de quand le feu passe au rouge'],
+  'Mikrofon starten': ['Start microphone', 'Activer le micro'],
+  'Mikrofon stoppen': ['Stop microphone', 'Couper le micro'],
+  'Stopp': ['Stop', 'Stop'],
+  'Tippe auf die Ampel oder starte das Mikrofon.': ['Tap the traffic light or start the microphone.', 'Touche le feu ou active le micro.'],
+  'Schieberegler: ab wann die Ampel rot wird.': ['Slider: when the light turns red.', 'Curseur : à partir de quand le feu passe au rouge.'],
+  'Die Ampel wird gerade vom Mikrofon gesteuert.': ['The traffic light is currently controlled by the microphone.', 'Le feu est actuellement commandé par le micro.'],
+  // iPad
+  'iPad-Nutzung': ['iPad use', 'Utilisation de l’iPad'],
+  'iPad-Stufe umschalten': ['Switch iPad status', 'Changer le statut de l’iPad'],
+  'iPad erlaubt': ['iPad allowed', 'iPad autorisé'],
+  'Kein iPad': ['No iPad', 'Pas d’iPad'],
+  'geöffnet auf dem Tisch': ['open on the desk', 'ouvert sur la table'],
+  'zugeklappt auf dem Tisch': ['closed on the desk', 'fermé sur la table'],
+  'in der Schultasche': ['in your school bag', 'dans le cartable'],
+  'Nutzung': ['Use', 'Usage'],
+  'Erlaubt': ['Allowed', 'Autorisé'],
+  'Verboten': ['Not allowed', 'Interdit'],
+  'Liegt': ['Where', 'Où'],
+  'Bereit': ['Ready', 'Prêt'],
+  'Zu': ['Closed', 'Fermé'],
+  'Tasche': ['Bag', 'Cartable'],
+  'iPad-Nutzung erlaubt': ['iPad use allowed', 'Utilisation de l’iPad autorisée'],
+  'iPad-Nutzung nicht erlaubt': ['iPad use not allowed', 'Utilisation de l’iPad interdite'],
+  'Wo liegt das iPad?': ['Where is the iPad?', 'Où est l’iPad ?'],
+  'Bereit: geöffnet auf dem Tisch': ['Ready: open on the desk', 'Prêt : ouvert sur la table'],
+  'Zugeklappt auf dem Tisch': ['Closed on the desk', 'Fermé sur la table'],
+  'Kein iPad: in der Schultasche': ['No iPad: in your school bag', 'Pas d’iPad : dans le cartable'],
+  // Arbeitsort
+  'Arbeitsort': ['Where to work', 'Lieu de travail'],
+  'Nur im Raum': ['Classroom only', 'Seulement en classe'],
+  'im Klassenraum bleiben': ['stay in the classroom', 'rester dans la salle'],
+  'Auch draußen': ['Outside too', 'Aussi dehors'],
+  'Arbeiten außerhalb möglich': ['working outside is allowed', 'travail hors de la salle possible'],
+  'Möglich': ['Allowed', 'Possible'],
+  'Nicht möglich': ['Not allowed', 'Pas possible'],
+  'Nur im Klassenraum': ['Classroom only', 'Seulement en classe'],
+  'Arbeiten außerhalb des Klassenraums umschalten': ['Switch working outside the classroom', 'Changer le travail hors de la salle'],
+  'Arbeiten außerhalb des Klassenraums': ['Working outside the classroom', 'Travail hors de la salle'],
+  // KI
+  'KI-Nutzung': ['AI use', 'Utilisation de l’IA'],
+  'KI-Nutzung umschalten': ['Switch AI use', 'Changer l’utilisation de l’IA'],
+  'KI-Nutzung wählen': ['Choose AI use', 'Choisir l’utilisation de l’IA'],
+  'Keine KI': ['No AI', 'Pas d’IA'],
+  'KI erlaubt': ['AI allowed', 'IA autorisée'],
+  'KI': ['AI', 'IA'],
+  // leere Ansicht, Fuß
+  'Alle Kacheln sind ausgeblendet.': ['All tiles are hidden.', 'Toutes les tuiles sont masquées.'],
+  'Öffne die Einstellungen (Zahnrad oben rechts).': ['Open the settings (gear icon, top right).', 'Ouvre les réglages (roue dentée en haut à droite).'],
+  'Impressum': ['Legal notice', 'Mentions légales'],
+  'Datenschutz': ['Privacy', 'Confidentialité'],
+  // Einstellungen
+  'Kacheln anzeigen': ['Show tiles', 'Afficher les tuiles'],
+  'Darstellung & Ton': ['Display & sound', 'Affichage et son'],
+  'Farben': ['Colours', 'Couleurs'],
+  'Sprache': ['Language', 'Langue'],
+  'Signalton, wenn der Timer abläuft': ['Sound when the timer ends', 'Signal sonore à la fin du minuteur'],
+  'Bildschirm nicht ausschalten': ['Keep the screen on', 'Garder l’écran allumé'],
+  'Vorbereiten & Teilen': ['Prepare & share', 'Préparer et partager'],
+  'Speichere den kompletten Stand (Stundenfahrplan mit Aufgaben, Texte, Reflexionen, Einstellungen) als Datei und lade ihn später oder auf einem anderen Gerät wieder. So kannst du Stunden vorbereiten oder mit Kolleg:innen teilen. Ein Bild unter „Input“ wird nicht mitgespeichert.':
+    ['Save everything (lesson plan with tasks, texts, reflections, settings) as a file and load it again later or on another device. This lets you prepare lessons or share them with colleagues. An image shown via “Input” is not saved.',
+     'Enregistre tout (déroulé avec consignes, textes, réflexions, réglages) dans un fichier et recharge-le plus tard ou sur un autre appareil. Tu peux ainsi préparer des séances ou les partager avec des collègues. Une image affichée via « Image » n’est pas enregistrée.'],
+  'Exportieren': ['Export', 'Exporter'],
+  'Importieren': ['Import', 'Importer'],
+  'Technik-Check': ['Tech check', 'Vérification technique'],
+  'Mikrofon jetzt testen': ['Test microphone now', 'Tester le micro'],
+  'Gut zu wissen': ['Good to know (in German)', 'Bon à savoir (en allemand)'],
+  'Alles zurücksetzen': ['Reset everything', 'Tout réinitialiser'],
+  'Fertig': ['Done', 'Terminé'],
+  // Bild
+  'Anderes Bild': ['Other image', 'Autre image'],
+  'Bild entfernen': ['Remove image', 'Supprimer l’image'],
+  'Bild schließen': ['Close image', 'Fermer l’image'],
+  'Das Bild bleibt nur in diesem Browser-Tab, bis du ihn schließt. Beim Exportieren wird es nicht mitgespeichert.':
+    ['The image stays in this browser tab only until you close it. It is not included when exporting.', 'L’image reste dans cet onglet jusqu’à sa fermeture. Elle n’est pas incluse dans l’export.'],
+  // Reflexion
+  'iPad-Arbeit': ['iPad work', 'Travail sur iPad'],
+  'Offenes Arbeiten': ['Open learning', 'Travail autonome'],
+  'Offen': ['Open', 'Autonome'],
+  'Text anpassen': ['Edit text', 'Modifier le texte'],
+  'Schließen': ['Close', 'Fermer'],
+  'Wie lief die Arbeit mit dem iPad heute?': ['How did working with the iPad go today?', 'Comment s’est passé le travail sur l’iPad aujourd’hui ?'],
+  'Lief gut': ['Went well', 'Bien'],
+  'Teils, teils': ['So-so', 'Moyen'],
+  'Lief nicht gut': ['Didn’t go well', 'Pas bien'],
+  'Ich war bei der Aufgabe und habe das iPad nur dafür genutzt.': ['I stayed on task and used the iPad only for that.', 'Je suis resté·e sur la tâche et j’ai utilisé l’iPad seulement pour ça.'],
+  'Ich war ab und zu abgelenkt, habe aber zurückgefunden.': ['I got distracted now and then but got back on track.', 'J’ai été distrait·e de temps en temps, mais je m’y suis remis·e.'],
+  'Ich war oft abgelenkt oder habe anderes am iPad gemacht.': ['I was often distracted or did other things on the iPad.', 'J’ai souvent été distrait·e ou j’ai fait autre chose sur l’iPad.'],
+  'Was mache ich nächstes Mal anders?': ['What will I do differently next time?', 'Que vais-je faire autrement la prochaine fois ?'],
+  'Wie lief das offene Arbeiten heute?': ['How did open learning go today?', 'Comment s’est passé le travail autonome aujourd’hui ?'],
+  'Ich habe konzentriert an meinen Aufgaben gearbeitet.': ['I worked on my tasks with focus.', 'J’ai travaillé de manière concentrée sur mes tâches.'],
+  'Ich habe meine Zeit gut eingeteilt.': ['I managed my time well.', 'J’ai bien géré mon temps.'],
+  'Bei Problemen habe ich mir selbst Hilfe geholt.': ['When I had problems, I found help myself.', 'En cas de problème, je suis allé·e chercher de l’aide moi-même.'],
+  'Ich habe meine Ergebnisse ordentlich gesichert.': ['I saved my results properly.', 'J’ai bien enregistré mes résultats.'],
+  'Ich war manchmal abgelenkt.': ['I was sometimes distracted.', 'J’ai parfois été distrait·e.'],
+  'Ich hatte Probleme, meine Aufgaben zu finden.': ['I had trouble finding my tasks.', 'J’ai eu du mal à trouver mes tâches.'],
+  'Ich hatte Probleme, meine Ergebnisse zu sortieren.': ['I had trouble organising my results.', 'J’ai eu du mal à organiser mes résultats.'],
+  'Ich war stark abgelenkt und habe anderes gemacht.': ['I was very distracted and did other things.', 'J’ai été très distrait·e et j’ai fait autre chose.'],
+  'Auswerten': ['Evaluate', 'Évaluer'],
+  'Unsortiert': ['Unsorted', 'Non trié'],
+  'Eins weniger': ['One less', 'Un de moins'],
+  'Wie ging es dir beim Arbeiten? Setz deinen Punkt.': ['How did you feel while working? Place your dot.', 'Comment t’es-tu senti·e en travaillant ? Place ton point.'],
+  'hoch': ['high', 'élevé'],
+  'niedrig': ['low', 'faible'],
+  'Anforderung': ['Challenge', 'Difficulté'],
+  'Mein Können': ['My skills', 'Mes compétences'],
+  'Überforderung': ['Overload', 'Surcharge'],
+  'Langeweile': ['Boredom', 'Ennui'],
+  'Letzten entfernen': ['Remove last', 'Retirer le dernier'],
+  'Tippen, um einen Punkt zu setzen': ['Tap to place a dot', 'Touche pour placer un point'],
+  'Tippt in das Feld, um einen Punkt zu setzen.': ['Tap the field to place a dot.', 'Touchez le champ pour placer un point.'],
+  'Punkt · Flow': ['dot · Flow', 'point · Flow'],
+  'Punkte · Flow': ['dots · Flow', 'points · Flow'],
+  '· Überforderung': ['· Overload', '· Surcharge'],
+  '· Langeweile': ['· Boredom', '· Ennui'],
+  // Rückfragen
+  'Alle Punkte löschen?': ['Delete all dots?', 'Supprimer tous les points ?'],
+  'Alle Zählungen auf 0 setzen?': ['Reset all counts to 0?', 'Remettre tous les compteurs à 0 ?'],
+  'Alle Phasen löschen?': ['Delete all phases?', 'Supprimer toutes les phases ?'],
+  'Alle Einstellungen auf Anfang zurücksetzen?': ['Reset all settings?', 'Réinitialiser tous les réglages ?'],
+  'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
+};
+/* gleiche Wörter, andere Bedeutung je nach Ort */
+const CTX = { 'Weiter': { tStart: ['Resume', 'Reprendre'] } };
+const one = (i, s) => (D[s] ? D[s][i] : s);
+const P = [
+  [/^Aufgabe · (.+)$/, (i, m) => ['Task · ', 'Consigne · '][i] + one(i, m[1])],
+  [/^Aufgabe für „(.+)“ eintippen …$/, (i, m) => [`Type the task for “${one(i, m[1])}” …`, `Saisis la consigne pour « ${one(i, m[1])} » …`][i]],
+  [/^Ende (\d{1,2}:\d{2}) Uhr$/, (i, m) => ['Ends ' + m[1], 'Fin à ' + m[1]][i]],
+  [/^KI · Level (\d)$/, (i, m) => ['AI · Level ' + m[1], 'IA · niveau ' + m[1]][i]],
+  [/^(\d+) Minuten$/, (i, m) => [m[1] + ' minutes', m[1] + ' minutes'][i]],
+  [/^(\d+) Stimmen?$/, (i, m) => m[1] + (+m[1] === 1 ? ' vote' : ' votes')],
+  [/^(\d+) Punkte?$/, (i, m) => m[1] + (+m[1] === 1 ? [' dot', ' point'][i] : [' dots', ' points'][i])],
+  [/^Phase (\d+): (.*)$/, (i, m) => 'Phase ' + m[1] + ': ' + one(i, m[2])],
+  [/^Text für Phase (\d+)$/, (i, m) => ['Text for phase ', 'Texte de la phase '][i] + m[1]],
+  [/^Aufgabe für Phase (\d+)$/, (i, m) => ['Task for phase ', 'Consigne de la phase '][i] + m[1]],
+  [/^Gespeichert als „(.+)“\.$/, (i, m) => [`Saved as “${m[1]}”.`, `Enregistré sous « ${m[1]} ».`][i]]
+];
+let lang = 'de';
+try { lang = localStorage.getItem(LKEY) || 'de'; } catch (e) { }
+if (!LANGS.includes(lang)) lang = 'de';
+
+function tr(s, el) {
+  if (lang === 'de') return null;
+  const i = lang === 'en' ? 0 : 1;
+  if (CTX[s] && el) { for (const id in CTX[s]) if (el.closest('#' + id)) return CTX[s][id][i]; }
+  if (D[s]) return D[s][i];
+  for (const [re, f] of P) { const m = s.match(re); if (m) return f(i, m); }
+  return null;
+}
+const SKIP = 'script,style,textarea,[contenteditable],[data-noi18n]';
+const memo = new WeakMap();
+function doText(n) {
+  const p = n.parentElement; if (!p || p.closest(SKIP)) return;
+  const cur = n.nodeValue, o = memo.get(n);
+  const base = o && o.out === cur ? o.de : cur;
+  const t = base.trim(); if (!t) return;
+  const r = tr(t, p);
+  if (r == null) { memo.delete(n); if (base !== cur) n.nodeValue = base; return; }
+  const out = base.replace(t, r);
+  memo.set(n, { de: base, out });
+  if (cur !== out) n.nodeValue = out;
+}
+const ATTRS = ['title', 'aria-label', 'placeholder'];
+function doAttr(el, a) {
+  if (!el.hasAttribute(a) || el.closest('[data-noi18n]')) return;
+  const cur = el.getAttribute(a), k = '__i18n_' + a, o = el[k];
+  const base = o && o.out === cur ? o.de : cur;
+  const t = base.trim(); if (!t) return;
+  const r = tr(t, el);
+  if (r == null) { el[k] = null; if (base !== cur) el.setAttribute(a, base); return; }
+  el[k] = { de: base, out: r };
+  if (cur !== r) el.setAttribute(a, r);
+}
+function walk(root) {
+  if (root.nodeType === 3) { doText(root); return; }
+  if (root.nodeType !== 1) return;
+  if (root.matches(SKIP)) return;
+  ATTRS.forEach(a => doAttr(root, a));
+  const tw = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+  let n; while ((n = tw.nextNode())) { if (n.nodeType === 3) doText(n); else ATTRS.forEach(a => doAttr(n, a)); }
+}
+new MutationObserver(list => {
+  for (const m of list) {
+    if (m.type === 'characterData') doText(m.target);
+    else if (m.type === 'attributes') doAttr(m.target, m.attributeName);
+    else m.addedNodes.forEach(walk);
+  }
+}).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+
+const oConfirm = window.confirm.bind(window);
+window.confirm = m => oConfirm(tr(String(m)) || m);
+
+function setLang(l, announce) {
+  lang = LANGS.includes(l) ? l : 'de';
+  try { localStorage.setItem(LKEY, lang); } catch (e) { }
+  document.documentElement.lang = lang;
+  walk(document.body);
+  const c = document.getElementById('langCode'); if (c) c.textContent = lang.toUpperCase();
+  const b = document.getElementById('btnLang');
+  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Deutsch)' }[lang];
+  document.querySelectorAll('[data-lang-set]').forEach(x => x.classList.toggle('sel', x.dataset.langSet === lang));
+  if (announce) {
+    const t = document.getElementById('toast');
+    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français' }[lang]; t.classList.add('show'); clearTimeout(setLang.tm); setLang.tm = setTimeout(() => t.classList.remove('show'), 1800); }
+  }
+}
+document.getElementById('btnLang').addEventListener('click', () => setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length], true));
+document.querySelectorAll('[data-lang-set]').forEach(x => x.addEventListener('click', () => setLang(x.dataset.langSet)));
+setLang(lang);
+})();
+</script>
+
 </body>
 </html>
