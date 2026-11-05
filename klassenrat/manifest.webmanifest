@@ -1,0 +1,33 @@
+{
+ "name": "Klassenrat-Board",
+ "short_name": "Klassenrat",
+ "description": "Klassenrat-Board mit Protokoll-Export.",
+ "lang": "de",
+ "start_url": "./",
+ "scope": "./",
+ "id": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#eef3ee",
+ "theme_color": "#2f7d4f",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

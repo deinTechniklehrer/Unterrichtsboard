@@ -1,7 +1,8 @@
 /* Unterrichtsboard – Offline-Speicher (Service Worker)
    Die Seite wird beim ersten Öffnen gespeichert und funktioniert danach auch ohne Internet.
    Mit Internet wird immer zuerst die neueste Version geladen. */
-const CACHE = 'unterrichtsboard-v1';
+const CACHE = 'unterrichtsboard-v2';
+const ROOT = new URL('./', self.location).pathname;
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -18,6 +19,9 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  // Tech-Board und Klassenrat-Board liegen in Unterordnern und haben eigene Offline-Speicher.
+  const path = new URL(req.url).pathname;
+  if (path.startsWith(ROOT) && path !== ROOT && path !== ROOT + 'index.html' && path.slice(ROOT.length).includes('/')) return;
   if (req.mode === 'navigate') {
     e.respondWith((async () => {
       const cache = await caches.open(CACHE);
