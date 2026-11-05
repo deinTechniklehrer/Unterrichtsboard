@@ -62,10 +62,46 @@ label input{margin-top:2px;color:var(--ink);font-weight:500}
 .note-priv{font-size:13px;color:var(--muted)}
 footer{font-size:12px;color:var(--muted);text-align:center;padding:2px}
 footer a{color:var(--accent)}
-dialog{border:0;border-radius:16px;padding:16px;max-width:min(460px,calc(100vw - 24px));background:var(--tile);color:var(--ink)}
+dialog{margin:auto;border:0;border-radius:16px;padding:16px;max-width:min(460px,calc(100vw - 24px));background:var(--tile);color:var(--ink)}
 dialog::backdrop{background:rgba(0,0,0,.5)}
 dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--tile);padding:10px 14px;border-radius:10px;font-weight:700;max-width:calc(100vw - 24px)}
+.roles{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:8px}
+.role{display:flex;gap:8px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:6px 8px;background:var(--soft);min-width:0}
+.role .ric{width:46px;height:46px;flex:none}
+.role label{flex:1;min-width:0}
+.role .rwb{flex:none;min-height:40px;min-width:40px;border-radius:10px;border:2px solid #c62828;background:var(--tile);color:#c62828;font-weight:800;padding:0 8px;font-size:13px}
+.hb svg{width:20px;height:20px;vertical-align:-5px}
+#bLang{min-width:48px}
+#bRW{border-color:#c62828;color:#c62828}
+h2 .ric{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
+#dRW{max-width:min(720px,calc(100vw - 16px));width:100%}
+#dRW h3{display:flex;align-items:center;gap:8px;font-size:22px}
+#dRW h3 .ric{width:34px;height:34px}
+#dRW h4{margin:14px 0 6px;font-size:16px}
+.rwcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rwcard{border:0;border-radius:14px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;color:#111;box-shadow:inset 0 0 0 4px rgba(0,0,0,.18)}
+.rwcard b{font-size:44px;line-height:1}.rwcard span{font-size:18px}
+.c1{background:#ffd23f}.c2{background:#f2662c;color:#fff}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{min-height:44px;border-radius:10px;border:2px solid var(--line);background:var(--tile);font-weight:800;padding:0 12px}
+.seg button.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--tile))}
+.rwform{display:grid;gap:8px}
+.rwrow{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;gap:8px;align-items:center;border:2px solid var(--line);border-radius:10px;padding:6px 8px;margin-top:6px;background:var(--soft);font-size:15px}
+.rwrow .st{font-weight:900;padding:2px 8px;border-radius:8px;color:#111}
+.rwrow .st.s2{color:#fff}
+.rwrow .who{font-weight:700;overflow-wrap:anywhere}
+.rwrow .who small{display:block;font-weight:500;color:var(--muted)}
+.rwrow button{border:0;background:none;font-size:22px;color:var(--muted);min-width:40px;min-height:40px}
+.chk{display:flex;gap:8px;align-items:center;font-size:15px;color:var(--ink);margin-top:8px}
+.chk input{width:22px;height:22px}
+#bigCard{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:16px;cursor:pointer}
+#bigCard[hidden]{display:none}
+#bigCard .bc{width:min(62vh,80vw);aspect-ratio:3/4;border-radius:5%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;transform:rotate(-4deg);box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 1.4vh rgba(0,0,0,.15);text-align:center;padding:4vh}
+#bigCard .bc b{font-size:min(26vh,34vw);line-height:.9;font-weight:900}
+#bigCard .bc span{font-size:min(7vh,9vw);font-weight:900}
+#bigCard .bc small{font-size:min(3.4vh,4.6vw);font-weight:700;max-width:90%}
+#bigCard p{color:#fff;font-weight:700}
 @media (max-width:1000px){.top{grid-template-columns:repeat(2,minmax(0,1fr))}.top .ablauf{grid-column:1/-1}}
 @media (max-width:760px){.top,.cols{grid-template-columns:minmax(0,1fr)}.logo{height:34px}}
 </style>
@@ -81,14 +117,17 @@ dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
   <button class="hb" id="bLoad">PDF laden</button><input type="file" id="fLoad" accept=".pdf,application/pdf" hidden>
   <button class="hb" id="bNew">Neue Sitzung</button>
   <button class="hb" id="bSet">Zeiten</button>
+  <button class="hb" id="bRW" title="Regelwache: Verwarnungen zeigen und eintragen"><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg> Regelwache</button>
   <button class="hb" id="bTheme">Dunkel</button>
+  <button class="hb" id="bLang" aria-label="Sprache / Language / Langue" data-noi18n><span class="lcode" id="langCode">DE</span></button>
 </header>
 <section class="top">
   <div class="tile ablauf"><h2>Ablauf</h2><div class="steps" id="steps"></div></div>
-  <div class="tile" id="tBox"><h2>Zeitwache</h2><div id="digits" role="timer">00:00</div>
+  <div class="tile" id="tBox"><h2><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>Zeitwache</h2><div id="digits" role="timer">00:00</div>
     <div class="row"><button id="tMinus" aria-label="Eine Minute weniger">−1</button><button id="tStart">Start</button><button id="tPlus" aria-label="Eine Minute mehr">+1</button></div></div>
   <div class="tile"><h2>Sitzung und Ämter</h2>
     <div class="grid2" id="meta"></div>
+    <div class="roles" id="roles"></div>
   </div>
 </section>
 <section class="cols">
@@ -100,7 +139,25 @@ dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
 <footer>Klassenrat-Board · Daniel Beyrodt · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/ueber-mich/" target="_blank" rel="noopener">Über mich</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutz</a></footer>
 </div>
 <dialog id="dSet"><h3>Zeiten im Ablauf (Minuten)</h3><div id="setList"></div><div class="row"><button id="setOk">Fertig</button></div></dialog>
-<dialog id="dNew"><h3>Neue Sitzung starten?</h3><p>Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.</p><p>Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.</p><div class="row"><button id="newPdf">Erst PDF speichern</button><button id="newGo">Neue Sitzung</button><button id="newNo">Abbrechen</button></div></dialog>
+<dialog id="dNew"><h3>Neue Sitzung starten?</h3><p>Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.</p><p>Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.</p><p>Die Liste der Regelwache wird geleert. Speichere ihre PDF vorher.</p><div class="row"><button id="newPdf">Erst PDF speichern</button><button id="newGo">Neue Sitzung</button><button id="newNo">Abbrechen</button></div></dialog>
+<dialog id="dRW">
+  <h3><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg>Regelwache</h3>
+  <p class="note-priv">Tippe auf eine Karte, um sie groß für die Klasse zu zeigen.</p>
+  <div class="rwcards"><button class="rwcard c1" data-big="1"><b>1.</b><span>Verwarnung</span></button><button class="rwcard c2" data-big="2"><b>2.</b><span>Verwarnung</span></button></div>
+  <h4>Verwarnung eintragen</h4>
+  <div class="rwform">
+    <div class="seg" id="rwStage"><button data-stage="1" class="on">1. Verwarnung</button><button data-stage="2">2. Verwarnung</button></div>
+    <label>Wer? (Name oder Namen)<input id="rwName" autocomplete="off"></label>
+    <label>Welche Regel? (optional)<input id="rwRule" autocomplete="off" placeholder="z. B. Wir lassen andere ausreden."></label>
+    <div class="row" style="justify-content:flex-start;margin-top:0"><button id="rwAdd" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">Eintragen</button><button id="rwShowBig">Groß zeigen</button></div>
+  </div>
+  <h4>Eingetragen</h4>
+  <div id="rwList"></div>
+  <label class="chk"><input type="checkbox" id="rwNames"> Namen anzeigen</label>
+  <p class="note-priv">Die Namen bleiben nur in diesem Browser und in der PDF. Zeig die Liste nicht über den Beamer. Lade die PDF in IServ hoch und leere danach die Liste.</p>
+  <div class="row"><button id="rwPdf" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">Als PDF speichern</button><button id="rwClear">Liste leeren</button><button id="rwClose">Schließen</button></div>
+</dialog>
+<div id="bigCard" hidden role="dialog" aria-label="Verwarnung"><div class="bc c1" id="bcCard"><b id="bcNum">1.</b><span>Verwarnung</span><small id="bcRule"></small></div><p>Antippen zum Schließen</p></div>
 <div id="toast" hidden></div>
 <script src="jspdf.umd.min.js"></script>
 <script>
@@ -108,15 +165,19 @@ dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
 const $=s=>document.querySelector(s),KEY='klassenrat-v1';
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const PH=[['Eröffnung','Vorsitz begrüßt, Regeln, Ämter'],['Rückblick','Letztes Protokoll: Was wurde umgesetzt?'],['Themen','Besprechen und beschließen'],['Abschluss','Beschlüsse vorlesen, nächste Sitzung']];
-const blank=()=>({klasse:'',datum:today(),nr:1,vorsitz:'',protokoll:'',zeitwache:'',regelwache:'',an:[],ge:[],na:[]});
+const blank=()=>({klasse:'',datum:today(),nr:1,vorsitz:'',protokoll:'',zeitwache:'',regelwache:'',an:[],ge:[],na:[],verw:[]});
 let S;try{S=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
 S=Object.assign({theme:'light',min:[2,5,25,3],phase:-1,dirty:false},blank(),S||{});
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function toast(t){const n=$('#toast');n.textContent=t;n.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>n.hidden=true,2600)}
 /* Sitzung und Ämter */
+const RICON={"vorsitz": `<svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#1b6fb0"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="19" y="9" width="10" height="18" rx="5"/><path d="M14 23a10 10 0 0 0 20 0M24 33v6M18 39h12"/></g></svg>`, "protokoll": `<svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2f7d4f"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="13" y="10" width="18" height="27" rx="2"/><path d="M17 17h10M17 22h10M17 27h6"/><path d="M29 35l8-8 3 3-8 8h-3z"/></g></svg>`, "zeitwache": `<svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>`, "regelwache": `<svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg>`};
 [['klasse','Klasse','text'],['datum','Datum','date'],['vorsitz','Vorsitz','text'],['protokoll','Protokoll','text'],['zeitwache','Zeitwache','text'],['regelwache','Regelwache','text']].forEach(([k,l,t])=>{
- const lb=document.createElement('label');lb.textContent=l;const i=document.createElement('input');i.type=t;i.id='m_'+k;i.autocomplete='off';i.oninput=()=>{S[k]=i.value;S.dirty=true;save()};lb.append(i);$('#meta').append(lb)});
+ const lb=document.createElement('label');lb.textContent=l;const i=document.createElement('input');i.type=t;i.id='m_'+k;i.autocomplete='off';i.oninput=()=>{S[k]=i.value;S.dirty=true;save()};lb.append(i);
+ if(!RICON[k]){$('#meta').append(lb);return}
+ i.placeholder='Name';const w=document.createElement('div');w.className='role';w.insertAdjacentHTML('afterbegin',RICON[k]);w.append(lb);
+ $('#roles').append(w)});
 function paintMeta(){['klasse','datum','vorsitz','protokoll','zeitwache','regelwache'].forEach(k=>{$('#m_'+k).value=S[k]||''})}
 /* Protokoll */
 const lab={an:'Was liegt an?',ge:'Was wurde geklärt?',na:'Beim nächsten Mal'};
@@ -184,6 +245,40 @@ $('#bPdf').onclick=savePdf;
 /* PDF laden */
 $('#bLoad').onclick=()=>$('#fLoad').click();
 $('#fLoad').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const t=new TextDecoder('latin1').decode(await f.arrayBuffer()),m=/KRB1:([A-Za-z0-9_-]+):KRB/.exec(t);if(!m)throw 0;const st=JSON.parse(unb64u(m[1]));STATE_KEYS.forEach(k=>{if(k in st)S[k]=st[k]});['an','ge','na'].forEach(k=>{if(!Array.isArray(S[k]))S[k]=[]});S.dirty=false;save();paintMeta();paintLists();toast('Protokoll geladen')}catch(x){toast('Diese PDF enthält kein Klassenrat-Protokoll.')}};
+/* Regelwache */
+if(!Array.isArray(S.verw))S.verw=[];
+let rwStage=1;
+function openRW(){paintRW();$('#dRW').showModal()}
+function paintRW(){document.querySelectorAll('#rwStage button').forEach(b=>b.classList.toggle('on',+b.dataset.stage===rwStage));
+ const l=$('#rwList');l.textContent='';const show=$('#rwNames').checked;
+ if(!S.verw.length){const e=document.createElement('div');e.className='empty';e.textContent='Noch keine Verwarnung eingetragen.';l.append(e);return}
+ S.verw.forEach(v=>{const row=document.createElement('div');row.className='rwrow';
+  const tm=document.createElement('span');tm.textContent=new Date(v.t).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+  const st=document.createElement('span');st.className='st '+(v.st===2?'c2 s2':'c1');st.textContent=v.st+'.';st.title=v.st+'. Verwarnung';
+  const who=document.createElement('span');who.className='who';who.textContent=show?v.n:'•••';if(v.r){const sm=document.createElement('small');sm.textContent=v.r;who.append(sm)}
+  const x=document.createElement('button');x.type='button';x.textContent='×';x.setAttribute('aria-label','Eintrag löschen');x.onclick=()=>{S.verw=S.verw.filter(y=>y!==v);save();paintRW()};
+  row.append(tm,st,who,x);l.append(row)})}
+document.querySelectorAll('#rwStage button').forEach(b=>b.onclick=()=>{rwStage=+b.dataset.stage;paintRW()});
+$('#rwNames').onchange=paintRW;
+$('#rwAdd').onclick=()=>{const n=$('#rwName').value.trim();if(!n){toast('Bitte einen Namen eintragen');$('#rwName').focus();return}
+ S.verw.push({id:uid(),t:new Date().toISOString(),st:rwStage,n,r:$('#rwRule').value.trim()});$('#rwName').value='';save();paintRW();toast('Verwarnung eingetragen')};
+function showBig(st,rule){$('#dRW').close();const c=$('#bcCard');c.className='bc '+(st===2?'c2':'c1');$('#bcNum').textContent=st+'.';$('#bcRule').textContent=rule||'';$('#bigCard').hidden=false}
+document.querySelectorAll('[data-big]').forEach(b=>b.onclick=()=>showBig(+b.dataset.big,$('#rwRule').value.trim()));
+$('#rwShowBig').onclick=()=>showBig(rwStage,$('#rwRule').value.trim());
+$('#bigCard').onclick=()=>{$('#bigCard').hidden=true;openRW()};
+$('#rwClose').onclick=()=>$('#dRW').close();
+$('#bRW').onclick=openRW;
+$('#rwClear').onclick=()=>{if(!S.verw.length)return;if(!confirm('Alle eingetragenen Verwarnungen löschen? Hast du die PDF gespeichert?'))return;S.verw=[];save();paintRW()};
+$('#rwPdf').onclick=()=>{const {jsPDF}=window.jspdf,d=new jsPDF({unit:'mm',format:'a4'}),W=210,M=18;let y=20;
+ d.setFont('helvetica','bold');d.setFontSize(17);d.setTextColor(198,40,40);d.text(clean('Regelwache – Verwarnungen'+(S.klasse?' – '+S.klasse:'')),M,y);y+=8;
+ d.setFont('helvetica','normal');d.setFontSize(11);d.setTextColor(20,35,26);d.text(clean('Datum: '+dDe(S.datum)+'   ·   Sitzung '+S.nr+(S.regelwache?'   ·   Regelwache: '+S.regelwache:'')),M,y);y+=9;
+ const cols=[[M,'Uhrzeit'],[M+20,'Stufe'],[M+52,'Name(n)'],[M+112,'Regel']];
+ d.setFont('helvetica','bold');d.setFontSize(10.5);cols.forEach(([x,h])=>d.text(h,x,y));d.setDrawColor(150,150,150);d.line(M,y+2,W-M,y+2);y+=8;d.setFont('helvetica','normal');
+ if(!S.verw.length){d.text('Keine Verwarnungen eingetragen.',M,y);y+=6}
+ S.verw.forEach(v=>{const a=d.splitTextToSize(clean(v.n),56),b=d.splitTextToSize(clean(v.r||'–'),W-M-(M+112)),h=Math.max(a.length,b.length)*5+2;if(y+h>280){d.addPage();y=20}
+  d.text(new Date(v.t).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}),M,y);d.text(v.st+'. Verwarnung',M+20,y);d.text(a,M+52,y);d.text(b,M+112,y);y+=h;d.setDrawColor(220,220,220);d.line(M,y-3,W-M,y-3)});
+ const n=d.getNumberOfPages();for(let p=1;p<=n;p++){d.setPage(p);d.setFontSize(8);d.setTextColor(90,100,95);d.text(clean('Enthält Namen: nur für die Klassenakte bzw. IServ · Klassenrat-Board, Daniel Beyrodt, CC BY-NC-SA 4.0 · Seite '+p+'/'+n),M,290)}
+ d.save('Klassenrat-Verwarnungen_'+(S.klasse||'Klasse').replace(/[^\wÄÖÜäöüß-]+/g,'-')+'_'+(S.datum||today())+'.pdf');toast('PDF gespeichert. Lade sie in IServ hoch.')};
 /* Neue Sitzung */
 function newSession(){const carry=[...S.an,...S.na].map(i=>({id:i.id,t:i.t,n:i.n||'',from:true}));const nr=(parseInt(S.nr,10)||0)+1,kl=S.klasse;Object.assign(S,blank(),{klasse:kl,nr,an:carry,phase:-1,dirty:false});save();run=false;rem=0;paintMeta();paintLists();paintSteps();show();$('#dNew').close();toast('Sitzung '+nr+' gestartet')}
 $('#bNew').onclick=()=>$('#dNew').showModal();$('#newGo').onclick=newSession;$('#newNo').onclick=()=>$('#dNew').close();$('#newPdf').onclick=savePdf;
@@ -192,6 +287,193 @@ function paintTheme(){document.documentElement.dataset.theme=S.theme;$('#bTheme'
 $('#bTheme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save();paintTheme()};
 paintTheme();paintMeta();paintLists();paintSteps();show();
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
+</script>
+<script>
+/* ================= Sprache: Deutsch, English, Français =================
+   Übersetzt die Oberfläche des Boards. Eigene Texte (Aufgaben, eigene Phasen, angepasste Reflexion) bleiben, wie sie eingetippt wurden. */
+(() => {
+'use strict';
+const LKEY = 'klassenrat.lang';
+const LANGS = ['de', 'en', 'fr'];
+const D = {
+  'Klassenrat-Board': ['Class Council Board', 'Conseil de classe'],
+  'Protokoll als PDF': ['Minutes as PDF', 'Procès-verbal en PDF'],
+  'Text kopieren': ['Copy text', 'Copier le texte'],
+  'PDF laden': ['Load PDF', 'Charger un PDF'],
+  'Neue Sitzung': ['New meeting', 'Nouvelle séance'],
+  'Zeiten': ['Times', 'Durées'],
+  'Dunkel': ['Dark', 'Sombre'],
+  'Hell': ['Light', 'Clair'],
+  'Regelwache': ['Rule keeper', 'Gardien des règles'],
+  'Regelwache: Verwarnungen zeigen und eintragen': ['Rule keeper: show and record warnings', 'Gardien des règles : afficher et noter les avertissements'],
+  'Regelwache öffnen': ['Open rule keeper', 'Ouvrir le gardien des règles'],
+  'Ablauf': ['Agenda', 'Déroulement'],
+  'Zeitwache': ['Timekeeper', 'Gardien du temps'],
+  'Sitzung und Ämter': ['Meeting and roles', 'Séance et rôles'],
+  'Klasse': ['Class', 'Classe'],
+  'Datum': ['Date', 'Date'],
+  'Vorsitz': ['Chair', 'Présidence'],
+  'Protokoll': ['Minutes', 'Secrétaire'],
+  'Name': ['Name', 'Nom'],
+  'Verwarnung': ['Warning', 'Avertissement'],
+  'Start': ['Start', 'Démarrer'],
+  'Pause': ['Pause', 'Pause'],
+  'Eine Minute weniger': ['One minute less', 'Une minute de moins'],
+  'Eine Minute mehr': ['One minute more', 'Une minute de plus'],
+  'Vorsitz begrüßt, Regeln, Ämter': ['Chair welcomes, rules, roles', 'Accueil, règles, rôles'],
+  'Letztes Protokoll: Was wurde umgesetzt?': ['Last minutes: what was done?', 'Dernier procès-verbal : qu’est-ce qui a été fait ?'],
+  'Besprechen und beschließen': ['Discuss and decide', 'Discuter et décider'],
+  'Beschlüsse vorlesen, nächste Sitzung': ['Read out decisions, next meeting', 'Lire les décisions, prochaine séance'],
+  'Was liegt an?': ['What’s on the agenda?', 'Qu’y a-t-il à l’ordre du jour ?'],
+  'Was wurde geklärt?': ['What was resolved?', 'Qu’est-ce qui a été réglé ?'],
+  'Was müssen wir beim nächsten Mal thematisieren?': ['What do we need to discuss next time?', 'De quoi devons-nous parler la prochaine fois ?'],
+  'Neues Thema …': ['New topic …', 'Nouveau sujet …'],
+  'Neues Thema': ['New topic', 'Nouveau sujet'],
+  'Thema …': ['Topic …', 'Sujet …'],
+  'Thema': ['Topic', 'Sujet'],
+  'Geklärtes Thema': ['Resolved topic', 'Sujet réglé'],
+  'Thema fürs nächste Mal …': ['Topic for next time …', 'Sujet pour la prochaine fois …'],
+  'Thema fürs nächste Mal': ['Topic for next time', 'Sujet pour la prochaine fois'],
+  'Hinzufügen': ['Add', 'Ajouter'],
+  'Ergebnis oder Beschluss …': ['Result or decision …', 'Résultat ou décision …'],
+  'Ergebnis oder Beschluss': ['Result or decision', 'Résultat ou décision'],
+  'Notiz …': ['Note …', 'Note …'],
+  'Notiz': ['Note', 'Note'],
+  '← Liegt an': ['← On the agenda', '← À l’ordre du jour'],
+  'Geklärt': ['Resolved', 'Réglé'],
+  'Nächstes Mal': ['Next time', 'La prochaine fois'],
+  'Löschen': ['Delete', 'Supprimer'],
+  'vom letzten Mal': ['from last time', 'de la dernière fois'],
+  'Noch nichts eingetragen.': ['Nothing entered yet.', 'Rien de noté pour l’instant.'],
+  'Alles bleibt nur in diesem Browser. Das Board läuft oft über den Beamer: Schreibt Konflikte sachlich und ohne Namen auf.':
+    ['Everything stays in this browser only. The board is often on the projector: write down conflicts objectively and without names.',
+     'Tout reste uniquement dans ce navigateur. Le tableau est souvent projeté : notez les conflits de façon neutre et sans noms.'],
+  'Über mich': ['About me', 'À propos'],
+  'Impressum': ['Legal notice', 'Mentions légales'],
+  'Datenschutz': ['Privacy', 'Confidentialité'],
+  'Zeiten im Ablauf (Minuten)': ['Agenda times (minutes)', 'Durées du déroulement (minutes)'],
+  'Eröffnung': ['Opening', 'Ouverture'],
+  'Rückblick': ['Review', 'Retour'],
+  'Themen': ['Topics', 'Sujets'],
+  'Abschluss': ['Closing', 'Clôture'],
+  'Fertig': ['Done', 'Terminé'],
+  'Neue Sitzung starten?': ['Start a new meeting?', 'Commencer une nouvelle séance ?'],
+  'Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.': ['Have you saved the minutes as a PDF? After starting, they will no longer be shown here.', 'As-tu enregistré le procès-verbal en PDF ? Après le démarrage, il ne sera plus visible ici.'],
+  'Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.': ['Open topics and everything from “Next time” move to “What’s on the agenda?”.', 'Les sujets ouverts et tout ce qui est prévu « la prochaine fois » passent à l’ordre du jour.'],
+  'Die Liste der Regelwache wird geleert. Speichere ihre PDF vorher.': ['The rule keeper’s list will be cleared. Save its PDF first.', 'La liste du gardien des règles sera vidée. Enregistre d’abord son PDF.'],
+  'Erst PDF speichern': ['Save PDF first', 'Enregistrer d’abord le PDF'],
+  'Abbrechen': ['Cancel', 'Annuler'],
+  'Tippe auf eine Karte, um sie groß für die Klasse zu zeigen.': ['Tap a card to show it large to the class.', 'Touche une carte pour l’afficher en grand pour la classe.'],
+  'Verwarnung eintragen': ['Record a warning', 'Noter un avertissement'],
+  '1. Verwarnung': ['1st warning', '1er avertissement'],
+  '2. Verwarnung': ['2nd warning', '2e avertissement'],
+  'Wer? (Name oder Namen)': ['Who? (name or names)', 'Qui ? (nom ou noms)'],
+  'Welche Regel? (optional)': ['Which rule? (optional)', 'Quelle règle ? (facultatif)'],
+  'z. B. Wir lassen andere ausreden.': ['e.g. We let others finish speaking.', 'p. ex. Nous laissons les autres finir de parler.'],
+  'Eintragen': ['Record', 'Noter'],
+  'Groß zeigen': ['Show large', 'Afficher en grand'],
+  'Eingetragen': ['Recorded', 'Notés'],
+  'Noch keine Verwarnung eingetragen.': ['No warnings recorded yet.', 'Aucun avertissement noté pour l’instant.'],
+  'Namen anzeigen': ['Show names', 'Afficher les noms'],
+  'Die Namen bleiben nur in diesem Browser und in der PDF. Zeig die Liste nicht über den Beamer. Lade die PDF in IServ hoch und leere danach die Liste.':
+    ['Names stay only in this browser and in the PDF. Don’t show the list on the projector. Upload the PDF to IServ and then clear the list.',
+     'Les noms restent uniquement dans ce navigateur et dans le PDF. Ne projette pas la liste. Dépose le PDF sur IServ puis vide la liste.'],
+  'Als PDF speichern': ['Save as PDF', 'Enregistrer en PDF'],
+  'Liste leeren': ['Clear list', 'Vider la liste'],
+  'Schließen': ['Close', 'Fermer'],
+  'Antippen zum Schließen': ['Tap to close', 'Toucher pour fermer'],
+  'Eintrag löschen': ['Delete entry', 'Supprimer l’entrée'],
+  'Thema gelöscht': ['Topic deleted', 'Sujet supprimé'],
+  'Protokoll kopiert': ['Minutes copied', 'Procès-verbal copié'],
+  'Protokoll geladen': ['Minutes loaded', 'Procès-verbal chargé'],
+  'PDF gespeichert. Leg sie in Notability ab.': ['PDF saved. Put it in Notability.', 'PDF enregistré. Range-le dans Notability.'],
+  'PDF gespeichert. Lade sie in IServ hoch.': ['PDF saved. Upload it to IServ.', 'PDF enregistré. Dépose-le sur IServ.'],
+  'Bitte einen Namen eintragen': ['Please enter a name', 'Merci de saisir un nom'],
+  'Verwarnung eingetragen': ['Warning recorded', 'Avertissement noté'],
+  'Diese PDF enthält kein Klassenrat-Protokoll.': ['This PDF contains no class council minutes.', 'Ce PDF ne contient pas de procès-verbal.'],
+  'Alle eingetragenen Verwarnungen löschen? Hast du die PDF gespeichert?': ['Delete all recorded warnings? Have you saved the PDF?', 'Supprimer tous les avertissements notés ? As-tu enregistré le PDF ?']
+};
+/* gleiche Wörter, andere Bedeutung je nach Ort */
+const CTX = {};
+const one = (i, s) => (D[s] ? D[s][i] : s);
+const P = [
+  [/^(Eröffnung|Rückblick|Themen|Abschluss) · (\d+) min$/, (i, m) => one(i, m[1]) + ' · ' + m[2] + ' min'],
+  [/^Sitzung (\d+) gestartet$/, (i, m) => ['Meeting ' + m[1] + ' started', 'Séance ' + m[1] + ' commencée'][i]],
+  [/^(\d)\. Verwarnung$/, (i, m) => m[1] === '1' ? ['1st warning', '1er avertissement'][i] : ['2nd warning', '2e avertissement'][i]]
+];
+let lang = 'de';
+try { lang = localStorage.getItem(LKEY) || 'de'; } catch (e) { }
+if (!LANGS.includes(lang)) lang = 'de';
+
+function tr(s, el) {
+  if (lang === 'de') return null;
+  const i = lang === 'en' ? 0 : 1;
+  if (CTX[s] && el) { for (const id in CTX[s]) if (el.closest('#' + id)) return CTX[s][id][i]; }
+  if (D[s]) return D[s][i];
+  for (const [re, f] of P) { const m = s.match(re); if (m) return f(i, m); }
+  return null;
+}
+const SKIP = 'script,style,textarea,[contenteditable],[data-noi18n]';
+const memo = new WeakMap();
+function doText(n) {
+  const p = n.parentElement; if (!p || p.closest(SKIP)) return;
+  const cur = n.nodeValue, o = memo.get(n);
+  const base = o && o.out === cur ? o.de : cur;
+  const t = base.trim(); if (!t) return;
+  const r = tr(t, p);
+  if (r == null) { memo.delete(n); if (base !== cur) n.nodeValue = base; return; }
+  const out = base.replace(t, r);
+  memo.set(n, { de: base, out });
+  if (cur !== out) n.nodeValue = out;
+}
+const ATTRS = ['title', 'aria-label', 'placeholder'];
+function doAttr(el, a) {
+  if (!el.hasAttribute(a) || el.closest('[data-noi18n]')) return;
+  const cur = el.getAttribute(a), k = '__i18n_' + a, o = el[k];
+  const base = o && o.out === cur ? o.de : cur;
+  const t = base.trim(); if (!t) return;
+  const r = tr(t, el);
+  if (r == null) { el[k] = null; if (base !== cur) el.setAttribute(a, base); return; }
+  el[k] = { de: base, out: r };
+  if (cur !== r) el.setAttribute(a, r);
+}
+function walk(root) {
+  if (root.nodeType === 3) { doText(root); return; }
+  if (root.nodeType !== 1) return;
+  if (root.matches(SKIP)) return;
+  ATTRS.forEach(a => doAttr(root, a));
+  const tw = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+  let n; while ((n = tw.nextNode())) { if (n.nodeType === 3) doText(n); else ATTRS.forEach(a => doAttr(n, a)); }
+}
+new MutationObserver(list => {
+  for (const m of list) {
+    if (m.type === 'characterData') doText(m.target);
+    else if (m.type === 'attributes') doAttr(m.target, m.attributeName);
+    else m.addedNodes.forEach(walk);
+  }
+}).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+
+const oConfirm = window.confirm.bind(window);
+window.confirm = m => oConfirm(tr(String(m)) || m);
+
+function setLang(l, announce) {
+  lang = LANGS.includes(l) ? l : 'de';
+  try { localStorage.setItem(LKEY, lang); } catch (e) { }
+  document.documentElement.lang = lang;
+  walk(document.body);
+  const c = document.getElementById('langCode'); if (c) c.textContent = lang.toUpperCase();
+  const b = document.getElementById('bLang');
+  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Deutsch)' }[lang];
+  document.querySelectorAll('[data-lang-set]').forEach(x => x.classList.toggle('sel', x.dataset.langSet === lang));
+  if (announce) {
+    const t = document.getElementById('toast');
+    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français' }[lang]; t.hidden = false; clearTimeout(setLang.tm); setLang.tm = setTimeout(() => { t.hidden = true; }, 1800); }
+  }
+}
+document.getElementById('bLang').addEventListener('click', () => setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length], true));
+document.querySelectorAll('[data-lang-set]').forEach(x => x.addEventListener('click', () => setLang(x.dataset.langSet)));
+setLang(lang);
 })();
 </script>
 </body></html>
