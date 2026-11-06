@@ -1006,7 +1006,7 @@ const KEY = 'roboboard.v1';
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
   theme: 'light', tsize: '2x2', meetT: '', fokus: 'frei', apeRobo: 0, clean: false, sound: true, wake: true,
-  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: true, fokus: true, gefahr: true },
+  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: false, fokus: true, gefahr: true },
   raus: false,
   ape: [], rules: [], haz: [],
   aufr: { n: 16, a: [] },
@@ -1079,7 +1079,7 @@ function load() {
 }
 let S = load();
 // Robo-Board: APE (Robotik, Arduino) einmalig einblenden, alte Auswahl aus dem Tech-Board entfernen
-if (!S.apeRobo) { S.apeRobo = 1; S.show.ape = true; S.ape = (S.ape || []).filter(a => ['Robotik', 'Arduino'].includes(a)); }
+if ((S.apeRobo || 0) < 2) { S.apeRobo = 2; S.show.ape = false; S.ape = (S.ape || []).filter(a => ['Robotik', 'Arduino'].includes(a)); } // APE anfangs aus
 function cleanPlan() {
   if (!Array.isArray(S.plan)) S.plan = clone(DEF.plan);
   S.plan = S.plan.filter(x => x && typeof x === 'object').slice(0, 12)

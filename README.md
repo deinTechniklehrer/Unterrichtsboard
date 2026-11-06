@@ -4,7 +4,7 @@
 
 Weitere Boards in diesem Repository:
 
-- [Tech-Board](https://deintechniklehrer.github.io/Unterrichtsboard/tech-board/) für den Technikunterricht: Sicherheit, Alarm, Treffpunkt, Timer, Aufräumphase, APE, Regeln und Gefährdungen
+- [Tech-Board](https://deintechniklehrer.github.io/Unterrichtsboard/tech-board/) für den Technikunterricht: Sicher/Unsicher, Alarm, Treffpunkt, Timer, Aufräumphase, APE, Sicherheitsregeln (eigene Kachel) und Gefährdungen
 - [Robo-Board](https://deintechniklehrer.github.io/Unterrichtsboard/robo-board/) für das Robotiklabor: wie das Tech-Board, Fokus (Dobot, 3D-Druck, Arduino, Freie Wahl), APE Robotik/Arduino ohne Sicherheitssymbole, mit dem Aufräumplan des Robotiklabors
 - [Klassenrat Dashboard](https://deintechniklehrer.github.io/Unterrichtsboard/klassenrat/): Ablauf, Ämter, Protokoll mit PDF-Export, Reflexion (gut/mittel/schlecht) und Lärmampel mit Alarm; Kacheln und Vorgaben anpassbar
 
