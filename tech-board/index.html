@@ -321,7 +321,13 @@ body.clean #ofReset, body.clean #flReset, body.clean #flUndo{display:none}
 .tile.no .s-text{color:var(--no)}
 #tSozial .s-text{color:var(--accent)}
 #tSozial.has-sub .s-sub{display:block; color:var(--accent)}
-#tSozial.has-sub .big{height:min(58cqh,74cqw)}
+#tSozial.has-sub .big,#tFokus.has-sub .big{height:min(58cqh,74cqw)}
+#tFokus .s-sub{display:block;color:var(--muted)}
+#tFokus .big svg{width:100%;height:100%}
+#tFokus .s-text{hyphens:manual;white-space:normal}
+#tFokus.long .s-text{font-size:min(10cqh,9.5cqw)}
+#tFokus.long .big{height:min(44cqh,60cqw)}
+#foBtns{flex-wrap:nowrap}#foBtns .btn{flex:1 1 0;min-width:0;padding:0 2px}#foBtns .btn svg{width:24px;height:24px}
 .so-btns{gap:4px}
 .so-btns .btn{flex:1 1 0; min-width:0; max-width:130px; padding:0 4px}
 .so-btns .btn svg{width:28px; height:28px}
@@ -811,6 +817,15 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
         </div>
         <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
     </section>
+    <section class="tile" id="tFokus" data-k="fokus">
+      <div class="label">Fokus</div>
+      <div class="vis">
+        <div class="big" id="foBig" role="button" aria-label="Fokus wechseln"></div>
+        <div class="s-text" id="foText">Freie Wahl</div>
+        <div class="s-sub" id="foSub"></div>
+      </div>
+      <div class="ctrl so-btns" id="foBtns"></div>
+    </section>
     <section class="tile" id="tApe" data-k="ape">
       <div class="label">APE</div>
       <div class="tb-body"><div class="tb-chips" id="apes"></div>
@@ -847,6 +862,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 
     <h3>Kacheln anzeigen</h3>
     <label class="row">APE <input type="checkbox" class="sw" data-show="ape"></label>
+    <label class="row">Fokus <input type="checkbox" class="sw" data-show="fokus"></label>
     <label class="row">Sicherheitsregeln <input type="checkbox" class="sw" data-show="regeln"></label>
     <label class="row">Gefährdungen <input type="checkbox" class="sw" data-show="gefahr"></label>
     <label class="row">Timer <input type="checkbox" class="sw" data-show="timer"></label>
@@ -869,6 +885,8 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
       <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button></div>
     </div>
     <label class="row">Signalton, wenn der Timer abläuft <input type="checkbox" class="sw" id="optSound"></label>
+    <label class="row">Ton zum Start der Aufräumphase <input type="checkbox" class="sw" id="optCleanTone"></label>
+    <label class="row">Sprachansage zum Aufräumen <input type="checkbox" class="sw" id="optCleanVoice"></label>
     <label class="row">Bildschirm nicht ausschalten <input type="checkbox" class="sw" id="optWake"></label>
 
     <h3>Vorbereiten &amp; Teilen</h3>
@@ -892,8 +910,9 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ mit rotem Hintergrund. Ein Tipp stellt auf „Sicher“ mit grünem Hintergrund. „Alarm“ gibt ein Signal und lässt den Hintergrund rot pulsieren, auch wenn der Signalton für den Timer aus ist. Ein zweiter Tipp beendet den Alarm. Am iPad muss der Ton laut gestellt sein.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
-    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. „Zufällig verteilen“ gibt jedem Auftrag eine Nummer, alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück.</p>
+    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag eine Nummer, alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
+    <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Holz, Metall, Elektro oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“. Antippen des großen Bildes schaltet weiter.</p>
     <p><strong>APE, Sicherheitsregeln und Gefährdungen:</strong> APE heißt Arbeitsplatzeinrichtung und ist anfangs ausgeblendet (Einstellungen). Holz und Metall zeigen ein Foto, Antippen vergrößert es. Die Sicherheitsregeln (Fenster auf Kipp, Schutzbrille, Hände waschen, Gehörschutz) haben eine eigene Kachel. Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
     <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
@@ -1015,8 +1034,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const KEY = 'techboard.v1';
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
-  theme: 'light', tsize: '2x2', meetT: '', clean: false, sound: true, wake: true,
-  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: false, regeln: true, gefahr: true },
+  theme: 'light', tsize: '2x2', meetT: '', cleanTone: true, cleanVoice: true, fokus: 'frei', clean: false, sound: true, wake: true,
+  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: false, regeln: true, fokus: true, gefahr: true },
   raus: false,
   ape: [], rules: [], haz: [],
   aufr: { n: 16, a: [] },
@@ -1162,13 +1181,14 @@ function clock() {
    Das Board probiert mehrere Anordnungen aus und nimmt die, bei der alles
    am größten und lesbarsten ist. Passt nichts auf einen Bildschirm,
    werden die Kacheln untereinander gesetzt und die Seite darf scrollen. */
-const ORDER = ['timer', 'plan', 'cleanmsg', 'ape', 'regeln', 'gefahr', 'aufgabe', 'sozial', 'ampel', 'ipad', 'ki', 'raus'];
+const ORDER = ['timer', 'plan', 'cleanmsg', 'ape', 'fokus', 'regeln', 'gefahr', 'aufgabe', 'sozial', 'ampel', 'ipad', 'ki', 'raus'];
 const MIN = {
   timer:  { ctrl: [250, 290], clean: [160, 150] },
   cleanmsg: { ctrl: [500, 440], clean: [460, 360] },
   ape:    { ctrl: [200, 170], clean: [130, 105] },
   gefahr: { ctrl: [200, 170], clean: [130, 105] },
   regeln: { ctrl: [200, 170], clean: [130, 105] },
+  fokus:  { ctrl: [175, 215], clean: [125, 112] },
   aufgabe:{ ctrl: [220, 125], clean: [200, 100] },
   sozial: { ctrl: [175, 215], clean: [125, 112] },
   raus:   { ctrl: [160, 190], clean: [120, 112] },
@@ -1652,6 +1672,46 @@ function buildSozial() {
   });
 }
 
+/* ================= Fokus (Tech-Board) =================
+   Woran die Klasse heute arbeitet: Holz, Metall, Elektro, Sicherheitsunterweisung oder freie Wahl. Eigene Zeichnungen. */
+const FOKUS = {
+  holz: { name: 'Holz', sub: '', svg:
+    '<rect x="8" y="30" width="84" height="40" rx="5" fill="#c58b4a"/><path d="M14 41 q20 -6 40 0 t34 0 M14 51 q22 6 44 0 t32 0 M14 61 q18 -5 36 0 t38 0" stroke="#8d5a2b" stroke-width="2.5" fill="none"/><ellipse cx="66" cy="51" rx="7" ry="3.5" fill="none" stroke="#8d5a2b" stroke-width="2.5"/>' },
+  metall: { name: 'Metall', sub: '', svg:
+    '<path d="M14 76 L14 24 L33 24 L33 57 L86 57 L86 76 Z" fill="#90a4ae" stroke="#455a64" stroke-width="3" stroke-linejoin="round"/><path d="M20 30 v38 M40 64 h40" stroke="#eceff1" stroke-width="4" stroke-linecap="round"/>' },
+  elektro: { name: 'Elektro', sub: '', svg:
+    '<circle cx="50" cy="50" r="40" fill="#fdd835"/><path d="M57 14 L30 55 h18 l-6 31 l28 -43 h-18 z" fill="#212121"/>' },
+  sicher: { name: 'Sicherheits­unterweisung', sub: 'Alle hören zu', svg:
+    '<svg x="4" y="8" width="92" height="84" viewBox="0 0 600 524"><use href="#tbTri"/></svg>' },
+  frei: { name: 'Freie Wahl', sub: 'Kein Fokus', svg:
+    '<rect x="10" y="10" width="36" height="36" rx="8" fill="#1e88e5" opacity=".85"/><rect x="54" y="10" width="36" height="36" rx="8" fill="#43a047" opacity=".85"/>' +
+    '<rect x="10" y="54" width="36" height="36" rx="8" fill="#00838f" opacity=".85"/><rect x="54" y="54" width="36" height="36" rx="8" fill="#ffb300" opacity=".85"/>' +
+    '<path d="M22 28 l6 6 12-12" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
+    '<path d="M66 72 l6 6 12-12" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' }
+};
+const FO_KEYS = Object.keys(FOKUS);
+function renderFokus() {
+  if (!FOKUS[S.fokus]) S.fokus = 'frei';
+  const f = FOKUS[S.fokus];
+  $('#foBig').innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true">${f.svg}</svg>`;
+  $('#foText').textContent = f.name;
+  $('#foSub').textContent = f.sub;
+  $('#tFokus').classList.toggle('has-sub', !!f.sub);
+  $('#tFokus').classList.toggle('long', f.name.length > 14);
+  $$('#foBtns .btn').forEach(b => b.classList.toggle('sel', b.dataset.fo === S.fokus));
+}
+function buildFokus() {
+  const box = $('#foBtns');
+  FO_KEYS.forEach(k => {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.dataset.fo = k; b.title = FOKUS[k].name; b.setAttribute('aria-label', FOKUS[k].name);
+    b.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true">${FOKUS[k].svg}</svg>`;
+    b.addEventListener('click', () => { S.fokus = k; save(); renderFokus(); });
+    box.appendChild(b);
+  });
+  $('#foBig').addEventListener('click', () => { S.fokus = FO_KEYS[(FO_KEYS.indexOf(S.fokus) + 1) % FO_KEYS.length]; save(); renderFokus(); });
+}
+
 /* ================= iPad & KI ================= */
 const STATUS = {
   ipad: { tile: '#tIpad', text: '#ipadText', yes: 'iPad erlaubt', no: 'Kein iPad' },
@@ -2018,6 +2078,7 @@ function toggleFS() {
 /* ================= Einstellungen ================= */
 function renderSettings() {
   $$('[data-show]').forEach(c => { c.checked = !!S.show[c.dataset.show]; });
+  $('#optCleanTone').checked = S.cleanTone; $('#optCleanVoice').checked = S.cleanVoice;
   $('#optSound').checked = S.sound; $('#optWake').checked = S.wake;
   renderTheme();
 }
@@ -2214,6 +2275,8 @@ function bind() {
   $$('[data-tsize-set]').forEach(b => b.addEventListener('click', () => { S.tsize = b.dataset.tsizeSet; save(); renderTsize(); queueLayout(); }));
   renderTsize();
   $('#optSound').addEventListener('change', e => { S.sound = e.target.checked; save(); if (S.sound) unlockAudio(); });
+  $('#optCleanTone').addEventListener('change', e => { S.cleanTone = e.target.checked; save(); });
+  $('#optCleanVoice').addEventListener('change', e => { S.cleanVoice = e.target.checked; save(); if (S.cleanVoice) cleanCue(); });
   $('#optWake').addEventListener('change', e => { S.wake = e.target.checked; save(); S.wake ? wake() : unwake(); });
   $('#btnReset').addEventListener('click', () => {
     if (!confirm('Alle Einstellungen auf Anfang zurücksetzen?')) return;
@@ -2267,7 +2330,7 @@ function importBoard(file) {
   rd.readAsText(file);
 }
 function renderAll() {
-  renderTheme(); renderClean(); renderTimer(); renderSozial();
+  renderTheme(); renderClean(); renderTimer(); renderSozial(); renderFokus();
   renderIpad(); renderRaus(); renderStatus('ki'); renderAmpelCtrl(); renderTask(); renderPlan(); tbRender(); layout();
 }
 
@@ -2304,9 +2367,29 @@ function tbVis(k) {
   return true;
 }
 const tbIsClean = p => !!p && /aufr[äa]um/i.test(p.text || '');
+/* Aufräumen: Ton und Sprachansage beim Start (Stimme des Geräts, offline, nichts geht ins Netz) */
+const CLEAN_SAY = {
+  de: 'Achtung! Aufräumzeit. Erledigt jetzt eure Aufgabe nach dem Aufräumplan.',
+  en: 'Attention! Time to tidy up. Please do your job on the clean-up plan now.',
+  fr: 'Attention ! C’est l’heure de ranger. Faites maintenant votre tâche du plan de rangement.'
+};
+function cleanCue() {
+  if (S.cleanTone) { unlockAudio(); tbTone(988, 0.22, 0); tbTone(784, 0.22, 0.26); tbTone(659, 0.45, 0.52); }
+  if (!S.cleanVoice || !('speechSynthesis' in window)) return;
+  try {
+    const l = (typeof lang === 'string' && CLEAN_SAY[lang]) ? lang : 'de';
+    const u = new SpeechSynthesisUtterance(CLEAN_SAY[l]);
+    u.lang = { de: 'de-DE', en: 'en-GB', fr: 'fr-FR' }[l]; u.rate = 0.95;
+    const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(l));
+    if (v) u.voice = v;
+    speechSynthesis.cancel();
+    setTimeout(() => speechSynthesis.speak(u), S.cleanTone ? 1100 : 0);
+  } catch (e) { }
+}
 function tbSetCleaning(v) {
   if (tbCleaning === v) return;
   tbCleaning = v; tbRender(); queueLayout();
+  if (v) cleanCue();
 }
 function tbSync() { tbSetCleaning(!!S.show.plan && tbIsClean(S.plan[S.planCur])); }
 function tbRender() {
@@ -2540,7 +2623,7 @@ function tbInit() {
 
 /* ================= Start ================= */
 if (isStandalone()) document.body.classList.add('standalone');
-buildPresets(); buildSozial(); bind(); tbInit();
+buildPresets(); buildSozial(); buildFokus(); bind(); tbInit();
 // Timer, der während geschlossener Seite abgelaufen ist: ohne Ton als „abgelaufen“ zeigen
 if (S.timer.endAt && S.timer.endAt <= Date.now()) { S.timer.endAt = null; S.timer.remaining = 0; doneFlag = true; save(); }
 renderAll(); clock();
@@ -2603,7 +2686,15 @@ const D = {
   'ALARM': ['ALARM', 'ALARME'],
   'STOPP': ['STOP', 'STOP'],
   'Treffpunkt': ['Meeting point', 'Point de rencontre'],
+  'Ton zum Start der Aufräumphase': ['Sound when clean-up starts', 'Son au début du rangement'],
+  'Sprachansage zum Aufräumen': ['Spoken announcement for clean-up', 'Annonce vocale pour le rangement'],
+  'Sicherheits\u00adunterweisung': ['Safety briefing', 'Consignes de sécurité'],
+  'Alle hören zu': ['Everyone listens', 'Tout le monde écoute'],
   'Sicherheitsregeln': ['Safety rules', 'Règles de sécurité'],
+  'Fokus': ['Focus', 'Focus'],
+  'Fokus wechseln': ['Change focus', 'Changer de focus'],
+  'Freie Wahl': ['Free choice', 'Libre choix'],
+  'Kein Fokus': ['No focus', 'Pas de focus'],
   'Sicherheit': ['Safety', 'Sécurité'],
   'Wähle die APE für die heutige Arbeit.': ['Choose the workstation set-up for today.', 'Choisis l’aménagement du poste pour aujourd’hui.'],
   'Treffpunkt: alle kommen zusammen': ['Meeting point: everyone gathers', 'Point de rencontre : tout le monde se rassemble'],
