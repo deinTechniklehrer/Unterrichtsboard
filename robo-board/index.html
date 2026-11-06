@@ -397,6 +397,8 @@ body.clean #tPlan .label, body.clean #tAufgabe .label{right:14px}
 .pe-so button.sel{border-color:var(--accent); color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,var(--tile))}
 .pe-mv svg{width:18px; height:18px}
 .pe-mv.del{color:var(--no)}
+.cl-ed{flex:1 1 100%;margin-left:30px;min-height:56px;border:2px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;color:var(--ink);background:var(--tile);resize:vertical;-webkit-user-select:text;user-select:text}
+.cl-ed:focus{outline:none;border-color:var(--accent)}
 .pe-sep{width:8px}
 .pe-add{margin-top:12px}
 
@@ -561,6 +563,13 @@ body.clean .tb-chip:not(.on),body.clean .tb-s:not(.on),body.clean .tb-hint{displ
 .puck.ghost{position:fixed;z-index:999;pointer-events:none;opacity:.9;transform:translate(-50%,-50%) scale(1.15)}
 .puck.dragging{opacity:.3}
 .cl-zones{display:flex;gap:6px;flex:none}
+body.scroll #tCleanMsg{container-type:inline-size}
+body.scroll .tb-clean{overflow:visible}
+body.scroll .cl-plan{flex:none;grid-auto-rows:auto}
+body.scroll .cl-task{min-height:48px}
+@media (max-width:600px){body.scroll .cl-plan{grid-template-columns:1fr}body.scroll .cl-zones{flex-direction:column}}
+body.scroll .tb-clean{--pk:44px}
+body.scroll .cl-head svg{width:40px}body.scroll .cl-head b{font-size:20px}body.scroll .cl-head p{font-size:14px}body.scroll .cl-zl{font-size:14px}
 .cl-zone{flex:1;display:flex;align-items:center;gap:6px;min-height:calc(var(--pk) + 10px);border:2px dashed #b9a24a;border-radius:10px;padding:3px 6px;background:rgba(255,255,255,.5);cursor:pointer}
 .cl-zone .cl-pk{max-width:none;justify-content:flex-start;flex:1}
 .cl-zone.out{border-color:#9a9a9a;background:rgba(0,0,0,.05)}
@@ -802,7 +811,8 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
           <button class="btn" id="clShuffle">Zufällig verteilen</button>
           <span class="cl-n"><span>Schüler:innen</span><button class="btn" id="clMinus" aria-label="Eine Person weniger">−</button><b id="clN">16</b><button class="btn" id="clPlus" aria-label="Eine Person mehr">+</button></span>
           <button class="btn" id="clAllFree">Alle zurück</button>
-          <span class="cl-hint">Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.</span>
+          <button class="btn" id="clEditBtn">Plan bearbeiten</button>
+          <span class="cl-hint">Jeder Auftrag bekommt eine Nummer, die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.</span>
         </div>
         <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
     </section>
@@ -893,7 +903,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ mit rotem Hintergrund. Ein Tipp stellt auf „Sicher“ mit grünem Hintergrund. „Alarm“ gibt ein Signal und lässt den Hintergrund rot pulsieren, auch wenn der Signalton für den Timer aus ist. Ein zweiter Tipp beendet den Alarm. Am iPad muss der Ton laut gestellt sein.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
-    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase.</p>
+    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. „Zufällig verteilen“ gibt jedem Auftrag eine Nummer, alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Dobot, 3D-Druck oder Arduino. Bei „Freie Wahl“ steht „Kein Fokus“, dann suchen sich alle selbst etwas aus. Antippen des großen Bildes schaltet weiter.</p>
     <p><strong>APE:</strong> Wähle Robotik oder Arduino. Robotik zeigt ein Foto des Arbeitsplatzes (Laptop, Not-Aus, Roboterarm), Antippen vergrößert es.</p>
@@ -926,6 +936,19 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <div class="dlg-foot">
       <button class="btn danger" id="planClear">Alles leeren</button>
       <button class="btn primary" id="planDone">Fertig</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="clDlg">
+  <div class="dlg">
+    <h2>Aufräumplan bearbeiten</h2>
+    <p>Trag die Aufträge für deinen Raum ein. Beim zufälligen Verteilen bekommt jeder Auftrag eine Nummer, alle übrigen Nummern sind Springer. Springer kannst du danach noch einem Auftrag zuordnen.</p>
+    <div id="clEdit"></div>
+    <button class="btn pe-add" id="clEditAdd">+ Auftrag hinzufügen</button>
+    <div class="dlg-foot">
+      <button class="btn danger" id="clEditReset">Vorlage wiederherstellen</button>
+      <button class="btn primary" id="clEditDone">Fertig</button>
     </div>
   </div>
 </dialog>
@@ -1010,6 +1033,7 @@ const DEF = {
   raus: false,
   ape: [], rules: [], haz: [],
   aufr: { n: 16, a: [] },
+  clTasks: null, // eigener Aufräumplan (null = Vorlage)
   aufgabe: '',
   plan: [
     { text: 'Einstieg', so: 'plenum' },
@@ -1361,7 +1385,9 @@ function layout(fromResize) {
 
   document.body.classList.toggle('scroll', !!L.scroll);
   g.style.gridTemplateColumns = L.cols;
-  g.style.gridTemplateRows = L.scroll ? L.rows.map(h => Math.round(h) + 'px').join(' ') : L.rows.map(h => h.toFixed(2) + 'fr').join(' ');
+  // Aufräumen auf dem Handy: Zeile wächst mit dem Plan, damit kein Auftrag zusammengedrückt wird
+  const growRows = L.scroll && keys.includes('cleanmsg');
+  g.style.gridTemplateRows = L.scroll ? L.rows.map(h => growRows ? `minmax(${Math.round(h)}px, auto)` : Math.round(h) + 'px').join(' ') : L.rows.map(h => h.toFixed(2) + 'fr').join(' ');
   for (const p of L.place) {
     tiles[p.k].style.gridColumn = `${p.col} / span ${p.cs}`;
     tiles[p.k].style.gridRow = `${p.row} / span ${p.rs}`;
@@ -2425,13 +2451,14 @@ const CL_TASKS = [
   { id: 'kaffee', t: 'Kaffeemaschine/\u200bTassen', d: 'Dreckige Tassen im kleinen Raum abwaschen und umgedreht zum Trocknen in die Geschirrkiste stellen. Kaffeemaschine abwischen und Reste des Kaffeepulvers auffegen.', p: 2 },
   { id: 'arduino', t: 'Arduino-Kästen', d: 'Arduino-Kästen in den Schrank bringen. Überprüfen, ob alle Kästen an der richtigen Position sind. Den Schrank abschließen und den Schlüssel der Lehrkraft bringen.', p: 2 }
 ];
-// Reihenfolge beim Verteilen: erst jeder Auftrag einmal, dann die zweiten Plätze (wie auf dem Plan im Raum)
-const CL_ORDER = ['tische', 'fegen', 'druck', 'fegen3d', 'laptops', 'dobots', 'arduino', 'station', 'challenges', 'kaffee',
-  'tische', 'fegen', 'druck', 'fegen3d', 'laptops', 'dobots', 'arduino', 'station', 'challenges', 'kaffee'];
 let clSel = 0, clDrag = null;
+/* Aufräumplan: eigene Fassung (S.clTasks) oder Vorlage (CL_TASKS) */
+function clTasks() {
+  return Array.isArray(S.clTasks) ? S.clTasks.filter(t => t && t.id && typeof t.t === 'string') : CL_TASKS;
+}
 function clState() {
   if (!S.aufr || typeof S.aufr !== 'object') S.aufr = { n: 16, a: [] };
-  const n = Math.max(1, Math.min(32, Math.round(+S.aufr.n) || 16)), ok = new Set(['', 'out', ...CL_TASKS.map(t => t.id)]);
+  const n = Math.max(1, Math.min(32, Math.round(+S.aufr.n) || 16)), ok = new Set(['', 'out', ...clTasks().map(t => t.id)]);
   const a = Array.isArray(S.aufr.a) ? S.aufr.a : [];
   S.aufr = { n, a: Array.from({ length: n }, (_, i) => ok.has(a[i]) ? a[i] : '') };
   return S.aufr;
@@ -2440,9 +2467,9 @@ function clPuck(n) { return `<button type="button" class="puck${clSel === n ? ' 
 function clRender() {
   const st = clState();
   const of = z => st.a.map((v, i) => v === z ? i + 1 : 0).filter(Boolean);
-  $('#clPlan').innerHTML = CL_TASKS.map(t => {
+  $('#clPlan').innerHTML = clTasks().map(t => {
     const ns = of(t.id);
-    return `<div class="cl-task${ns.length ? '' : ' cl-none'}" data-zone="${t.id}"><div class="cl-tx"><b>${esc(t.t)}</b><small>${esc(t.d)}</small></div><span class="cl-pk">${ns.map(clPuck).join('')}</span></div>`;
+    return `<div class="cl-task${ns.length ? '' : ' cl-none'}" data-zone="${t.id}"><div class="cl-tx"><b>${esc(t.t)}</b><small>${esc(t.d || '')}</small></div><span class="cl-pk">${ns.map(clPuck).join('')}</span></div>`;
   }).join('');
   $('#clFree .cl-pk').innerHTML = of('').map(clPuck).join('');
   $('#clOut .cl-pk').innerHTML = of('out').map(clPuck).join('');
@@ -2454,8 +2481,57 @@ function clShuffle() {
   const st = clState();
   const pres = st.a.map((v, i) => v === 'out' ? 0 : i + 1).filter(Boolean);
   for (let i = pres.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pres[i], pres[j]] = [pres[j], pres[i]]; }
-  pres.forEach((n, i) => { st.a[n - 1] = i < CL_ORDER.length ? CL_ORDER[i] : ''; });
+  // Jeder Auftrag bekommt eine Nummer, alle übrigen sind Springer und können noch zugeordnet werden
+  const tasks = clTasks();
+  pres.forEach((n, i) => { st.a[n - 1] = i < tasks.length ? tasks[i].id : ''; });
   clSel = 0; save(); clRender();
+}
+/* Aufräumplan bearbeiten */
+function clEditRender() {
+  const t = clTasks();
+  $('#clEdit').innerHTML = t.map((x, i) => `
+    <div class="pe-row cl-er" data-i="${i}">
+      <span class="pe-num">${i + 1}</span>
+      <input class="pe-txt cl-et" type="text" maxlength="60" value="${esc(x.t)}" placeholder="Auftrag, z. B. Gang 1 fegen" aria-label="Auftrag ${i + 1}">
+      <div class="pe-tools">
+        <button class="pe-mv" data-mv="-1" title="Nach oben" aria-label="Nach oben" ${i === 0 ? 'disabled' : ''}>${ICON_UP}</button>
+        <button class="pe-mv" data-mv="1" title="Nach unten" aria-label="Nach unten" ${i === t.length - 1 ? 'disabled' : ''}>${ICON_DN}</button>
+        <button class="pe-mv del" data-del="1" title="Auftrag löschen" aria-label="Auftrag löschen">${ICON_X}</button>
+      </div>
+      <textarea class="cl-ed" maxlength="300" rows="2" placeholder="Was genau ist zu tun?" aria-label="Beschreibung ${i + 1}">${esc(x.d || '')}</textarea>
+    </div>`).join('') || '<p>Noch keine Aufträge. Füge unten einen hinzu.</p>';
+}
+function clEditable() { if (!Array.isArray(S.clTasks)) S.clTasks = CL_TASKS.map(t => ({ id: t.id, t: t.t, d: t.d })); return S.clTasks; }
+function clEditInit() {
+  const dlg = $('#clDlg');
+  const close = () => { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); clRender(); };
+  $('#clEditBtn').addEventListener('click', () => { clEditRender(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); });
+  $('#clEditDone').addEventListener('click', close);
+  dlg.addEventListener('click', e => { if (e.target === dlg) close(); });
+  dlg.addEventListener('close', clRender);
+  $('#clEdit').addEventListener('input', e => {
+    const row = e.target.closest('.cl-er'); if (!row) return;
+    const t = clEditable()[+row.dataset.i]; if (!t) return;
+    if (e.target.classList.contains('cl-et')) t.t = e.target.value;
+    if (e.target.classList.contains('cl-ed')) t.d = e.target.value;
+    save();
+  });
+  $('#clEdit').addEventListener('click', e => {
+    const b = e.target.closest('button'), row = e.target.closest('.cl-er'); if (!b || !row) return;
+    const t = clEditable(), i = +row.dataset.i;
+    if (b.dataset.del) t.splice(i, 1);
+    else if (b.dataset.mv) { const j = i + +b.dataset.mv; if (j >= 0 && j < t.length) [t[i], t[j]] = [t[j], t[i]]; }
+    save(); clEditRender();
+  });
+  $('#clEditAdd').addEventListener('click', () => {
+    const t = clEditable(); if (t.length >= 20) return toast('Mehr als 20 Aufträge passen nicht in den Plan.');
+    t.push({ id: 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), t: '', d: '' });
+    save(); clEditRender(); const ins = $$('#clEdit .cl-et'); if (ins.length) ins[ins.length - 1].focus();
+  });
+  $('#clEditReset').addEventListener('click', () => {
+    if (!confirm('Den Aufräumplan auf die Vorlage zurücksetzen? Deine Änderungen gehen verloren.')) return;
+    S.clTasks = null; save(); clEditRender();
+  });
 }
 function clInit() {
   const box = $('#tCleanMsg');
@@ -2488,6 +2564,7 @@ function clInit() {
     const z = e.target.closest('[data-zone]'); if (z) clMove(clSel, z.dataset.zone);
   });
   $('#clShuffle').addEventListener('click', clShuffle);
+  clEditInit();
   $('#clAllFree').addEventListener('click', () => { const st = clState(); st.a = st.a.map(v => v === 'out' ? 'out' : ''); clSel = 0; save(); clRender(); });
   $('#clMinus').addEventListener('click', () => { const st = clState(); if (st.n > 1) { st.n--; st.a.length = st.n; save(); clRender(); } });
   $('#clPlus').addEventListener('click', () => { const st = clState(); if (st.n < 32) { st.n++; save(); clRender(); } });
@@ -2552,6 +2629,17 @@ const D = {
   'Zufällig verteilen': ['Assign randomly', 'Répartir au hasard'],
   'Schüler:innen': ['Students', 'Élèves'],
   'Alle zurück': ['Reset all', 'Tout remettre'],
+  'Plan bearbeiten': ['Edit plan', 'Modifier le plan'],
+  'Aufräumplan bearbeiten': ['Edit clean-up plan', 'Modifier le plan de rangement'],
+  'Jeder Auftrag bekommt eine Nummer, die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.': ['Each job gets one number, the rest are floaters. Tap a number, then tap a job, or drag the number.', 'Chaque tâche reçoit un numéro, les autres sont des renforts. Touche un numéro puis une tâche, ou fais glisser le numéro.'],
+  'Trag die Aufträge für deinen Raum ein. Beim zufälligen Verteilen bekommt jeder Auftrag eine Nummer, alle übrigen Nummern sind Springer. Springer kannst du danach noch einem Auftrag zuordnen.': ['Enter the jobs for your room. When assigning randomly, each job gets one number and all other numbers are floaters. You can still assign floaters to a job afterwards.', 'Saisis les tâches de ta salle. En répartition aléatoire, chaque tâche reçoit un numéro, les autres numéros sont des renforts. Tu peux ensuite encore les attribuer à une tâche.'],
+  '+ Auftrag hinzufügen': ['+ Add job', '+ Ajouter une tâche'],
+  'Vorlage wiederherstellen': ['Restore template', 'Rétablir le modèle'],
+  'Auftrag löschen': ['Delete job', 'Supprimer la tâche'],
+  'Auftrag, z. B. Gang 1 fegen': ['Job, e.g. sweep aisle 1', 'Tâche, p. ex. balayer l’allée 1'],
+  'Was genau ist zu tun?': ['What exactly needs doing?', 'Que faut-il faire exactement ?'],
+  'Noch keine Aufträge. Füge unten einen hinzu.': ['No jobs yet. Add one below.', 'Pas encore de tâche. Ajoutes-en une ci-dessous.'],
+  'Mehr als 20 Aufträge passen nicht in den Plan.': ['More than 20 jobs don’t fit into the plan.', 'Plus de 20 tâches ne tiennent pas dans le plan.'],
   'Eine Person weniger': ['One person less', 'Une personne de moins'],
   'Eine Person mehr': ['One person more', 'Une personne de plus'],
   'Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.': ['Tap a number, then tap a job, or drag the number.', 'Touche un numéro puis une tâche, ou fais glisser le numéro.'],
