@@ -400,6 +400,8 @@ body.clean #tPlan .label, body.clean #tAufgabe .label{right:14px}
 .pe-so button.sel{border-color:var(--accent); color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,var(--tile))}
 .pe-mv svg{width:18px; height:18px}
 .pe-mv.del{color:var(--no)}
+.cl-np{flex:1 1 100%;margin-left:30px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--muted)}
+.cl-p{min-height:36px;border:2px solid var(--line);border-radius:10px;padding:0 8px;font:inherit;font-weight:800;color:var(--ink);background:var(--tile)}
 .cl-ed{flex:1 1 100%;margin-left:30px;min-height:56px;border:2px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;color:var(--ink);background:var(--tile);resize:vertical;-webkit-user-select:text;user-select:text}
 .cl-ed:focus{outline:none;border-color:var(--accent)}
 .pe-sep{width:8px}
@@ -492,9 +494,11 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 :root[data-theme="dark"]{--unsafe:#a81f1f;--safe:#116a32}
 body{background:var(--unsafe);transition:background .35s}
 body.safe{background:var(--safe)}
-body.alarm{animation:tbPulse 1s ease-in-out infinite;transition:none}
-@keyframes tbPulse{0%,100%{background:#ff1a1a}50%{background:#5c0000}}
-@media (prefers-reduced-motion:reduce){body.alarm{animation:none;background:#ff1a1a}}
+body.alarm{animation:tbPulse .5s steps(1,end) infinite;transition:none}
+@keyframes tbPulse{0%{background:#ff1a1a}50%{background:#4a0000}}
+body.alarm #btnAlarm{animation:tbBtnPulse .5s steps(1,end) infinite}
+@keyframes tbBtnPulse{0%{transform:scale(1)}50%{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){body.alarm{animation:none;background:#ff1a1a}body.alarm #btnAlarm{animation:none}}
 header{background:var(--tile);border-radius:14px;padding:2px 8px}
 footer,footer a{color:#fff}
 #safeBand{flex:none;position:sticky;top:max(4px,env(safe-area-inset-top));z-index:5;display:grid;gap:var(--gap);grid-template-columns:2.4fr .8fr 1.1fr minmax(0,auto);height:clamp(48px,8.5vh,84px)}
@@ -813,7 +817,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
           <span class="cl-n"><span>Schüler:innen</span><button class="btn" id="clMinus" aria-label="Eine Person weniger">−</button><b id="clN">16</b><button class="btn" id="clPlus" aria-label="Eine Person mehr">+</button></span>
           <button class="btn" id="clAllFree">Alle zurück</button>
           <button class="btn" id="clEditBtn">Plan bearbeiten</button>
-          <span class="cl-hint">Jeder Auftrag bekommt eine Nummer, die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.</span>
+          <span class="cl-hint">Jeder Auftrag bekommt seine Nummern (Fegen und Werkzeug zwei), die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.</span>
         </div>
         <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
     </section>
@@ -910,7 +914,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ mit rotem Hintergrund. Ein Tipp stellt auf „Sicher“ mit grünem Hintergrund. „Alarm“ gibt ein Signal und lässt den Hintergrund rot pulsieren, auch wenn der Signalton für den Timer aus ist. Ein zweiter Tipp beendet den Alarm. Am iPad muss der Ton laut gestellt sein.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
-    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag eine Nummer, alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück.</p>
+    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen und Werkzeug je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Holz, Metall, Elektro oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“. Antippen des großen Bildes schaltet weiter.</p>
     <p><strong>APE, Sicherheitsregeln und Gefährdungen:</strong> APE heißt Arbeitsplatzeinrichtung und ist anfangs ausgeblendet (Einstellungen). Holz und Metall zeigen ein Foto, Antippen vergrößert es. Die Sicherheitsregeln (Fenster auf Kipp, Schutzbrille, Hände waschen, Gehörschutz) haben eine eigene Kachel. Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
@@ -949,7 +953,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 <dialog id="clDlg">
   <div class="dlg">
     <h2>Aufräumplan bearbeiten</h2>
-    <p>Trag die Aufträge für deinen Raum ein. Beim zufälligen Verteilen bekommt jeder Auftrag eine Nummer, alle übrigen Nummern sind Springer. Springer kannst du danach noch einem Auftrag zuordnen.</p>
+    <p>Trag die Aufträge für deinen Raum ein und stell ein, wie viele Nummern jeder Auftrag bekommt. Beim zufälligen Verteilen bekommt zuerst jeder Auftrag eine Nummer, dann die Aufträge mit zwei oder drei Nummern die nächsten. Alle übrigen Nummern sind Springer und lassen sich danach noch zuordnen.</p>
     <div id="clEdit"></div>
     <button class="btn pe-add" id="clEditAdd">+ Auftrag hinzufügen</button>
     <div class="dlg-foot">
@@ -1034,8 +1038,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const KEY = 'techboard.v1';
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
-  theme: 'light', tsize: '2x2', meetT: '', cleanTone: true, cleanVoice: true, fokus: 'frei', clean: false, sound: true, wake: true,
-  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: false, regeln: true, fokus: true, gefahr: true },
+  theme: 'light', tsize: '2x2', meetT: '', cleanTone: true, cleanVoice: true, fokus: 'frei', fokusOff: 0, clean: false, sound: true, wake: true,
+  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: false, regeln: true, fokus: false, gefahr: true },
   raus: false,
   ape: [], rules: [], haz: [],
   aufr: { n: 16, a: [] },
@@ -1108,6 +1112,8 @@ function load() {
   catch (e) { return clone(DEF); }
 }
 let S = load();
+// Fokus im Tech-Board anfangs aus (einmalig auch für ältere Speicherstände)
+if (!S.fokusOff) { S.fokusOff = 1; S.show.fokus = false; }
 function cleanPlan() {
   if (!Array.isArray(S.plan)) S.plan = clone(DEF.plan);
   S.plan = S.plan.filter(x => x && typeof x === 'object').slice(0, 12)
@@ -2420,9 +2426,26 @@ function tbTone(f, d, t0) {
   o.type = 'square'; o.frequency.value = f; g.gain.setValueAtTime(0.3, t); g.gain.linearRampToValueAtTime(0, t + d);
   o.connect(g).connect(c.destination); o.start(t); o.stop(t + d);
 }
+/* Alarm wie ein Feueralarm: lauter, rauer Heulton, der jede Sekunde von 1200 Hz auf 500 Hz fällt, ohne Pause */
+let tbSirenNodes = null;
+function tbSirenStop() {
+  clearInterval(tbSiren); tbSiren = 0;
+  if (tbSirenNodes) { const { g, os, c } = tbSirenNodes; try { g.gain.cancelScheduledValues(c.currentTime); g.gain.setTargetAtTime(0, c.currentTime, 0.03); os.forEach(o => o.stop(c.currentTime + 0.15)); } catch (e) { } tbSirenNodes = null; }
+}
+function tbSirenStart() {
+  unlockAudio(); const c = ac(); if (!c) return;
+  const g = c.createGain(); g.gain.value = 0.0001;
+  const comp = c.createDynamicsCompressor(); comp.threshold.value = -12; comp.ratio.value = 6;
+  const os = ['square', 'sawtooth'].map((type, i) => { const o = c.createOscillator(); o.type = type; o.detune.value = i ? 12 : 0; o.connect(g); o.start(); return o; });
+  g.connect(comp).connect(c.destination);
+  g.gain.exponentialRampToValueAtTime(0.32, c.currentTime + 0.05);
+  const sweep = () => { const t = c.currentTime; os.forEach(o => { o.frequency.cancelScheduledValues(t); o.frequency.setValueAtTime(1200, t); o.frequency.linearRampToValueAtTime(500, t + 0.98); }); };
+  sweep(); tbSiren = setInterval(sweep, 1000);
+  tbSirenNodes = { g, os, c };
+}
 function tbAlarm(v) {
-  tbAlarmOn = v; clearInterval(tbSiren);
-  if (v) { unlockAudio(); const beat = () => { tbTone(880, .4, 0); tbTone(620, .4, .45); }; beat(); tbSiren = setInterval(beat, 900); }
+  tbAlarmOn = v; tbSirenStop();
+  if (v) tbSirenStart();
   tbRender();
 }
 /* Treffpunkt: alle kommen zusammen, mit Gong und kurzer Überschrift */
@@ -2457,7 +2480,7 @@ function tbEndClean() {
 
 /* ================= Aufräumplan ================= */
 const CL_TASKS = [
-  { id: 'werkzeug', t: 'Werkzeug', d: 'Werkzeug auf Vollständigkeit prüfen und in die Schränke einsortieren.', p: 1 },
+  { id: 'werkzeug', t: 'Werkzeug', d: 'Werkzeug auf Vollständigkeit prüfen und in die Schränke einsortieren.', p: 2 },
   { id: 'material', t: 'Material', d: 'Material sortieren und in den Lagerraum bringen.', p: 1 },
   { id: 'tasche', t: 'Taschenablage Seite', d: 'Ablage bei Bedarf aufräumen und abfegen. Auch die Fensterbank abfegen.', p: 1 },
   { id: 'bohr', t: 'Werkbank Tischbohrmaschinen', d: 'Werkbank/Bohrmaschinen säubern und Werkzeuge in den Schränken auf Vollständigkeit prüfen. Schlüssel nach vorne bringen.', p: 1 },
@@ -2470,6 +2493,7 @@ const CL_TASKS = [
 ];
 let clSel = 0, clDrag = null;
 /* Aufräumplan: eigene Fassung (S.clTasks) oder Vorlage (CL_TASKS) */
+const clP = t => Math.max(1, Math.min(3, Math.round(+t.p) || 1)); // Nummern je Auftrag
 function clTasks() {
   return Array.isArray(S.clTasks) ? S.clTasks.filter(t => t && t.id && typeof t.t === 'string') : CL_TASKS;
 }
@@ -2498,9 +2522,11 @@ function clShuffle() {
   const st = clState();
   const pres = st.a.map((v, i) => v === 'out' ? 0 : i + 1).filter(Boolean);
   for (let i = pres.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pres[i], pres[j]] = [pres[j], pres[i]]; }
-  // Jeder Auftrag bekommt eine Nummer, alle übrigen sind Springer und können noch zugeordnet werden
-  const tasks = clTasks();
-  pres.forEach((n, i) => { st.a[n - 1] = i < tasks.length ? tasks[i].id : ''; });
+  // Erst bekommt jeder Auftrag eine Nummer, dann die Aufträge mit mehr Plätzen (z. B. Fegen) die nächste.
+  // Alle übrigen sind Springer und können noch zugeordnet werden.
+  const tasks = clTasks(), slots = [], maxP = Math.max(1, ...tasks.map(t => clP(t)));
+  for (let r = 0; r < maxP; r++) tasks.forEach(t => { if (clP(t) > r) slots.push(t.id); });
+  pres.forEach((n, i) => { st.a[n - 1] = i < slots.length ? slots[i] : ''; });
   clSel = 0; save(); clRender();
 }
 /* Aufräumplan bearbeiten */
@@ -2515,10 +2541,11 @@ function clEditRender() {
         <button class="pe-mv" data-mv="1" title="Nach unten" aria-label="Nach unten" ${i === t.length - 1 ? 'disabled' : ''}>${ICON_DN}</button>
         <button class="pe-mv del" data-del="1" title="Auftrag löschen" aria-label="Auftrag löschen">${ICON_X}</button>
       </div>
+      <label class="cl-np">Nummern <select class="cl-p" aria-label="Nummern für Auftrag ${i + 1}">${[1, 2, 3].map(n => `<option value="${n}" ${clP(x) === n ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
       <textarea class="cl-ed" maxlength="300" rows="2" placeholder="Was genau ist zu tun?" aria-label="Beschreibung ${i + 1}">${esc(x.d || '')}</textarea>
     </div>`).join('') || '<p>Noch keine Aufträge. Füge unten einen hinzu.</p>';
 }
-function clEditable() { if (!Array.isArray(S.clTasks)) S.clTasks = CL_TASKS.map(t => ({ id: t.id, t: t.t, d: t.d })); return S.clTasks; }
+function clEditable() { if (!Array.isArray(S.clTasks)) S.clTasks = CL_TASKS.map(t => ({ id: t.id, t: t.t, d: t.d, p: clP(t) })); return S.clTasks; }
 function clEditInit() {
   const dlg = $('#clDlg');
   const close = () => { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); clRender(); };
@@ -2533,6 +2560,11 @@ function clEditInit() {
     if (e.target.classList.contains('cl-ed')) t.d = e.target.value;
     save();
   });
+  $('#clEdit').addEventListener('change', e => {
+    if (!e.target.classList.contains('cl-p')) return;
+    const row = e.target.closest('.cl-er'), t = row && clEditable()[+row.dataset.i];
+    if (t) { t.p = +e.target.value; save(); }
+  });
   $('#clEdit').addEventListener('click', e => {
     const b = e.target.closest('button'), row = e.target.closest('.cl-er'); if (!b || !row) return;
     const t = clEditable(), i = +row.dataset.i;
@@ -2542,7 +2574,7 @@ function clEditInit() {
   });
   $('#clEditAdd').addEventListener('click', () => {
     const t = clEditable(); if (t.length >= 20) return toast('Mehr als 20 Aufträge passen nicht in den Plan.');
-    t.push({ id: 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), t: '', d: '' });
+    t.push({ id: 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), t: '', d: '', p: 1 });
     save(); clEditRender(); const ins = $$('#clEdit .cl-et'); if (ins.length) ins[ins.length - 1].focus();
   });
   $('#clEditReset').addEventListener('click', () => {
@@ -2649,7 +2681,10 @@ const D = {
   'Alle zurück': ['Reset all', 'Tout remettre'],
   'Plan bearbeiten': ['Edit plan', 'Modifier le plan'],
   'Aufräumplan bearbeiten': ['Edit clean-up plan', 'Modifier le plan de rangement'],
+  'Jeder Auftrag bekommt seine Nummern (Fegen und Werkzeug zwei), die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.': ['Each job gets its numbers (sweeping and tools two), the rest are floaters. Tap a number, then tap a job, or drag the number.', 'Chaque tâche reçoit ses numéros (balayage et outils deux), les autres sont des renforts. Touche un numéro puis une tâche, ou fais glisser le numéro.'],
   'Jeder Auftrag bekommt eine Nummer, die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.': ['Each job gets one number, the rest are floaters. Tap a number, then tap a job, or drag the number.', 'Chaque tâche reçoit un numéro, les autres sont des renforts. Touche un numéro puis une tâche, ou fais glisser le numéro.'],
+  'Trag die Aufträge für deinen Raum ein und stell ein, wie viele Nummern jeder Auftrag bekommt. Beim zufälligen Verteilen bekommt zuerst jeder Auftrag eine Nummer, dann die Aufträge mit zwei oder drei Nummern die nächsten. Alle übrigen Nummern sind Springer und lassen sich danach noch zuordnen.': ['Enter the jobs for your room and set how many numbers each job gets. When assigning randomly, every job first gets one number, then jobs with two or three numbers get the next ones. All other numbers are floaters and can still be assigned afterwards.', 'Saisis les tâches de ta salle et indique combien de numéros chaque tâche reçoit. En répartition aléatoire, chaque tâche reçoit d’abord un numéro, puis les tâches à deux ou trois numéros les suivants. Les autres numéros sont des renforts et peuvent encore être attribués.'],
+  'Nummern': ['Numbers', 'Numéros'],
   'Trag die Aufträge für deinen Raum ein. Beim zufälligen Verteilen bekommt jeder Auftrag eine Nummer, alle übrigen Nummern sind Springer. Springer kannst du danach noch einem Auftrag zuordnen.': ['Enter the jobs for your room. When assigning randomly, each job gets one number and all other numbers are floaters. You can still assign floaters to a job afterwards.', 'Saisis les tâches de ta salle. En répartition aléatoire, chaque tâche reçoit un numéro, les autres numéros sont des renforts. Tu peux ensuite encore les attribuer à une tâche.'],
   '+ Auftrag hinzufügen': ['+ Add job', '+ Ajouter une tâche'],
   'Vorlage wiederherstellen': ['Restore template', 'Rétablir le modèle'],
