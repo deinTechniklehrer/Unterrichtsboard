@@ -321,7 +321,10 @@ body.clean #ofReset, body.clean #flReset, body.clean #flUndo{display:none}
 .tile.no .s-text{color:var(--no)}
 #tSozial .s-text{color:var(--accent)}
 #tSozial.has-sub .s-sub{display:block; color:var(--accent)}
-#tSozial.has-sub .big{height:min(58cqh,74cqw)}
+#tSozial.has-sub .big,#tFokus.has-sub .big{height:min(58cqh,74cqw)}
+#tFokus .s-sub{display:block;color:var(--muted)}
+#tFokus .big svg{width:100%;height:100%}
+#foBtns{flex-wrap:nowrap}#foBtns .btn{flex:1 1 0;min-width:0;padding:0 2px}#foBtns .btn svg{width:26px;height:26px}
 .so-btns{gap:4px}
 .so-btns .btn{flex:1 1 0; min-width:0; max-width:130px; padding:0 4px}
 .so-btns .btn svg{width:28px; height:28px}
@@ -803,6 +806,15 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
         </div>
         <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
     </section>
+    <section class="tile" id="tFokus" data-k="fokus">
+      <div class="label">Fokus</div>
+      <div class="vis">
+        <div class="big" id="foBig" role="button" aria-label="Fokus wechseln"></div>
+        <div class="s-text" id="foText">Freie Wahl</div>
+        <div class="s-sub" id="foSub"></div>
+      </div>
+      <div class="ctrl so-btns" id="foBtns"></div>
+    </section>
     <section class="tile" id="tApe" data-k="ape">
       <div class="label">APE</div>
       <div class="tb-body"><div class="tb-chips" id="apes"></div>
@@ -836,6 +848,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 
     <h3>Kacheln anzeigen</h3>
     <label class="row">APE <input type="checkbox" class="sw" data-show="ape"></label>
+    <label class="row">Fokus <input type="checkbox" class="sw" data-show="fokus"></label>
     <label class="row">Gefährdungen <input type="checkbox" class="sw" data-show="gefahr"></label>
     <label class="row">Timer <input type="checkbox" class="sw" data-show="timer"></label>
     <div class="row">Größe des Timers (Querformat)
@@ -882,7 +895,8 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
-    <p><strong>APE:</strong> Wähle Robotik oder Arduino. Fotos der Arbeitsplätze können später ergänzt werden.</p>
+    <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Dobot, 3D-Druck oder Arduino. Bei „Freie Wahl“ steht „Kein Fokus“, dann suchen sich alle selbst etwas aus. Antippen des großen Bildes schaltet weiter.</p>
+    <p><strong>APE:</strong> Wähle Robotik oder Arduino. Robotik zeigt ein Foto des Arbeitsplatzes (Laptop, Not-Aus, Roboterarm), Antippen vergrößert es.</p>
     <p><strong>Gefährdungen:</strong> Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
     <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
@@ -991,8 +1005,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const KEY = 'roboboard.v1';
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
-  theme: 'light', tsize: '2x2', meetT: '', clean: false, sound: true, wake: true,
-  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: true, gefahr: true },
+  theme: 'light', tsize: '2x2', meetT: '', fokus: 'frei', apeRobo: 0, clean: false, sound: true, wake: true,
+  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: true, fokus: true, gefahr: true },
   raus: false,
   ape: [], rules: [], haz: [],
   aufr: { n: 16, a: [] },
@@ -1139,7 +1153,7 @@ function clock() {
    Das Board probiert mehrere Anordnungen aus und nimmt die, bei der alles
    am größten und lesbarsten ist. Passt nichts auf einen Bildschirm,
    werden die Kacheln untereinander gesetzt und die Seite darf scrollen. */
-const ORDER = ['timer', 'plan', 'cleanmsg', 'ape', 'gefahr', 'aufgabe', 'sozial', 'ampel', 'ipad', 'ki', 'raus'];
+const ORDER = ['timer', 'plan', 'cleanmsg', 'ape', 'fokus', 'gefahr', 'aufgabe', 'sozial', 'ampel', 'ipad', 'ki', 'raus'];
 const MIN = {
   timer:  { ctrl: [250, 290], clean: [160, 150] },
   cleanmsg: { ctrl: [500, 440], clean: [460, 360] },
@@ -1147,6 +1161,7 @@ const MIN = {
   gefahr: { ctrl: [200, 170], clean: [130, 105] },
   aufgabe:{ ctrl: [220, 125], clean: [200, 100] },
   sozial: { ctrl: [175, 215], clean: [125, 112] },
+  fokus:  { ctrl: [175, 215], clean: [125, 112] },
   raus:   { ctrl: [160, 190], clean: [120, 112] },
   ampel:  { ctrl: [170, 190], mic: [180, 250], clean: [120, 112] },
   ipad:   { ctrl: [180, 250], clean: [120, 115] },
@@ -1624,6 +1639,55 @@ function buildSozial() {
   $('#soBig').addEventListener('click', () => {
     S.sozial = SO_KEYS[(SO_KEYS.indexOf(S.sozial) + 1) % SO_KEYS.length]; save(); renderSozial();
   });
+}
+
+/* ================= Fokus (Robo-Board) =================
+   Woran die Klasse heute arbeitet: Dobot, 3D-Druck, Arduino oder freie Wahl. Eigene Zeichnungen. */
+const FOKUS = {
+  dobot: { name: 'Dobot', sub: 'Robotik', svg:
+    '<rect x="18" y="80" width="46" height="10" rx="3" fill="#37474f"/><rect x="28" y="70" width="26" height="12" rx="3" fill="#546e7a"/>' +
+    '<path d="M41 70 L34 40" stroke="#1e88e5" stroke-width="10" stroke-linecap="round"/><path d="M34 40 L70 26" stroke="#1e88e5" stroke-width="9" stroke-linecap="round"/>' +
+    '<circle cx="41" cy="70" r="6" fill="#263238"/><circle cx="34" cy="40" r="6" fill="#263238"/><circle cx="70" cy="26" r="5" fill="#263238"/>' +
+    '<path d="M70 31 V44 M64 44 h12 M64 44 v8 M76 44 v8" stroke="#263238" stroke-width="4" stroke-linecap="round" fill="none"/>' +
+    '<rect x="62" y="74" width="16" height="16" rx="2" fill="#ffb300"/>' },
+  druck: { name: '3D-Druck', sub: '', svg:
+    '<rect x="14" y="12" width="72" height="78" rx="6" fill="none" stroke="#455a64" stroke-width="6"/>' +
+    '<rect x="14" y="26" width="72" height="6" fill="#455a64"/><rect x="42" y="24" width="16" height="14" rx="2" fill="#263238"/><path d="M47 38 h6 l-3 6z" fill="#263238"/>' +
+    '<rect x="22" y="80" width="56" height="5" rx="2" fill="#78909c"/>' +
+    '<path d="M38 80 v-14 l12 -9 12 9 v14z" fill="#43a047"/><path d="M38 66 h24 M38 72 h24" stroke="#2e7d32" stroke-width="2"/>' },
+  arduino: { name: 'Arduino', sub: '', svg:
+    '<rect x="10" y="22" width="80" height="56" rx="6" fill="#00838f"/>' +
+    '<rect x="40" y="38" width="28" height="22" rx="2" fill="#263238"/>' +
+    '<path d="M42 38 v-5 M48 38 v-5 M54 38 v-5 M60 38 v-5 M66 38 v-5 M42 60 v5 M48 60 v5 M54 60 v5 M60 60 v5 M66 60 v5" stroke="#b0bec5" stroke-width="2.5"/>' +
+    '<rect x="4" y="32" width="16" height="14" rx="2" fill="#b0bec5"/><rect x="6" y="54" width="12" height="14" rx="3" fill="#37474f"/>' +
+    '<rect x="30" y="24" width="56" height="5" rx="1" fill="#1b1b1b"/><rect x="40" y="71" width="46" height="5" rx="1" fill="#1b1b1b"/>' +
+    '<circle cx="80" cy="40" r="3" fill="#ffeb3b"/>' },
+  frei: { name: 'Freie Wahl', sub: 'Kein Fokus', svg:
+    '<rect x="10" y="10" width="36" height="36" rx="8" fill="#1e88e5" opacity=".85"/><rect x="54" y="10" width="36" height="36" rx="8" fill="#43a047" opacity=".85"/>' +
+    '<rect x="10" y="54" width="36" height="36" rx="8" fill="#00838f" opacity=".85"/><rect x="54" y="54" width="36" height="36" rx="8" fill="#ffb300" opacity=".85"/>' +
+    '<path d="M22 28 l6 6 12-12" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
+    '<path d="M66 72 l6 6 12-12" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' }
+};
+const FO_KEYS = Object.keys(FOKUS);
+function renderFokus() {
+  if (!FOKUS[S.fokus]) S.fokus = 'frei';
+  const f = FOKUS[S.fokus];
+  $('#foBig').innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true">${f.svg}</svg>`;
+  $('#foText').textContent = f.name;
+  $('#foSub').textContent = f.sub;
+  $('#tFokus').classList.toggle('has-sub', !!f.sub);
+  $$('#foBtns .btn').forEach(b => b.classList.toggle('sel', b.dataset.fo === S.fokus));
+}
+function buildFokus() {
+  const box = $('#foBtns');
+  FO_KEYS.forEach(k => {
+    const b = document.createElement('button');
+    b.className = 'btn'; b.dataset.fo = k; b.title = FOKUS[k].name; b.setAttribute('aria-label', FOKUS[k].name);
+    b.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true">${FOKUS[k].svg}</svg>`;
+    b.addEventListener('click', () => { S.fokus = k; save(); renderFokus(); });
+    box.appendChild(b);
+  });
+  $('#foBig').addEventListener('click', () => { S.fokus = FO_KEYS[(FO_KEYS.indexOf(S.fokus) + 1) % FO_KEYS.length]; save(); renderFokus(); });
 }
 
 /* ================= iPad & KI ================= */
@@ -2241,7 +2305,7 @@ function importBoard(file) {
   rd.readAsText(file);
 }
 function renderAll() {
-  renderTheme(); renderClean(); renderTimer(); renderSozial();
+  renderTheme(); renderClean(); renderTimer(); renderSozial(); renderFokus();
   renderIpad(); renderRaus(); renderStatus('ki'); renderAmpelCtrl(); renderTask(); renderPlan(); tbRender(); layout();
 }
 
@@ -2255,7 +2319,7 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 const tbBlue = b => `<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#1565c0"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${b}</g></svg>`;
 const tbTri = b => `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4 46 43H2z" fill="#f5b700" stroke="#111" stroke-width="2.500" stroke-linejoin="round"/><g fill="none" stroke="#111" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round">${b}</g></svg>`;
 const TB_APE = ['Robotik', 'Arduino']; // Robotiklabor
-const TB_APE_IMG = {}; // Fotos folgen
+const TB_APE_IMG = { Robotik: 'ape-robotik.jpg' }; // Arduino: Foto folgt
 const TB_RULES = [
   ['kipp', 'Fenster auf Kipp', tbBlue('<rect x="13" y="12" width="22" height="25" rx="1"/><path d="M13 37 19 15h22l-6 22"/>')],
   ['brille', 'Schutzbrille', "<svg viewBox=\"0 0 265 265\" aria-hidden=\"true\"><path fill=\"#005387\" d=\"M0 132.46C0 59.514 59.525 0 132.501 0 205.469 0 265 59.513 265 132.459 265 205.417 205.469 265 132.501 265 59.537 265 0 205.417 0 132.46\"/><path fill=\"#fff\" fill-rule=\"evenodd\" d=\"M132.509 235.575c-30.16.13-50.638-19.989-61.406-60.356-10.177 0-15.469-5.546-21.475-19.222-9.758-22.201-7.971-38.874 7.162-39.606-4.879-50.031 34.927-87.4 75.719-87.4 40.774 0 80.586 37.37 75.701 87.4 15.139.732 16.915 17.405 7.162 39.606-6.018 13.676-11.31 19.222-21.475 19.222-10.767 40.367-31.246 60.485-61.388 60.356m-7.882-8.401c-21.08-3.056-36.715-19.517-45.919-53.984l-1.563-5.853c-.867-3.493-5.859-3.186-6.909-.484-.761 2.024-7.688-1.044-13.393-14.024-4.649-10.561-5.953-18.614-5.186-23.446.584-3.676 4.018-6.395 6.301-5.168 1.215 5.994 8.602 3.522 7.865-.979l-.897-5.687 12.891 8.219-.059-6.826-13.458-8.219c-1.345-39.517 28.219-69.099 60.326-73.335q7.788-1.035 15.877 0c32.078 4.23 61.636 33.777 60.326 73.258l-13.593 8.295-.053 6.826 13.027-8.313-.903 5.782c-.737 4.502 6.643 6.974 7.853.979 2.289-1.227 5.735 1.493 6.307 5.168.773 4.832-.537 12.885-5.18 23.446-5.699 12.98-12.632 16.048-13.387 14.024-1.068-2.702-6.047-3.009-6.921.484l-1.563 5.853c-9.21 34.467-24.838 50.928-45.913 53.984a60 60 0 0 1-15.877 0m16.537-109.796c14.112-.808 28.614-.472 43.511 1.021l-.218 27.086c-.083 10.077-9.988 17.115-19.045 16.986l-3.965-.047c-11.67-.165-20.762-7.422-20.626-18.531zm38.591 5.469-.183 22.591c-.059 6.661-6.956 12.26-14.089 12.154l-3.965-.053c-9.788-.142-15.9-5.912-15.818-13.587l.283-21.918c11.021-.437 22.272-.165 33.771.814m-3.015 22.567c-.035 4.726-5.257 9.44-11.222 9.351l-3.965-.053c-8.637-.124-13.086-4.997-13.015-10.72l.242-19.228q13.815-.398 28.125.69zm19.835-34.721-9.363 5.375-2.277-.23a295 295 0 0 0-19.841-1.316c9.794-1.681 22.496-3.328 31.482-3.829m-9.422 17.806 7.735-4.92c-.614 6.342-1.858 13.758-3.752 21.67l-4.413 3.381c.195-1.009.283-2.053.307-3.127zm-63.317-11.121c-14.107-.808-28.614-.472-43.511 1.021l.23 27.086c.083 10.077 9.971 17.115 19.033 16.986l3.965-.047c11.67-.165 20.762-7.422 20.626-18.531zm-38.597 5.469.201 22.591c.053 6.661 6.95 12.26 14.077 12.154l3.971-.053c9.77-.142 15.906-5.912 15.8-13.587l-.277-21.918q-16.522-.655-33.771.814m3.021 22.567c.035 4.726 5.257 9.44 11.222 9.351l3.959-.053c8.637-.124 13.104-4.997 13.027-10.72l-.248-19.228q-13.815-.398-28.125.69zm-19.829-34.721 9.357 5.375 2.277-.23c6.69-.667 13.31-1.109 19.847-1.316-9.806-1.681-22.514-3.328-31.482-3.829m9.41 17.806-7.723-4.92c.619 6.342 1.864 13.758 3.752 21.67l4.407 3.381a18.7 18.7 0 0 1-.295-3.127zm48.986-6.59q5.272-5.212 11.334 0v2.95h-11.334zm0 7.251q5.272-5.213 11.334 0v2.95h-11.334z\"/></svg>"],
@@ -2301,7 +2365,7 @@ function tbRender() {
   $$('#rules .tb-s').forEach(e => { const o = S.rules.includes(e.dataset.id); e.classList.toggle('on', o); e.setAttribute('aria-pressed', String(o)); });
   $$('#hazards .tb-s').forEach(e => { const o = S.haz.includes(e.dataset.id); e.classList.toggle('on', o); e.setAttribute('aria-pressed', String(o)); });
   $('#apePhotos').innerHTML = TB_APE.filter(a => S.ape.includes(a)).map(a => TB_APE_IMG[a]
-    ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}: Werkzeug auf der Werkbank"></button>`
+    ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}"></button>`
     : `<div class="tb-photo none">APE ${a}: Bild folgt</div>`).join('');
   // Robotiklabor: APE ohne Sicherheitssymbole
   $('#rules').hidden = true; $('#apeSplit').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
@@ -2464,7 +2528,7 @@ function tbInit() {
 
 /* ================= Start ================= */
 if (isStandalone()) document.body.classList.add('standalone');
-buildPresets(); buildSozial(); bind(); tbInit();
+buildPresets(); buildSozial(); buildFokus(); bind(); tbInit();
 // Timer, der während geschlossener Seite abgelaufen ist: ohne Ton als „abgelaufen“ zeigen
 if (S.timer.endAt && S.timer.endAt <= Date.now()) { S.timer.endAt = null; S.timer.remaining = 0; doneFlag = true; save(); }
 renderAll(); clock();
@@ -2557,6 +2621,12 @@ const D = {
   'Arbeitsplatzeinrichtung': ['Workstation setup', 'Aménagement du poste'],
   'Holz': ['Wood', 'Bois'],
   'Robotik': ['Robotics', 'Robotique'],
+  'Fokus': ['Focus', 'Focus'],
+  'Fokus wechseln': ['Change focus', 'Changer de focus'],
+  'Dobot': ['Dobot', 'Dobot'],
+  '3D-Druck': ['3D printing', 'Impression 3D'],
+  'Freie Wahl': ['Free choice', 'Libre choix'],
+  'Kein Fokus': ['No focus', 'Pas de focus'],
   'Arduino': ['Arduino', 'Arduino'],
   'Wähle die APE für die heutige Arbeit.': ['Choose the workstation set-up for today.', 'Choisis l’aménagement du poste pour aujourd’hui.'],
   'Metall': ['Metal', 'Métal'],
