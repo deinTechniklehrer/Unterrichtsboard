@@ -5,7 +5,7 @@
 Weitere Boards in diesem Repository:
 
 - [Tech-Board](https://deintechniklehrer.github.io/Unterrichtsboard/tech-board/) für den Technikunterricht: Sicherheit, Alarm, Timer, Aufräumphase, APE, Regeln und Gefährdungen
-- [Klassenrat-Board](https://deintechniklehrer.github.io/Unterrichtsboard/klassenrat/): Ablauf, Ämter und Protokoll mit PDF-Export
+- [Klassenrat Dashboard](https://deintechniklehrer.github.io/Unterrichtsboard/klassenrat/): Ablauf, Ämter, Protokoll mit PDF-Export, Reflexion (gut/mittel/schlecht) und Lärmampel mit Alarm; Kacheln und Vorgaben anpassbar
 
 Läuft im Browser und lässt sich als App auf dem Home-Bildschirm installieren (funktioniert danach auch offline).
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Klassenrat-Board</title>
-<meta name="description" content="Klassenrat-Board: Ablauf mit Timer, Ämter und Protokoll (Was liegt an, was wurde geklärt, was thematisieren wir beim nächsten Mal) mit PDF-Export.">
+<title>Klassenrat Dashboard</title>
+<meta name="description" content="Klassenrat Dashboard: Ablauf mit Timer, Ämter, Protokoll, Reflexion und Lärmampel, mit PDF-Export. Kacheln und Vorgaben lassen sich anpassen.">
 <meta name="author" content="Daniel Beyrodt">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -32,7 +32,7 @@ h1{font-size:clamp(20px,3vw,28px);color:var(--accent);font-weight:800}
 .hb.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .tile{background:var(--tile);border:2px solid var(--line);border-radius:16px;padding:12px;min-width:0}
 h2{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:800}
-.top{display:grid;gap:10px;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) minmax(0,1.4fr)}
+.top{display:flex;flex-wrap:wrap;gap:10px}.top>.tile{flex:1 1 260px}.top>.ablauf{flex:2 1 340px}
 .steps{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
 .step{min-height:56px;border-radius:12px;border:2px solid var(--line);background:var(--tile);font-weight:700;padding:4px 6px;line-height:1.15}
 .step small{display:block;font-weight:500;color:var(--muted)}
@@ -45,7 +45,7 @@ h2{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute
 .grid2{display:grid;gap:6px;grid-template-columns:repeat(2,minmax(0,1fr))}
 label{font-size:13px;font-weight:700;color:var(--muted);display:block}
 label input{margin-top:2px;color:var(--ink);font-weight:500}
-.cols{flex:1;display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}
+.cols{flex:1;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));align-items:start}
 .col{--c:var(--c1);border-top:6px solid var(--c)}
 .col.g{--c:var(--c2)}.col.n{--c:var(--c3)}
 .col h2{font-size:clamp(17px,2vw,21px);text-transform:none;letter-spacing:0;color:var(--c)}
@@ -102,44 +102,113 @@ h2 .ric{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
 #bigCard .bc span{font-size:min(7vh,9vw);font-weight:900}
 #bigCard .bc small{font-size:min(3.4vh,4.6vw);font-weight:700;max-width:90%}
 #bigCard p{color:#fff;font-weight:700}
-@media (max-width:1000px){.top{grid-template-columns:repeat(2,minmax(0,1fr))}.top .ablauf{grid-column:1/-1}}
-@media (max-width:760px){.top,.cols{grid-template-columns:minmax(0,1fr)}.logo{height:34px}}
+@media (max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}.logo{height:34px}}
+[hidden]{display:none!important}
+.mid{display:flex;flex-wrap:wrap;gap:10px}.mid>.tile{flex:1 1 300px}.mid>#tRefl{flex:3 1 460px}
+.hint{font-size:13px;color:var(--muted);margin-top:6px}
+.amp{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hous{background:#1d2630;border-radius:30px;padding:10px;display:flex;flex-direction:column;gap:8px;cursor:pointer;flex:none}
+.lamp{width:clamp(44px,6vw,62px);aspect-ratio:1;border-radius:50%;background:#3a4452;transition:background .2s,box-shadow .2s;cursor:pointer}
+.lamp.on.red{background:#ff3b30;box-shadow:0 0 18px #ff3b30aa}.lamp.on.yellow{background:#ffcc00;box-shadow:0 0 18px #ffcc00aa}.lamp.on.green{background:#30d158;box-shadow:0 0 18px #30d158aa}
+.amp-txt{font-size:clamp(22px,2.8vw,32px);font-weight:900;line-height:1.1}
+.amp-txt.red{color:#d32f2f}.amp-txt.yellow{color:#9a6b00}.amp-txt.green{color:var(--c2)}
+:root[data-theme="dark"] .amp-txt.red{color:#ff6b61}:root[data-theme="dark"] .amp-txt.yellow{color:#ffd24d}
+.meter{position:relative;height:12px;border-radius:6px;background:var(--line);overflow:hidden;margin-top:10px}
+.meter i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--c2);border-radius:6px}
+.meter b{position:absolute;top:0;bottom:0;width:3px;background:var(--ink);opacity:.6}
+.slider{display:flex;align-items:center;gap:8px;margin-top:6px}
+.slider input{flex:1;min-width:0;padding:0;border:0;background:none;accent-color:var(--accent);height:28px}
+body.alarm{animation:krPulse 1s ease-in-out infinite}
+@keyframes krPulse{0%,100%{background:#ff1a1a}50%{background:#5c0000}}
+@media (prefers-reduced-motion:reduce){body.alarm{animation:none;background:#ff1a1a}}
+#alarmBar{position:fixed;left:0;right:0;top:0;z-index:70;min-height:64px;border:0;background:#fff;color:#a80000;font-weight:900;font-size:clamp(18px,3vw,30px);box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.rfrow{border:2px solid var(--line);border-radius:12px;padding:8px;margin-top:8px;background:var(--soft);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.rfrow .q{flex:1 1 220px;min-width:0;font-weight:700;overflow-wrap:anywhere}
+.rfrow .bes{display:block;font-weight:500;color:var(--muted);font-size:14px;margin-top:2px}
+.rfrow .bes .bk{font-weight:800;color:var(--c2)}
+.votes{display:flex;gap:6px;flex:none}
+.vb{min-width:84px;min-height:52px;border-radius:12px;border:2px solid var(--line);background:var(--tile);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;line-height:1.1;padding:2px 8px}
+.vb b{font-size:22px;font-variant-numeric:tabular-nums}.vb span{font-size:13px}
+.vb.v0{border-color:var(--c2);color:var(--c2)}.vb.v1{border-color:var(--c1);color:var(--c1)}.vb.v2{border-color:#c62828;color:#c62828}
+:root[data-theme="dark"] .vb.v2{color:#ff6b61;border-color:#ff6b61}
+.vrs{min-width:44px;min-height:52px;border-radius:12px;border:2px solid var(--line);background:var(--tile);color:var(--muted);font-size:18px;font-weight:800}
+.rfh{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:14px 0 0;font-weight:800}
+#dView{max-width:min(720px,calc(100vw - 16px));width:100%;max-height:92dvh;overflow:auto}
+#dView h4{margin:16px 0 6px;font-size:16px}
+.prow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.prow .pn{flex:1 1 130px;width:auto}.prow .pd{flex:3 1 200px;width:auto}.prow .pm{flex:none;width:72px}.prow .pq{flex:1 1 260px;width:auto}
+.prow .px{flex:none;min-width:44px;min-height:44px;border-radius:10px;border:2px solid var(--line);background:var(--tile);font-size:20px;color:var(--muted)}
+.prow .px:disabled{opacity:.4}
 </style>
 </head>
 <body>
 <div class="app">
 <header>
   <img class="logo" alt="dein Technik Lehrer" src="data:image/png;base64,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">
-  <h1>Klassenrat-Board</h1>
+  <h1>Klassenrat Dashboard</h1>
   <span class="sp"></span>
   <button class="hb pri" id="bPdf">Protokoll als PDF</button>
   <button class="hb" id="bCopy">Text kopieren</button>
   <button class="hb" id="bLoad">PDF laden</button><input type="file" id="fLoad" accept=".pdf,application/pdf" hidden>
   <button class="hb" id="bNew">Neue Sitzung</button>
   <button class="hb" id="bSet">Zeiten</button>
+  <button class="hb" id="bView" title="Kacheln und Vorgaben anpassen">Einstellungen</button>
   <button class="hb" id="bRW" title="Regelwache: Verwarnungen zeigen und eintragen"><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg> Regelwache</button>
   <button class="hb" id="bTheme">Dunkel</button>
   <button class="hb" id="bLang" aria-label="Sprache / Language / Langue" data-noi18n><span class="lcode" id="langCode">DE</span></button>
 </header>
 <section class="top">
-  <div class="tile ablauf"><h2>Ablauf</h2><div class="steps" id="steps"></div></div>
-  <div class="tile" id="tBox"><h2><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>Zeitwache</h2><div id="digits" role="timer">00:00</div>
+  <div class="tile ablauf" data-card="ablauf"><h2>Ablauf</h2><div class="steps" id="steps"></div></div>
+  <div class="tile" id="tBox" data-card="zeit"><h2><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>Zeitwache</h2><div id="digits" role="timer">00:00</div>
     <div class="row"><button id="tMinus" aria-label="Eine Minute weniger">−1</button><button id="tStart">Start</button><button id="tPlus" aria-label="Eine Minute mehr">+1</button></div></div>
-  <div class="tile"><h2>Sitzung und Ämter</h2>
+  <div class="tile" data-card="meta"><h2>Sitzung und Ämter</h2>
     <div class="grid2" id="meta"></div>
     <div class="roles" id="roles"></div>
   </div>
 </section>
 <section class="cols">
-  <div class="tile col" data-k="an"><h2>Was liegt an?</h2><div class="add"><input aria-label="Neues Thema" placeholder="Neues Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
-  <div class="tile col g" data-k="ge"><h2>Was wurde geklärt?</h2><div class="add"><input aria-label="Geklärtes Thema" placeholder="Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
-  <div class="tile col n" data-k="na"><h2>Was müssen wir beim nächsten Mal thematisieren?</h2><div class="add"><input aria-label="Thema fürs nächste Mal" placeholder="Thema fürs nächste Mal …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
+  <div class="tile col" data-k="an" data-card="an"><h2>Was liegt an?</h2><div class="add"><input aria-label="Neues Thema" placeholder="Neues Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
+  <div class="tile col g" data-k="ge" data-card="ge"><h2>Was wurde geklärt?</h2><div class="add"><input aria-label="Geklärtes Thema" placeholder="Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
+  <div class="tile col n" data-k="na" data-card="na"><h2>Was müssen wir beim nächsten Mal thematisieren?</h2><div class="add"><input aria-label="Thema fürs nächste Mal" placeholder="Thema fürs nächste Mal …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
+</section>
+<section class="mid">
+  <div class="tile" id="tRefl" data-card="refl"><h2>Reflexion</h2>
+    <div id="rfList"></div>
+    <h3 class="rfh">Geklärt und beschlossen</h3>
+    <div id="rfDone"></div>
+    <p class="hint">Tippe bei jeder Frage auf gut, mittel oder schlecht, sooft Stimmen gezählt werden sollen. Hinter jedem geklärten Thema steht der Beschluss.</p>
+  </div>
+  <div class="tile" id="tAmpel" data-card="ampel"><h2>Lärmampel</h2>
+    <div class="amp">
+      <div class="hous" id="aHous" role="button" tabindex="0" aria-label="Ampel umschalten"><div class="lamp red" data-l="red"></div><div class="lamp yellow" data-l="yellow"></div><div class="lamp green" data-l="green"></div></div>
+      <div><div class="amp-txt green" id="aTxt" aria-live="polite">Alles gut</div><div class="hint" id="aHint">Tippe auf die Ampel oder starte das Mikrofon.</div></div>
+    </div>
+    <div id="aMicBox" hidden><div class="meter" aria-hidden="true"><i id="aLvl"></i><b id="aMarkY"></b><b id="aMarkR"></b></div>
+      <label class="slider"><span>leise</span><input type="range" id="aLimit" min="25" max="95" step="1" aria-label="Ab wann die Ampel rot wird"><span>laut</span></label></div>
+    <div class="row"><button id="aMic">Mikrofon starten</button></div>
+    <label class="chk"><input type="checkbox" id="aAlarm"> Alarm, wenn die Ampel rot wird</label>
+    <p class="hint">Der Alarm pulsiert rot und gibt einen Signalton, bis du ihn antippst, spätestens nach 15 Sekunden. Das Mikrofon misst nur die Lautstärke im Browser, nichts wird aufgenommen.</p>
+  </div>
 </section>
 <p class="note-priv">Alles bleibt nur in diesem Browser. Das Board läuft oft über den Beamer: Schreibt Konflikte sachlich und ohne Namen auf.</p>
-<footer>Klassenrat-Board · Daniel Beyrodt · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/ueber-mich/" target="_blank" rel="noopener">Über mich</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutz</a></footer>
+<footer>Klassenrat Dashboard · Daniel Beyrodt · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/ueber-mich/" target="_blank" rel="noopener">Über mich</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutz</a></footer>
 </div>
+<dialog id="dView">
+  <h3>Einstellungen</h3>
+  <h4>Kacheln anzeigen</h4>
+  <div id="vCards"></div>
+  <h4>Ablauf anpassen</h4>
+  <p class="note-priv">Name, Beschreibung und Minuten jeder Phase. Die Änderungen gelten für alle weiteren Sitzungen.</p>
+  <div id="vPh"></div>
+  <div class="row" style="justify-content:flex-start"><button id="vPhAdd">Phase hinzufügen</button><button id="vPhDef">Standard</button></div>
+  <h4>Reflexionsfragen anpassen</h4>
+  <div id="vRq"></div>
+  <div class="row" style="justify-content:flex-start"><button id="vRqAdd">Frage hinzufügen</button><button id="vRqDef">Standard</button></div>
+  <div class="row"><button id="vOk" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">Fertig</button></div>
+</dialog>
+<button id="alarmBar" hidden>ALARM · Antippen zum Beenden</button>
 <dialog id="dSet"><h3>Zeiten im Ablauf (Minuten)</h3><div id="setList"></div><div class="row"><button id="setOk">Fertig</button></div></dialog>
-<dialog id="dNew"><h3>Neue Sitzung starten?</h3><p>Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.</p><p>Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.</p><p>Die Liste der Regelwache wird geleert. Speichere ihre PDF vorher.</p><div class="row"><button id="newPdf">Erst PDF speichern</button><button id="newGo">Neue Sitzung</button><button id="newNo">Abbrechen</button></div></dialog>
+<dialog id="dNew"><h3>Neue Sitzung starten?</h3><p>Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.</p><p>Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.</p><p>Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.</p><div class="row"><button id="newPdf">Erst PDF speichern</button><button id="newGo">Neue Sitzung</button><button id="newNo">Abbrechen</button></div></dialog>
 <dialog id="dRW">
   <h3><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg>Regelwache</h3>
   <p class="note-priv">Tippe auf eine Karte, um sie groß für die Klasse zu zeigen.</p>
@@ -164,10 +233,19 @@ h2 .ric{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
 (function(){
 const $=s=>document.querySelector(s),KEY='klassenrat-v1';
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-const PH=[['Eröffnung','Vorsitz begrüßt, Regeln, Ämter'],['Rückblick','Letztes Protokoll: Was wurde umgesetzt?'],['Themen','Besprechen und beschließen'],['Abschluss','Beschlüsse vorlesen, nächste Sitzung']];
-const blank=()=>({klasse:'',datum:today(),nr:1,vorsitz:'',protokoll:'',zeitwache:'',regelwache:'',an:[],ge:[],na:[],verw:[]});
+const PH0=[['Eröffnung','Vorsitz begrüßt, Regeln, Ämter',2],['Rückblick','Letztes Protokoll: Was wurde umgesetzt?',5],['Themen','Besprechen und beschließen',25],['Abschluss','Beschlüsse vorlesen, nächste Sitzung',3]];
+const defPh=()=>PH0.map(p=>({n:p[0],d:p[1],m:p[2]}));
+const defRq=()=>[{id:'r1',t:'Wie lief unser Klassenrat insgesamt?'},{id:'r2',t:'Durften alle ausreden und wurden alle gehört?'},{id:'r3',t:'Haben wir uns an die Regeln gehalten?'}];
+const blank=()=>({klasse:'',datum:today(),nr:1,vorsitz:'',protokoll:'',zeitwache:'',regelwache:'',an:[],ge:[],na:[],verw:[],rv:{}});
 let S;try{S=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
-S=Object.assign({theme:'light',min:[2,5,25,3],phase:-1,dirty:false},blank(),S||{});
+S=Object.assign({theme:'light',phase:-1,dirty:false},blank(),S||{});
+S.show=Object.assign({ablauf:true,zeit:true,meta:true,an:true,ge:true,na:true,refl:true,ampel:true},S.show||{});
+S.ampel=Object.assign({limit:62,manual:'green',alarm:true},S.ampel||{});
+if(!Array.isArray(S.ph)||!S.ph.length){const mn=Array.isArray(S.min)?S.min:[];S.ph=PH0.map((p,i)=>({n:p[0],d:p[1],m:Number.isFinite(+mn[i])&&mn[i]!==null?+mn[i]:p[2]}))}
+delete S.min;
+if(!Array.isArray(S.rq)||!S.rq.length)S.rq=defRq();
+if(!S.rv||typeof S.rv!=='object')S.rv={};
+if(S.phase>=S.ph.length)S.phase=-1;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function toast(t){const n=$('#toast');n.textContent=t;n.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>n.hidden=true,2600)}
@@ -185,8 +263,8 @@ function move(it,from,to){S[from]=S[from].filter(x=>x!==it);S[to].push(it);S.dir
 function itemEl(it,k){
  const w=document.createElement('div');w.className='item';
  if(it.from){const f=document.createElement('div');f.className='from';f.textContent='vom letzten Mal';w.append(f)}
- const t=document.createElement('textarea');t.rows=1;t.value=it.t;t.setAttribute('aria-label','Thema');t.oninput=()=>{it.t=t.value;S.dirty=true;save()};w.append(t);
- if(k==='ge'||it.n){const n=document.createElement('textarea');n.className='note';n.rows=2;n.placeholder=k==='ge'?'Ergebnis oder Beschluss …':'Notiz …';n.value=it.n||'';n.setAttribute('aria-label',k==='ge'?'Ergebnis oder Beschluss':'Notiz');n.oninput=()=>{it.n=n.value;S.dirty=true;save()};w.append(n)}
+ const t=document.createElement('textarea');t.rows=1;t.value=it.t;t.setAttribute('aria-label','Thema');t.oninput=()=>{it.t=t.value;S.dirty=true;save();paintRDone()};w.append(t);
+ if(k==='ge'||it.n){const n=document.createElement('textarea');n.className='note';n.rows=2;n.placeholder=k==='ge'?'Ergebnis oder Beschluss …':'Notiz …';n.value=it.n||'';n.setAttribute('aria-label',k==='ge'?'Ergebnis oder Beschluss':'Notiz');n.oninput=()=>{it.n=n.value;S.dirty=true;save();paintRDone()};w.append(n)}
  const a=document.createElement('div');a.className='acts';
  const B=(txt,fn,c)=>{const b=document.createElement('button');b.textContent=txt;if(c)b.className=c;b.onclick=fn;a.append(b)};
  if(k!=='an')B('← Liegt an',()=>move(it,k,'an'));
@@ -197,7 +275,7 @@ function itemEl(it,k){
 function grow(t){t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px'}
 function paintLists(){document.querySelectorAll('.col').forEach(c=>{const k=c.dataset.k,l=c.querySelector('.list');l.textContent='';
  if(!S[k].length){const e=document.createElement('div');e.className='empty';e.textContent='Noch nichts eingetragen.';l.append(e)}
- S[k].forEach(it=>l.append(itemEl(it,k)));l.querySelectorAll('textarea').forEach(t=>{grow(t);t.addEventListener('input',()=>grow(t))})})}
+ S[k].forEach(it=>l.append(itemEl(it,k)));l.querySelectorAll('textarea').forEach(t=>{grow(t);t.addEventListener('input',()=>grow(t))})});paintRDone()}
 document.querySelectorAll('.col').forEach(c=>{const k=c.dataset.k,i=c.querySelector('.add input'),b=c.querySelector('.add button');
  const go=()=>{const v=i.value.trim();if(!v)return;S[k].push({id:uid(),t:v,n:''});i.value='';S.dirty=true;save();paintLists();i.focus()};
  b.onclick=go;i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}})});
@@ -205,8 +283,8 @@ document.querySelectorAll('.col').forEach(c=>{const k=c.dataset.k,i=c.querySelec
 let rem=0,end=0,run=false;
 const fmt=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
 function show(){$('#digits').textContent=fmt(run?(end-Date.now())/1000:rem);$('#tStart').textContent=run?'Pause':'Start'}
-function paintSteps(){const h=$('#steps');h.textContent='';PH.forEach((p,i)=>{const b=document.createElement('button');b.className='step'+(S.phase===i?' on':'');b.innerHTML='';b.append(p[0]+' · '+S.min[i]+' min');const sm=document.createElement('small');sm.textContent=p[1];b.append(sm);
- b.onclick=()=>{S.phase=i;save();run=false;rem=S.min[i]*60;$('#tBox').classList.remove('done');paintSteps();show()};h.append(b)})}
+function paintSteps(){const h=$('#steps');h.textContent='';S.ph.forEach((p,i)=>{const b=document.createElement('button');b.className='step'+(S.phase===i?' on':'');b.innerHTML='';b.append(p.n+' · '+p.m+' min');const sm=document.createElement('small');sm.textContent=p.d;b.append(sm);
+ b.onclick=()=>{S.phase=i;save();run=false;rem=p.m*60;$('#tBox').classList.remove('done');paintSteps();show()};h.append(b)})}
 let AC;const ctx=()=>{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C()}if(AC.state==='suspended')AC.resume();return AC};
 function beep(t0){const c=ctx();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.frequency.value=740;g.gain.value=.2;o.connect(g).connect(c.destination);const t=c.currentTime+t0;o.start(t);o.stop(t+.3)}
 $('#tStart').onclick=()=>{ctx();if(run){rem=(end-Date.now())/1000;run=false}else if(rem>0){end=Date.now()+rem*1000;run=true;$('#tBox').classList.remove('done')}show()};
@@ -214,18 +292,19 @@ const adj=d=>{if(run){end=Math.max(Date.now(),end+d*1000)}else rem=Math.max(0,re
 $('#tPlus').onclick=()=>adj(60);$('#tMinus').onclick=()=>adj(-60);
 setInterval(()=>{if(run&&end<=Date.now()){run=false;rem=0;$('#tBox').classList.add('done');[0,.5,1].forEach(beep)}show()},250);
 /* Zeiten */
-$('#bSet').onclick=()=>{const l=$('#setList');l.textContent='';PH.forEach((p,i)=>{const lb=document.createElement('label');lb.textContent=p[0];lb.style.marginTop='8px';const n=document.createElement('input');n.type='number';n.min=0;n.max=90;n.inputMode='numeric';n.value=S.min[i];n.oninput=()=>{const v=Math.max(0,Math.min(90,parseInt(n.value,10)||0));S.min[i]=v;save();paintSteps()};lb.append(n);l.append(lb)});$('#dSet').showModal()};
+$('#bSet').onclick=()=>{const l=$('#setList');l.textContent='';S.ph.forEach((p,i)=>{const lb=document.createElement('label');lb.textContent=p.n;lb.style.marginTop='8px';const n=document.createElement('input');n.type='number';n.min=0;n.max=90;n.inputMode='numeric';n.value=p.m;n.oninput=()=>{const v=Math.max(0,Math.min(90,parseInt(n.value,10)||0));p.m=v;save();paintSteps()};lb.append(n);l.append(lb)});$('#dSet').showModal()};
 $('#setOk').onclick=()=>$('#dSet').close();
 /* Export */
 const dDe=s=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s||'');return m?m[3]+'.'+m[2]+'.'+m[1]:(s||'')};
 function asText(){const L=[];L.push('Protokoll Klassenrat'+(S.klasse?' – '+S.klasse:''));L.push('Datum: '+dDe(S.datum)+' · Sitzung '+S.nr);
  const am=[['Vorsitz',S.vorsitz],['Protokoll',S.protokoll],['Zeitwache',S.zeitwache],['Regelwache',S.regelwache]].filter(a=>a[1]);if(am.length)L.push(am.map(a=>a[0]+': '+a[1]).join(' · '));
- [['an','Was liegt an?'],['ge','Was wurde geklärt?'],['na','Was müssen wir beim nächsten Mal thematisieren?']].forEach(([k,h])=>{L.push('',h);if(!S[k].length)L.push('– nichts eingetragen');S[k].forEach(i=>{L.push('– '+i.t);if(i.n)L.push('  → '+i.n)})});return L.join('\n')}
+ [['an','Was liegt an?'],['ge','Was wurde geklärt?'],['na','Was müssen wir beim nächsten Mal thematisieren?']].forEach(([k,h])=>{L.push('',h);if(!S[k].length)L.push('– nichts eingetragen');S[k].forEach(i=>{L.push('– '+i.t);if(i.n)L.push('  → '+i.n);if(k==='ge'&&vsum(i.id))L.push('  '+vtxt(i.id))})});
+ L.push('','Reflexion');S.rq.forEach(q=>{L.push('– '+q.t);L.push('  '+vtxt(q.id))});return L.join('\n')}
 $('#bCopy').onclick=async()=>{try{await navigator.clipboard.writeText(asText());toast('Protokoll kopiert')}catch(e){toast('Kopieren geht hier nicht, nutze die PDF')}};
 const clean=s=>String(s||'').replace(/[„“”]/g,'"').replace(/[‚‘’]/g,"'").replace(/[→]/g,'->').replace(/[^\x09\x0a\x20-\x7e\xa0-\xff–—•€]/g,'');
 const b64u=s=>{const b=new TextEncoder().encode(s);let o='';b.forEach(c=>o+=String.fromCharCode(c));return btoa(o).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
 const unb64u=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return new TextDecoder().decode(Uint8Array.from(atob(s),c=>c.charCodeAt(0)))};
-const STATE_KEYS=['klasse','datum','nr','vorsitz','protokoll','zeitwache','regelwache','an','ge','na'];
+const STATE_KEYS=['klasse','datum','nr','vorsitz','protokoll','zeitwache','regelwache','an','ge','na','rv','rq'];
 function makePdf(){const {jsPDF}=window.jspdf,d=new jsPDF({unit:'mm',format:'a4'}),W=210,M=18,TW=W-2*M;let y=18;
  const logo=document.querySelector('.logo');try{const r=logo.naturalWidth/logo.naturalHeight;d.addImage(logo.src,'PNG',W-M-14*r,10,14*r,14)}catch(e){}
  const page=h=>{if(y+h>280){d.addPage();y=18}};
@@ -235,16 +314,18 @@ function makePdf(){const {jsPDF}=window.jspdf,d=new jsPDF({unit:'mm',format:'a4'
  const am=[['Vorsitz',S.vorsitz],['Protokoll',S.protokoll],['Zeitwache',S.zeitwache],['Regelwache',S.regelwache]].filter(a=>a[1]);if(am.length)line(am.map(a=>a[0]+': '+a[1]).join('   ·   '),11);y+=4;
  [['an','Was liegt an?',[199,119,0]],['ge','Was wurde geklärt?',[47,125,79]],['na','Was müssen wir beim nächsten Mal thematisieren?',[27,111,176]]].forEach(([k,h,c])=>{page(16);line(h,13.5,'bold',c);d.setDrawColor.apply(d,c);d.setLineWidth(.5);d.line(M,y-3.2,W-M,y-3.2);y+=2;
   if(!S[k].length)line('Nichts eingetragen.',11,'italic',[90,100,95]);
-  S[k].forEach(i=>{page(10);line('• '+i.t,12,'bold',null,2);if(i.n)line(i.n,11,'normal',null,6);y+=1.5});y+=5});
+  S[k].forEach(i=>{page(10);line('• '+i.t,12,'bold',null,2);if(i.n)line(i.n,11,'normal',null,6);if(k==='ge'&&vsum(i.id))line(vtxt(i.id),10.5,'normal',[90,100,95],6);y+=1.5});y+=5});
+ page(16);line('Reflexion',13.5,'bold',[90,100,95]);d.setDrawColor(90,100,95);d.setLineWidth(.5);d.line(M,y-3.2,W-M,y-3.2);y+=2;
+ S.rq.forEach(q=>{page(10);line('• '+q.t,12,'bold',null,2);line(vtxt(q.id),11,'normal',null,6);y+=1.5});y+=3;
  const st={};STATE_KEYS.forEach(k=>st[k]=S[k]);
- d.setProperties({title:'Protokoll Klassenrat',creator:'Klassenrat-Board',keywords:'KRB1:'+b64u(JSON.stringify(st))+':KRB'});
- const n=d.getNumberOfPages();for(let p=1;p<=n;p++){d.setPage(p);d.setFont('helvetica','normal');d.setFontSize(8);d.setTextColor(90,100,95);d.text(clean('Lässt sich über „PDF laden“ im Klassenrat-Board wieder öffnen · Klassenrat-Board, Daniel Beyrodt, CC BY-NC-SA 4.0 · Seite '+p+'/'+n),M,290)}
+ d.setProperties({title:'Protokoll Klassenrat',creator:'Klassenrat Dashboard',keywords:'KRB1:'+b64u(JSON.stringify(st))+':KRB'});
+ const n=d.getNumberOfPages();for(let p=1;p<=n;p++){d.setPage(p);d.setFont('helvetica','normal');d.setFontSize(8);d.setTextColor(90,100,95);d.text(clean('Lässt sich über „PDF laden“ im Klassenrat Dashboard wieder öffnen · Klassenrat Dashboard, Daniel Beyrodt, CC BY-NC-SA 4.0 · Seite '+p+'/'+n),M,290)}
  return d}
 function savePdf(){const d=makePdf(),nm=(S.klasse||'Klasse').replace(/[^\wÄÖÜäöüß-]+/g,'-');d.save('Klassenrat-Protokoll_'+nm+'_'+(S.datum||today())+'.pdf');S.dirty=false;save();toast('PDF gespeichert. Leg sie in Notability ab.')}
 $('#bPdf').onclick=savePdf;
 /* PDF laden */
 $('#bLoad').onclick=()=>$('#fLoad').click();
-$('#fLoad').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const t=new TextDecoder('latin1').decode(await f.arrayBuffer()),m=/KRB1:([A-Za-z0-9_-]+):KRB/.exec(t);if(!m)throw 0;const st=JSON.parse(unb64u(m[1]));STATE_KEYS.forEach(k=>{if(k in st)S[k]=st[k]});['an','ge','na'].forEach(k=>{if(!Array.isArray(S[k]))S[k]=[]});S.dirty=false;save();paintMeta();paintLists();toast('Protokoll geladen')}catch(x){toast('Diese PDF enthält kein Klassenrat-Protokoll.')}};
+$('#fLoad').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const t=new TextDecoder('latin1').decode(await f.arrayBuffer()),m=/KRB1:([A-Za-z0-9_-]+):KRB/.exec(t);if(!m)throw 0;const st=JSON.parse(unb64u(m[1]));STATE_KEYS.forEach(k=>{if(k in st)S[k]=st[k]});['an','ge','na'].forEach(k=>{if(!Array.isArray(S[k]))S[k]=[]});if(!Array.isArray(S.rq)||!S.rq.length)S.rq=defRq();if(!S.rv||typeof S.rv!=='object')S.rv={};S.dirty=false;save();paintMeta();paintLists();paintRefl();toast('Protokoll geladen')}catch(x){toast('Diese PDF enthält kein Klassenrat-Protokoll.')}};
 /* Regelwache */
 if(!Array.isArray(S.verw))S.verw=[];
 let rwStage=1;
@@ -277,15 +358,102 @@ $('#rwPdf').onclick=()=>{const {jsPDF}=window.jspdf,d=new jsPDF({unit:'mm',forma
  if(!S.verw.length){d.text('Keine Verwarnungen eingetragen.',M,y);y+=6}
  S.verw.forEach(v=>{const a=d.splitTextToSize(clean(v.n),56),b=d.splitTextToSize(clean(v.r||'–'),W-M-(M+112)),h=Math.max(a.length,b.length)*5+2;if(y+h>280){d.addPage();y=20}
   d.text(new Date(v.t).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}),M,y);d.text(v.st+'. Verwarnung',M+20,y);d.text(a,M+52,y);d.text(b,M+112,y);y+=h;d.setDrawColor(220,220,220);d.line(M,y-3,W-M,y-3)});
- const n=d.getNumberOfPages();for(let p=1;p<=n;p++){d.setPage(p);d.setFontSize(8);d.setTextColor(90,100,95);d.text(clean('Enthält Namen: nur für die Klassenakte bzw. IServ · Klassenrat-Board, Daniel Beyrodt, CC BY-NC-SA 4.0 · Seite '+p+'/'+n),M,290)}
+ const n=d.getNumberOfPages();for(let p=1;p<=n;p++){d.setPage(p);d.setFontSize(8);d.setTextColor(90,100,95);d.text(clean('Enthält Namen: nur für die Klassenakte bzw. IServ · Klassenrat Dashboard, Daniel Beyrodt, CC BY-NC-SA 4.0 · Seite '+p+'/'+n),M,290)}
  d.save('Klassenrat-Verwarnungen_'+(S.klasse||'Klasse').replace(/[^\wÄÖÜäöüß-]+/g,'-')+'_'+(S.datum||today())+'.pdf');toast('PDF gespeichert. Lade sie in IServ hoch.')};
 /* Neue Sitzung */
-function newSession(){const carry=[...S.an,...S.na].map(i=>({id:i.id,t:i.t,n:i.n||'',from:true}));const nr=(parseInt(S.nr,10)||0)+1,kl=S.klasse;Object.assign(S,blank(),{klasse:kl,nr,an:carry,phase:-1,dirty:false});save();run=false;rem=0;paintMeta();paintLists();paintSteps();show();$('#dNew').close();toast('Sitzung '+nr+' gestartet')}
+function newSession(){const carry=[...S.an,...S.na].map(i=>({id:i.id,t:i.t,n:i.n||'',from:true}));const nr=(parseInt(S.nr,10)||0)+1,kl=S.klasse;Object.assign(S,blank(),{klasse:kl,nr,an:carry,phase:-1,dirty:false});save();run=false;rem=0;paintMeta();paintLists();paintRefl();paintSteps();show();$('#dNew').close();toast('Sitzung '+nr+' gestartet')}
 $('#bNew').onclick=()=>$('#dNew').showModal();$('#newGo').onclick=newSession;$('#newNo').onclick=()=>$('#dNew').close();$('#newPdf').onclick=savePdf;
+/* Kacheln, Vorgaben, Reflexion, Lärmampel */
+const CARDS=[['ablauf','Ablauf'],['zeit','Zeitwache'],['meta','Sitzung und Ämter'],['an','Was liegt an?'],['ge','Was wurde geklärt?'],['na','Was müssen wir beim nächsten Mal thematisieren?'],['refl','Reflexion'],['ampel','Lärmampel']];
+function applyShow(){document.querySelectorAll('[data-card]').forEach(e=>{e.hidden=!S.show[e.dataset.card]});if(!S.show.ampel){if(mic.on)micStop();if(alarmOn)setAlarm(false)}}
+function fixPhase(){if(S.phase>=S.ph.length)S.phase=-1}
+const mkIn=(v,al,ph,fn,cls)=>{const x=document.createElement('input');x.value=v;x.setAttribute('aria-label',al);x.placeholder=ph||'';x.className=cls||'';x.autocomplete='off';x.oninput=()=>fn(x);return x};
+const mkX=(fn,dis)=>{const x=document.createElement('button');x.type='button';x.className='px';x.textContent='×';x.setAttribute('aria-label','Entfernen');x.disabled=!!dis;x.onclick=fn;return x};
+function paintPhEdit(){const l=$('#vPh');l.textContent='';S.ph.forEach((p,i)=>{const r=document.createElement('div');r.className='prow';
+ const m=mkIn(p.m,'Minuten','min',x=>{p.m=Math.max(0,Math.min(90,parseInt(x.value,10)||0));save();paintSteps()},'pm');m.type='number';m.min=0;m.max=90;m.inputMode='numeric';
+ r.append(mkIn(p.n,'Name der Phase','Name',x=>{p.n=x.value;save();paintSteps()},'pn'),mkIn(p.d,'Beschreibung der Phase','Beschreibung',x=>{p.d=x.value;save();paintSteps()},'pd'),m,
+  mkX(()=>{S.ph.splice(i,1);fixPhase();save();paintPhEdit();paintSteps()},S.ph.length<=1));l.append(r)})}
+function paintRqEdit(){const l=$('#vRq');l.textContent='';S.rq.forEach((q,i)=>{const r=document.createElement('div');r.className='prow';
+ r.append(mkIn(q.t,'Reflexionsfrage','Frage',x=>{q.t=x.value;save();paintRefl()},'pq'),mkX(()=>{delete S.rv[q.id];S.rq.splice(i,1);save();paintRqEdit();paintRefl()}));l.append(r)})}
+function openView(){const l=$('#vCards');l.textContent='';
+ CARDS.forEach(([k,t])=>{const lb=document.createElement('label');lb.className='chk';const c=document.createElement('input');c.type='checkbox';c.checked=!!S.show[k];c.onchange=()=>{S.show[k]=c.checked;save();applyShow()};lb.append(c,t);l.append(lb)});
+ paintPhEdit();paintRqEdit();$('#dView').showModal()}
+$('#bView').onclick=openView;$('#vOk').onclick=()=>$('#dView').close();
+$('#vPhAdd').onclick=()=>{S.ph.push({n:'Neue Phase',d:'',m:5});save();paintPhEdit();paintSteps()};
+$('#vPhDef').onclick=()=>{S.ph=defPh();S.phase=-1;save();paintPhEdit();paintSteps()};
+$('#vRqAdd').onclick=()=>{S.rq.push({id:uid(),t:''});save();paintRqEdit();paintRefl();const a=document.querySelectorAll('#vRq .pq');if(a.length)a[a.length-1].focus()};
+$('#vRqDef').onclick=()=>{S.rq=defRq();save();paintRqEdit();paintRefl()};
+/* Reflexion: gut, mittel, schlecht */
+const VL=['gut','mittel','schlecht'];
+const votes=id=>S.rv[id]||[0,0,0];
+const vsum=id=>votes(id).reduce((a,b)=>a+b,0);
+const vtxt=id=>{const v=votes(id);return 'Stimmen: gut '+v[0]+' · mittel '+v[1]+' · schlecht '+v[2]};
+function voteRow(id){const w=document.createElement('div');w.className='votes';const ns=[];
+ VL.forEach((t,j)=>{const b=document.createElement('button');b.type='button';b.className='vb v'+j;const sp=document.createElement('span');sp.textContent=t;const n=document.createElement('b');n.textContent=votes(id)[j];ns.push(n);b.append(sp,n);
+  b.onclick=()=>{const v=votes(id).slice();v[j]++;S.rv[id]=v;S.dirty=true;save();n.textContent=v[j]};w.append(b)});
+ const r=document.createElement('button');r.type='button';r.className='vrs';r.textContent='↺';r.title='Stimmen zurücksetzen';r.setAttribute('aria-label','Stimmen zurücksetzen');
+ r.onclick=()=>{delete S.rv[id];S.dirty=true;save();ns.forEach(n=>n.textContent=0)};w.append(r);return w}
+function paintRDone(){const l=$('#rfDone');if(!l)return;l.textContent='';
+ if(!S.ge.length){const e=document.createElement('div');e.className='empty';e.textContent='Noch nichts geklärt.';l.append(e);return}
+ S.ge.forEach(it=>{const r=document.createElement('div');r.className='rfrow';const q=document.createElement('div');q.className='q';q.append(it.t||'(ohne Titel)');
+  const b=document.createElement('span');b.className='bes';if((it.n||'').trim()){const k=document.createElement('span');k.className='bk';k.textContent='Beschluss:';b.append(k,' '+it.n)}else b.textContent='Noch kein Beschluss eingetragen.';q.append(b);r.append(q,voteRow(it.id));l.append(r)})}
+function paintRefl(){const l=$('#rfList');l.textContent='';
+ if(!S.rq.length){const e=document.createElement('div');e.className='empty';e.textContent='Keine Reflexionsfragen. Du kannst sie unter Einstellungen hinzufügen.';l.append(e)}
+ S.rq.forEach(q=>{if(!(q.t||'').trim())return;const r=document.createElement('div');r.className='rfrow';const t=document.createElement('div');t.className='q';t.append(q.t);r.append(t,voteRow(q.id));l.append(r)});paintRDone()}
+/* Lärmampel mit Alarm */
+const A_TXT={green:'Alles gut',yellow:'Etwas leiser',red:'Zu laut!'};
+const mic={on:false,stream:null,src:null,an:null,buf:null,raf:0,lvl:0,redUntil:0,yelUntil:0,light:null};
+let alarmOn=false,siren=0,sirenStop=0,coolUntil=0,armed=true;
+function tone(f,d,t0){const c=ctx();if(!c)return;const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+t0;o.type='square';o.frequency.value=f;g.gain.setValueAtTime(.3,t);g.gain.linearRampToValueAtTime(0,t+d);o.connect(g).connect(c.destination);o.start(t);o.stop(t+d)}
+function setAlarm(v){alarmOn=v;clearInterval(siren);clearTimeout(sirenStop);
+ if(v){armed=false;ctx();const beat=()=>{tone(880,.4,0);tone(620,.4,.45)};beat();siren=setInterval(beat,900);sirenStop=setTimeout(()=>setAlarm(false),15000)}else coolUntil=Date.now()+4000;
+ document.body.classList.toggle('alarm',v);$('#alarmBar').hidden=!v}
+$('#alarmBar').onclick=()=>setAlarm(false);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&alarmOn)setAlarm(false)});
+function setLight(l,user){if(mic.light===l)return;mic.light=l;document.querySelectorAll('#tAmpel .lamp').forEach(x=>x.classList.toggle('on',x.dataset.l===l));const tx=$('#aTxt');tx.textContent=A_TXT[l];tx.className='amp-txt '+l;
+ if(l==='red'){if(user&&armed&&S.ampel.alarm&&Date.now()>coolUntil)setAlarm(true)}else armed=true}
+function renderAmp(){$('#aMicBox').hidden=!mic.on;$('#aMic').textContent=mic.on?'Mikrofon stoppen':'Mikrofon starten';
+ $('#aHint').textContent=mic.on?'Schieberegler: ab wann die Ampel rot wird.':'Tippe auf die Ampel oder starte das Mikrofon.';
+ $('#aLimit').value=S.ampel.limit;$('#aMarkR').style.left=S.ampel.limit+'%';$('#aMarkY').style.left=Math.max(0,S.ampel.limit-12)+'%';$('#aAlarm').checked=!!S.ampel.alarm;if(!mic.on)setLight(S.ampel.manual)}
+const UA=navigator.userAgent||'';
+const isStandalone=()=>(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+const IS_IOS=/iPad|iPhone|iPod/.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const IS_ANDROID=/Android/i.test(UA);
+const IN_WEBVIEW=(IS_ANDROID&&/; wv\)/.test(UA))||(IS_IOS&&!/Safari\//.test(UA)&&!isStandalone());
+const setSession=t=>{try{if(navigator.audioSession)navigator.audioSession.type=t}catch(e){}};
+function micHelp(err){const n=(err&&err.name)||'Fehler';let m;
+ if(IN_WEBVIEW)m='Das Dashboard ist gerade in einer App-Vorschau geöffnet, dort ist das Mikrofon gesperrt. Öffne die Adresse direkt in '+(IS_ANDROID?'Chrome':'Safari')+'.';
+ else if(n==='NotFoundError'||n==='OverconstrainedError')m='Es wurde kein Mikrofon gefunden.';
+ else if(n==='NotReadableError'||n==='AbortError')m='Das Mikrofon wird gerade von einer anderen App benutzt. Schließ sie und versuch es nochmal.';
+ else if(IS_IOS)m='Mikrofon erlauben: In Safari auf „aA“ in der Adressleiste → Website-Einstellungen → Mikrofon → Erlauben. Danach die Seite neu laden.';
+ else if(IS_ANDROID)m='Mikrofon erlauben: In Chrome links neben der Adresse auf das Symbol tippen → Berechtigungen → Mikrofon → Erlauben.';
+ else m='Mikrofon erlauben: Links neben der Adresse auf das Schloss-Symbol klicken und das Mikrofon erlauben.';
+ toast(m+' ('+n+')')}
+async function micStart(){
+ if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast(IN_WEBVIEW?'Das Mikrofon ist in einer App-Vorschau gesperrt. Öffne die Adresse direkt im Browser.':'Das Mikrofon funktioniert nur über eine sichere Adresse (https://). Bis dahin kannst du die Ampel per Tippen schalten.');return}
+ setSession('play-and-record');const c=ctx();if(!c){toast('Dieser Browser kann die Lautstärke leider nicht messen.');return}
+ let st;try{st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false})}
+ catch(e){if(['OverconstrainedError','TypeError'].includes(e&&e.name)){try{st=await navigator.mediaDevices.getUserMedia({audio:true})}catch(x){setSession('playback');micHelp(x);return}}else{setSession('playback');micHelp(e);return}}
+ try{if(c.state==='suspended')await c.resume();mic.stream=st;mic.src=c.createMediaStreamSource(st);mic.an=c.createAnalyser();mic.an.fftSize=2048;mic.an.smoothingTimeConstant=0;mic.buf=new Float32Array(mic.an.fftSize);mic.src.connect(mic.an);mic.on=true;mic.lvl=0;mic.light=null;renderAmp();micLoop()}
+ catch(e){try{st.getTracks().forEach(t=>t.stop())}catch(x){}setSession('playback');toast('Die Lautstärke ließ sich nicht messen. Lade die Seite neu und versuch es nochmal.')}}
+function micStop(){cancelAnimationFrame(mic.raf);try{mic.src&&mic.src.disconnect()}catch(e){}try{mic.stream&&mic.stream.getTracks().forEach(t=>t.stop())}catch(e){}
+ Object.assign(mic,{on:false,stream:null,src:null,an:null,light:null});setSession('playback');$('#aLvl').style.width='0';renderAmp()}
+function micLoop(){if(!mic.on)return;mic.an.getFloatTimeDomainData(mic.buf);let sum=0;for(let i=0;i<mic.buf.length;i++)sum+=mic.buf[i]*mic.buf[i];
+ const db=20*Math.log10(Math.sqrt(sum/mic.buf.length)+1e-9),L=Math.max(0,Math.min(100,(db+75)/65*100));
+ mic.lvl+=(L-mic.lvl)*(L>mic.lvl?.25:.05);
+ const now=performance.now(),red=S.ampel.limit,yel=red-12;let l;
+ if(mic.lvl>=red){l='red';mic.redUntil=now+2500}else if(now<mic.redUntil)l='red';else if(mic.lvl>=yel){l='yellow';mic.yelUntil=now+1200}else if(now<mic.yelUntil)l='yellow';else l='green';
+ setLight(l,true);const bar=$('#aLvl');bar.style.width=mic.lvl.toFixed(1)+'%';bar.style.background=mic.lvl>=red?'#d32f2f':mic.lvl>=yel?'#e0a000':'var(--c2)';mic.raf=requestAnimationFrame(micLoop)}
+$('#aMic').onclick=()=>{if(mic.on)micStop();else micStart()};
+$('#aLimit').oninput=e=>{S.ampel.limit=+e.target.value;save();renderAmp()};
+$('#aAlarm').onchange=e=>{S.ampel.alarm=e.target.checked;save();if(!S.ampel.alarm&&alarmOn)setAlarm(false)};
+$('#aHous').onclick=e=>{if(mic.on){toast('Die Ampel wird gerade vom Mikrofon gesteuert.');return}
+ const lamp=e.target.closest('.lamp'),order=['green','yellow','red'];S.ampel.manual=lamp?lamp.dataset.l:order[(order.indexOf(S.ampel.manual)+1)%3];save();setLight(S.ampel.manual,true)};
+$('#aHous').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#aHous').click()}};
 /* Thema */
 function paintTheme(){document.documentElement.dataset.theme=S.theme;$('#bTheme').textContent=S.theme==='dark'?'Hell':'Dunkel'}
 $('#bTheme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save();paintTheme()};
-paintTheme();paintMeta();paintLists();paintSteps();show();
+paintTheme();paintMeta();applyShow();paintRefl();paintLists();paintSteps();show();renderAmp();
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
 </script>
@@ -297,7 +465,7 @@ if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWo
 const LKEY = 'klassenrat.lang';
 const LANGS = ['de', 'en', 'fr'];
 const D = {
-  'Klassenrat-Board': ['Class Council Board', 'Conseil de classe'],
+  'Klassenrat Dashboard': ['Class Council Dashboard', 'Tableau de bord du conseil de classe'],
   'Protokoll als PDF': ['Minutes as PDF', 'Procès-verbal en PDF'],
   'Text kopieren': ['Copy text', 'Copier le texte'],
   'PDF laden': ['Load PDF', 'Charger un PDF'],
@@ -392,7 +560,55 @@ const D = {
   'Bitte einen Namen eintragen': ['Please enter a name', 'Merci de saisir un nom'],
   'Verwarnung eingetragen': ['Warning recorded', 'Avertissement noté'],
   'Diese PDF enthält kein Klassenrat-Protokoll.': ['This PDF contains no class council minutes.', 'Ce PDF ne contient pas de procès-verbal.'],
-  'Alle eingetragenen Verwarnungen löschen? Hast du die PDF gespeichert?': ['Delete all recorded warnings? Have you saved the PDF?', 'Supprimer tous les avertissements notés ? As-tu enregistré le PDF ?']
+  'Alle eingetragenen Verwarnungen löschen? Hast du die PDF gespeichert?': ['Delete all recorded warnings? Have you saved the PDF?', 'Supprimer tous les avertissements notés ? As-tu enregistré le PDF ?'],
+  'Einstellungen': ['Settings', 'Réglages'],
+  'Kacheln und Vorgaben anpassen': ['Adjust cards and defaults', 'Adapter les cartes et les paramètres'],
+  'Kacheln anzeigen': ['Show cards', 'Afficher les cartes'],
+  'Ablauf anpassen': ['Adjust agenda', 'Adapter le déroulement'],
+  'Name, Beschreibung und Minuten jeder Phase. Die Änderungen gelten für alle weiteren Sitzungen.': ['Name, description and minutes of each phase. Changes apply to all further meetings.', 'Nom, description et minutes de chaque phase. Les changements valent pour toutes les séances suivantes.'],
+  'Phase hinzufügen': ['Add phase', 'Ajouter une phase'],
+  'Standard': ['Default', 'Par défaut'],
+  'Reflexionsfragen anpassen': ['Adjust reflection questions', 'Adapter les questions de réflexion'],
+  'Frage hinzufügen': ['Add question', 'Ajouter une question'],
+  'Name der Phase': ['Name of the phase', 'Nom de la phase'],
+  'Beschreibung der Phase': ['Description of the phase', 'Description de la phase'],
+  'Beschreibung': ['Description', 'Description'],
+  'Minuten': ['Minutes', 'Minutes'],
+  'Frage': ['Question', 'Question'],
+  'Reflexionsfrage': ['Reflection question', 'Question de réflexion'],
+  'Entfernen': ['Remove', 'Retirer'],
+  'Reflexion': ['Reflection', 'Réflexion'],
+  'Geklärt und beschlossen': ['Resolved and decided', 'Réglé et décidé'],
+  'Tippe bei jeder Frage auf gut, mittel oder schlecht, sooft Stimmen gezählt werden sollen. Hinter jedem geklärten Thema steht der Beschluss.': ['For each question, tap good, medium or bad as often as votes should be counted. The decision is shown behind each resolved topic.', 'Pour chaque question, touche bien, moyen ou mauvais autant de fois que de voix à compter. La décision figure derrière chaque sujet réglé.'],
+  'gut': ['good', 'bien'],
+  'mittel': ['medium', 'moyen'],
+  'schlecht': ['bad', 'mauvais'],
+  'Stimmen zurücksetzen': ['Reset votes', 'Réinitialiser les voix'],
+  'Beschluss:': ['Decision:', 'Décision :'],
+  'Noch kein Beschluss eingetragen.': ['No decision recorded yet.', 'Aucune décision notée pour l’instant.'],
+  'Noch nichts geklärt.': ['Nothing resolved yet.', 'Rien de réglé pour l’instant.'],
+  '(ohne Titel)': ['(no title)', '(sans titre)'],
+  'Keine Reflexionsfragen. Du kannst sie unter Einstellungen hinzufügen.': ['No reflection questions. You can add them under Settings.', 'Aucune question de réflexion. Tu peux en ajouter dans les réglages.'],
+  'Wie lief unser Klassenrat insgesamt?': ['How did our class council go overall?', 'Comment s’est passé notre conseil de classe ?'],
+  'Durften alle ausreden und wurden alle gehört?': ['Could everyone finish speaking and was everyone heard?', 'Tout le monde a-t-il pu finir de parler et été entendu ?'],
+  'Haben wir uns an die Regeln gehalten?': ['Did we stick to the rules?', 'Avons-nous respecté les règles ?'],
+  'Lärmampel': ['Noise traffic light', 'Feu sonore'],
+  'Ampel umschalten': ['Switch traffic light', 'Changer le feu'],
+  'Alles gut': ['All good', 'Tout va bien'],
+  'Etwas leiser': ['A bit quieter', 'Un peu plus bas'],
+  'Zu laut!': ['Too loud!', 'Trop fort !'],
+  'Tippe auf die Ampel oder starte das Mikrofon.': ['Tap the traffic light or start the microphone.', 'Touche le feu ou active le micro.'],
+  'Schieberegler: ab wann die Ampel rot wird.': ['Slider: when the light turns red.', 'Curseur : à partir de quand le feu passe au rouge.'],
+  'Ab wann die Ampel rot wird': ['When the light turns red', 'À partir de quand le feu passe au rouge'],
+  'leise': ['quiet', 'calme'],
+  'laut': ['loud', 'fort'],
+  'Mikrofon starten': ['Start microphone', 'Activer le micro'],
+  'Mikrofon stoppen': ['Stop microphone', 'Arrêter le micro'],
+  'Alarm, wenn die Ampel rot wird': ['Alarm when the light turns red', 'Alarme quand le feu passe au rouge'],
+  'Der Alarm pulsiert rot und gibt einen Signalton, bis du ihn antippst, spätestens nach 15 Sekunden. Das Mikrofon misst nur die Lautstärke im Browser, nichts wird aufgenommen.': ['The alarm pulses red and sounds a signal until you tap it, after 15 seconds at the latest. The microphone only measures the volume in the browser; nothing is recorded.', 'L’alarme clignote en rouge et émet un signal jusqu’à ce que tu la touches, au plus tard après 15 secondes. Le micro mesure seulement le volume dans le navigateur, rien n’est enregistré.'],
+  'ALARM · Antippen zum Beenden': ['ALARM · tap to stop', 'ALARME · toucher pour arrêter'],
+  'Die Ampel wird gerade vom Mikrofon gesteuert.': ['The traffic light is currently controlled by the microphone.', 'Le feu est actuellement commandé par le micro.'],
+  'Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.': ['The rule keeper’s list and the reflection votes will be cleared. Save the PDFs first.', 'La liste du gardien des règles et les voix de la réflexion seront vidées. Enregistre d’abord les PDF.']
 };
 /* gleiche Wörter, andere Bedeutung je nach Ort */
 const CTX = {};

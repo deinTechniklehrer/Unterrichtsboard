@@ -19,7 +19,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
-  // Tech-Board und Klassenrat-Board liegen in Unterordnern und haben eigene Offline-Speicher.
+  // Tech-Board und Klassenrat Dashboard liegen in Unterordnern und haben eigene Offline-Speicher.
   const path = new URL(req.url).pathname;
   if (path.startsWith(ROOT) && path !== ROOT && path !== ROOT + 'index.html' && path.slice(ROOT.length).includes('/')) return;
   if (req.mode === 'navigate') {

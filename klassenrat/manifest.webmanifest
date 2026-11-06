@@ -1,7 +1,7 @@
 {
- "name": "Klassenrat-Board",
+ "name": "Klassenrat Dashboard",
  "short_name": "Klassenrat",
- "description": "Klassenrat-Board mit Protokoll-Export.",
+ "description": "Klassenrat Dashboard mit Protokoll-Export, Reflexion und Lärmampel.",
  "lang": "de",
  "start_url": "./",
  "scope": "./",
