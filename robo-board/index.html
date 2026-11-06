@@ -518,6 +518,9 @@ body.alarm #btnAlarm{background:#fff;color:#a80000}
 .mv-main>svg{width:min(20vh,18vw);height:auto;animation:mvPulse 1.6s ease-in-out 3}
 .mv-t{font-size:clamp(44px,min(11vw,17vh),170px);font-weight:900;letter-spacing:.04em;text-transform:uppercase;line-height:1}
 .mv-h{font-size:clamp(28px,min(6.4vw,10vh),100px);font-weight:900;color:#ffd23f;line-height:1.05;max-width:95vw;overflow-wrap:anywhere}
+.mv-h .mv-tri{width:1.15em;height:auto;flex:none}
+.mv-h:has(.mv-tri){display:flex;align-items:center;justify-content:center;gap:.35em;font-size:clamp(22px,min(5.2vw,9vh),90px)}
+.mv-h:has(.mv-tri) span{overflow-wrap:normal;hyphens:manual;min-width:0}
 .mv-s{font-size:clamp(17px,min(2.6vw,4vh),36px);font-weight:700;opacity:.92}
 .mv-bar{flex:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
 .mv-bar .btn{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.55);min-height:44px}
@@ -2471,7 +2474,12 @@ function meetChime() {
 }
 function meetRender() {
   const h = $('#meetHead'), v = (S.meetT || '').trim();
-  h.textContent = v; h.hidden = !v;
+  // Sicherheitsunterweisung: Achtung-Zeichen links und rechts der Überschrift
+  if (/^sicherheitsunterweisung$/i.test(v)) {
+    const tri = '<svg class="mv-tri" viewBox="0 0 600 524" aria-hidden="true"><use href="#tbTri"/></svg>';
+    h.innerHTML = tri + '<span></span>' + tri; h.querySelector('span').textContent = v.replace(/^(sicherheits)(unterweisung)$/i, '$1\u00ad$2');
+  } else h.textContent = v;
+  h.hidden = !v;
   $$('[data-meet]').forEach(b => b.classList.toggle('sel', b.dataset.meet === v));
   const i = $('#meetIn'); if (document.activeElement !== i) i.value = $$('[data-meet]').some(b => b.dataset.meet === v) ? '' : v;
 }
