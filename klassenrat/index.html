@@ -32,12 +32,15 @@ h1{font-size:clamp(20px,3vw,28px);color:var(--accent);font-weight:800}
 .hb.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .tile{background:var(--tile);border:2px solid var(--line);border-radius:16px;padding:12px;min-width:0}
 h2{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:800}
-.top{display:flex;flex-wrap:wrap;gap:10px}.top>.tile{flex:1 1 260px}.top>.ablauf{flex:2 1 340px}
-.steps{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
-.step{min-height:56px;border-radius:12px;border:2px solid var(--line);background:var(--tile);font-weight:700;padding:4px 6px;line-height:1.15}
+.top{display:flex;flex-wrap:wrap;gap:10px}.top>.tile{flex:1 1 260px}.top>.ablauf{flex:1 1 200px}.top>#tAmpel{flex:1.3 1 250px}.top>#tBox{flex:1 1 200px;container-type:inline-size}.top>[data-card=meta]{flex:1.4 1 280px}
+.steps{display:flex;flex-direction:column;gap:6px}
+.step{min-height:48px;border-radius:12px;border:2px solid var(--line);background:var(--tile);font-weight:700;padding:5px 10px;line-height:1.15;text-align:left}
+.step.rstep{display:flex;align-items:center;gap:8px;border-color:var(--c3);color:var(--c3)}
+.step.rstep svg{width:26px;height:26px;flex:none}
+.step.rstep small{color:var(--muted)}
 .step small{display:block;font-weight:500;color:var(--muted)}
 .step.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--tile))}
-#digits{font-size:clamp(44px,7vw,80px);font-weight:900;font-variant-numeric:tabular-nums;text-align:center;line-height:1.05}
+#digits{font-size:clamp(40px,25cqw,80px);font-weight:900;font-variant-numeric:tabular-nums;text-align:center;line-height:1.05}
 #tBox.done #digits{color:#d32f2f}
 .row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:6px}
 .row button{min-height:44px;min-width:48px;border-radius:12px;border:2px solid var(--line);background:var(--tile);font-weight:800;padding:0 10px}
@@ -72,7 +75,10 @@ dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
 .role label{flex:1;min-width:0}
 .role .rwb{flex:none;min-height:40px;min-width:40px;border-radius:10px;border:2px solid #c62828;background:var(--tile);color:#c62828;font-weight:800;padding:0 8px;font-size:13px}
 .hb svg{width:20px;height:20px;vertical-align:-5px}
-#bLang{min-width:48px}
+.hb.ic{min-width:48px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.hb.ic svg{width:24px;height:24px}
+#bRW.ic svg{width:28px;height:28px}
+#bLang .lcode{font-size:13px}
 #bRW{border-color:#c62828;color:#c62828}
 h2 .ric{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
 #dRW{max-width:min(720px,calc(100vw - 16px));width:100%}
@@ -104,7 +110,23 @@ h2 .ric{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
 #bigCard p{color:#fff;font-weight:700}
 @media (max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}.logo{height:34px}}
 [hidden]{display:none!important}
-.mid{display:flex;flex-wrap:wrap;gap:10px}.mid>.tile{flex:1 1 300px}.mid>#tRefl{flex:3 1 460px}
+#tAmpel .amp{flex-wrap:nowrap;justify-content:flex-start;gap:12px}#tAmpel .amp>div:last-child{flex:1;min-width:0}
+#tAmpel .lamp{width:clamp(38px,4.4vw,54px)}
+#tAmpel .amp-txt{font-size:clamp(20px,2.3vw,28px)}
+#tAmpel .hint{margin-top:4px;font-size:12px}
+#tAmpel .row{justify-content:flex-start}
+.rfov{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;gap:10px;background:var(--bg);color:var(--ink);padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+.rfov-head{display:flex;align-items:center;gap:8px;flex:none}
+.rfov-head .tag{font-size:clamp(15px,2vw,20px);font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--c3);display:flex;align-items:center;gap:8px}
+.rfov-head .tag svg{width:30px;height:30px}
+.rfov-body{flex:1;min-height:0;overflow:auto;max-width:1200px;width:100%;margin:0 auto}
+.rfov .rfrow{padding:12px 14px;gap:14px}
+.rfov .rfrow .q{font-size:clamp(19px,2.6vw,32px);line-height:1.2}
+.rfov .rfrow .bes{font-size:clamp(15px,1.8vw,20px)}
+.rfov .vb{min-width:clamp(78px,10vw,120px);min-height:clamp(56px,8vh,80px)}
+.rfov .vb b{font-size:clamp(22px,3vw,34px)}.rfov .vb span{font-size:clamp(13px,1.5vw,17px)}
+.rfov .vrs{min-height:clamp(56px,8vh,80px);min-width:52px}
+.rfov .rfh{font-size:clamp(15px,1.8vw,19px);margin-top:18px}
 .hint{font-size:13px;color:var(--muted);margin-top:6px}
 .amp{display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap}
 .hous{background:#1d2630;border-radius:30px;padding:10px;display:flex;flex-direction:column;gap:8px;cursor:pointer;flex:none}
@@ -152,32 +174,13 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
   <button class="hb" id="bLoad">PDF laden</button><input type="file" id="fLoad" accept=".pdf,application/pdf" hidden>
   <button class="hb" id="bNew">Neue Sitzung</button>
   <button class="hb" id="bSet">Zeiten</button>
-  <button class="hb" id="bView" title="Kacheln und Vorgaben anpassen">Einstellungen</button>
-  <button class="hb" id="bRW" title="Regelwache: Verwarnungen zeigen und eintragen"><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg> Regelwache</button>
+  <button class="hb ic" id="bView" title="Kacheln und Vorgaben anpassen" aria-label="Einstellungen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  <button class="hb ic" id="bRW" title="Regelwache: Verwarnungen zeigen und eintragen" aria-label="Regelwache"><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg></button>
   <button class="hb" id="bTheme">Dunkel</button>
-  <button class="hb" id="bLang" aria-label="Sprache / Language / Langue" data-noi18n><span class="lcode" id="langCode">DE</span></button>
+  <button class="hb ic" id="bLang" aria-label="Sprache / Language / Langue" data-noi18n><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.8 6 3.8 9.5s-1.2 6.7-3.8 9.5c-2.6-2.8-3.8-6-3.8-9.5S9.4 5.3 12 2.5z"/></svg><span class="lcode" id="langCode">DE</span></button>
 </header>
 <section class="top">
   <div class="tile ablauf" data-card="ablauf"><h2>Ablauf</h2><div class="steps" id="steps"></div></div>
-  <div class="tile" id="tBox" data-card="zeit"><h2><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>Zeitwache</h2><div id="digits" role="timer">00:00</div>
-    <div class="row"><button id="tMinus" aria-label="Eine Minute weniger">−1</button><button id="tStart">Start</button><button id="tPlus" aria-label="Eine Minute mehr">+1</button></div></div>
-  <div class="tile" data-card="meta"><h2>Sitzung und Ämter</h2>
-    <div class="grid2" id="meta"></div>
-    <div class="roles" id="roles"></div>
-  </div>
-</section>
-<section class="cols">
-  <div class="tile col" data-k="an" data-card="an"><h2>Was liegt an?</h2><div class="add"><input aria-label="Neues Thema" placeholder="Neues Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
-  <div class="tile col g" data-k="ge" data-card="ge"><h2>Was wurde geklärt?</h2><div class="add"><input aria-label="Geklärtes Thema" placeholder="Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
-  <div class="tile col n" data-k="na" data-card="na"><h2>Was müssen wir beim nächsten Mal thematisieren?</h2><div class="add"><input aria-label="Thema fürs nächste Mal" placeholder="Thema fürs nächste Mal …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
-</section>
-<section class="mid">
-  <div class="tile" id="tRefl" data-card="refl"><h2>Reflexion</h2>
-    <div id="rfList"></div>
-    <h3 class="rfh">Geklärt und beschlossen</h3>
-    <div id="rfDone"></div>
-    <p class="hint">Tippe bei jeder Frage auf gut, mittel oder schlecht, sooft Stimmen gezählt werden sollen. Hinter jedem geklärten Thema steht der Beschluss.</p>
-  </div>
   <div class="tile" id="tAmpel" data-card="ampel"><h2>Lärmampel</h2>
     <div class="amp">
       <div class="hous" id="aHous" role="button" tabindex="0" aria-label="Ampel umschalten"><div class="lamp red" data-l="red"></div><div class="lamp yellow" data-l="yellow"></div><div class="lamp green" data-l="green"></div></div>
@@ -189,6 +192,17 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
     <label class="chk"><input type="checkbox" id="aAlarm"> Alarm, wenn die Ampel rot wird</label>
     <p class="hint">Der Alarm pulsiert rot und gibt einen Signalton, bis du ihn antippst, spätestens nach 15 Sekunden. Das Mikrofon misst nur die Lautstärke im Browser, nichts wird aufgenommen.</p>
   </div>
+  <div class="tile" id="tBox" data-card="zeit"><h2><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>Zeitwache</h2><div id="digits" role="timer">00:00</div>
+    <div class="row"><button id="tMinus" aria-label="Eine Minute weniger">−1</button><button id="tStart">Start</button><button id="tPlus" aria-label="Eine Minute mehr">+1</button></div></div>
+  <div class="tile" data-card="meta"><h2>Sitzung und Ämter</h2>
+    <div class="grid2" id="meta"></div>
+    <div class="roles" id="roles"></div>
+  </div>
+</section>
+<section class="cols">
+  <div class="tile col" data-k="an" data-card="an"><h2>Was liegt an?</h2><div class="add"><input aria-label="Neues Thema" placeholder="Neues Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
+  <div class="tile col g" data-k="ge" data-card="ge"><h2>Was wurde geklärt?</h2><div class="add"><input aria-label="Geklärtes Thema" placeholder="Thema …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
+  <div class="tile col n" data-k="na" data-card="na"><h2>Was müssen wir beim nächsten Mal thematisieren?</h2><div class="add"><input aria-label="Thema fürs nächste Mal" placeholder="Thema fürs nächste Mal …" enterkeyhint="done"><button aria-label="Hinzufügen">+</button></div><div class="list"></div></div>
 </section>
 <p class="note-priv">Alles bleibt nur in diesem Browser. Das Board läuft oft über den Beamer: Schreibt Konflikte sachlich und ohne Namen auf.</p>
 <footer>Klassenrat Dashboard · Daniel Beyrodt · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/ueber-mich/" target="_blank" rel="noopener">Über mich</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutz</a></footer>
@@ -206,6 +220,15 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
   <div class="row" style="justify-content:flex-start"><button id="vRqAdd">Frage hinzufügen</button><button id="vRqDef">Standard</button></div>
   <div class="row"><button id="vOk" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">Fertig</button></div>
 </dialog>
+<div class="rfov" id="rfView" role="dialog" aria-modal="true" aria-label="Reflexion" hidden>
+  <div class="rfov-head"><span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5A8.5 8.5 0 1 1 21 12z"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.8.6-.8 1.2v.4M12 16.6v.1"/></svg>Reflexion</span><span class="sp"></span><button class="hb" id="rfClose">Schließen</button></div>
+  <div class="rfov-body">
+    <div id="rfList"></div>
+    <h3 class="rfh">Geklärt und beschlossen</h3>
+    <div id="rfDone"></div>
+    <p class="hint">Tippe bei jeder Frage auf gut, mittel oder schlecht, sooft Stimmen gezählt werden sollen. Hinter jedem geklärten Thema steht der Beschluss.</p>
+  </div>
+</div>
 <button id="alarmBar" hidden>ALARM · Antippen zum Beenden</button>
 <dialog id="dSet"><h3>Zeiten im Ablauf (Minuten)</h3><div id="setList"></div><div class="row"><button id="setOk">Fertig</button></div></dialog>
 <dialog id="dNew"><h3>Neue Sitzung starten?</h3><p>Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.</p><p>Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.</p><p>Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.</p><div class="row"><button id="newPdf">Erst PDF speichern</button><button id="newGo">Neue Sitzung</button><button id="newNo">Abbrechen</button></div></dialog>
@@ -284,7 +307,14 @@ let rem=0,end=0,run=false;
 const fmt=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
 function show(){$('#digits').textContent=fmt(run?(end-Date.now())/1000:rem);$('#tStart').textContent=run?'Pause':'Start'}
 function paintSteps(){const h=$('#steps');h.textContent='';S.ph.forEach((p,i)=>{const b=document.createElement('button');b.className='step'+(S.phase===i?' on':'');b.innerHTML='';b.append(p.n+' · '+p.m+' min');const sm=document.createElement('small');sm.textContent=p.d;b.append(sm);
- b.onclick=()=>{S.phase=i;save();run=false;rem=p.m*60;$('#tBox').classList.remove('done');paintSteps();show()};h.append(b)})}
+ b.onclick=()=>{S.phase=i;save();run=false;rem=p.m*60;$('#tBox').classList.remove('done');paintSteps();show()};h.append(b)});
+ if(S.show.refl){const b=document.createElement('button');b.className='step rstep'+(S.phase==='r'?' on':'');b.title='Reflexion groß zeigen';b.insertAdjacentHTML('afterbegin',RICO);const tx=document.createElement('span');tx.append('Reflexion');const sm=document.createElement('small');sm.textContent='Wie lief es?';tx.append(sm);b.append(tx);
+  b.onclick=()=>{S.phase='r';save();paintSteps();openRefl()};h.append(b)}}
+const RICO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5A8.5 8.5 0 1 1 21 12z"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.8.6-.8 1.2v.4M12 16.6v.1"/></svg>';
+function openRefl(){paintRefl();$('#rfView').hidden=false;document.body.style.overflow='hidden';$('#rfClose').focus()}
+function closeRefl(){$('#rfView').hidden=true;document.body.style.overflow=''}
+$('#rfClose').onclick=closeRefl;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#rfView').hidden)closeRefl()});
 let AC;const ctx=()=>{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C()}if(AC.state==='suspended')AC.resume();return AC};
 function beep(t0){const c=ctx();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.frequency.value=740;g.gain.value=.2;o.connect(g).connect(c.destination);const t=c.currentTime+t0;o.start(t);o.stop(t+.3)}
 $('#tStart').onclick=()=>{ctx();if(run){rem=(end-Date.now())/1000;run=false}else if(rem>0){end=Date.now()+rem*1000;run=true;$('#tBox').classList.remove('done')}show()};
@@ -364,8 +394,8 @@ $('#rwPdf').onclick=()=>{const {jsPDF}=window.jspdf,d=new jsPDF({unit:'mm',forma
 function newSession(){const carry=[...S.an,...S.na].map(i=>({id:i.id,t:i.t,n:i.n||'',from:true}));const nr=(parseInt(S.nr,10)||0)+1,kl=S.klasse;Object.assign(S,blank(),{klasse:kl,nr,an:carry,phase:-1,dirty:false});save();run=false;rem=0;paintMeta();paintLists();paintRefl();paintSteps();show();$('#dNew').close();toast('Sitzung '+nr+' gestartet')}
 $('#bNew').onclick=()=>$('#dNew').showModal();$('#newGo').onclick=newSession;$('#newNo').onclick=()=>$('#dNew').close();$('#newPdf').onclick=savePdf;
 /* Kacheln, Vorgaben, Reflexion, Lärmampel */
-const CARDS=[['ablauf','Ablauf'],['zeit','Zeitwache'],['meta','Sitzung und Ämter'],['an','Was liegt an?'],['ge','Was wurde geklärt?'],['na','Was müssen wir beim nächsten Mal thematisieren?'],['refl','Reflexion'],['ampel','Lärmampel']];
-function applyShow(){document.querySelectorAll('[data-card]').forEach(e=>{e.hidden=!S.show[e.dataset.card]});if(!S.show.ampel){if(mic.on)micStop();if(alarmOn)setAlarm(false)}}
+const CARDS=[['ablauf','Ablauf'],['zeit','Zeitwache'],['meta','Sitzung und Ämter'],['an','Was liegt an?'],['ge','Was wurde geklärt?'],['na','Was müssen wir beim nächsten Mal thematisieren?'],['refl','Reflexion (im Ablauf)'],['ampel','Lärmampel']];
+function applyShow(){document.querySelectorAll('[data-card]').forEach(e=>{e.hidden=!S.show[e.dataset.card]});paintSteps();if(!S.show.refl)closeRefl();if(!S.show.ampel){if(mic.on)micStop();if(alarmOn)setAlarm(false)}}
 function fixPhase(){if(S.phase>=S.ph.length)S.phase=-1}
 const mkIn=(v,al,ph,fn,cls)=>{const x=document.createElement('input');x.value=v;x.setAttribute('aria-label',al);x.placeholder=ph||'';x.className=cls||'';x.autocomplete='off';x.oninput=()=>fn(x);return x};
 const mkX=(fn,dis)=>{const x=document.createElement('button');x.type='button';x.className='px';x.textContent='×';x.setAttribute('aria-label','Entfernen');x.disabled=!!dis;x.onclick=fn;return x};
@@ -562,6 +592,9 @@ const D = {
   'Diese PDF enthält kein Klassenrat-Protokoll.': ['This PDF contains no class council minutes.', 'Ce PDF ne contient pas de procès-verbal.'],
   'Alle eingetragenen Verwarnungen löschen? Hast du die PDF gespeichert?': ['Delete all recorded warnings? Have you saved the PDF?', 'Supprimer tous les avertissements notés ? As-tu enregistré le PDF ?'],
   'Einstellungen': ['Settings', 'Réglages'],
+  'Wie lief es?': ['How did it go?', 'Comment ça s’est passé ?'],
+  'Reflexion groß zeigen': ['Show reflection full screen', 'Afficher la réflexion en grand'],
+  'Reflexion (im Ablauf)': ['Reflection (in the agenda)', 'Réflexion (dans le déroulement)'],
   'Kacheln und Vorgaben anpassen': ['Adjust cards and defaults', 'Adapter les cartes et les paramètres'],
   'Kacheln anzeigen': ['Show cards', 'Afficher les cartes'],
   'Ablauf anpassen': ['Adjust agenda', 'Adapter le déroulement'],
