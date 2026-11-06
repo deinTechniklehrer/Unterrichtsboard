@@ -79,6 +79,14 @@ dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
 .hb.ic svg{width:24px;height:24px}
 #bRW.ic svg{width:28px;height:28px}
 #bLang .lcode{font-size:13px}
+.hb[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+body.clean :is(#bLoad,#bNew,#bSet,#bView,#rwClear,.acts .x,.vrs,.hint,#tAmpel .chk,#tAmpel .slider){display:none!important}
+#dRW .rwcards{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cx,.rwcard.cx{background:#8e0000;color:#fff}
+@media (max-width:520px){#dRW .rwcard{min-height:100px;padding:4px}#dRW .rwcard b{font-size:34px}#dRW .rwcard span{font-size:13px;line-height:1.1}#dRW .rwcard.cx svg{width:32px;height:32px}}
+.rwcard.cx svg{width:44px;height:44px}.rwcard.cx span{font-size:16px;line-height:1.1;text-align:center}
+#bigCard .bc.cx svg{width:min(24vh,32vw);height:auto}
+.rwhint{border:2px solid #c62828;border-radius:10px;padding:8px 10px;margin-top:10px;font-weight:700;font-size:15px;color:var(--ink);background:color-mix(in srgb,#c62828 8%,var(--tile))}
 #bRW{border-color:#c62828;color:#c62828}
 h2 .ric{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
 #dRW{max-width:min(720px,calc(100vw - 16px));width:100%}
@@ -174,6 +182,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
   <button class="hb" id="bLoad">PDF laden</button><input type="file" id="fLoad" accept=".pdf,application/pdf" hidden>
   <button class="hb" id="bNew">Neue Sitzung</button>
   <button class="hb" id="bSet">Zeiten</button>
+  <button class="hb ic" id="bClean" aria-pressed="false" title="Bedienelemente aus- oder einblenden" aria-label="Nur Anzeige"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
   <button class="hb ic" id="bView" title="Kacheln und Vorgaben anpassen" aria-label="Einstellungen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   <button class="hb ic" id="bRW" title="Regelwache: Verwarnungen zeigen und eintragen" aria-label="Regelwache"><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg></button>
   <button class="hb" id="bTheme">Dunkel</button>
@@ -235,10 +244,10 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 <dialog id="dRW">
   <h3><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg>Regelwache</h3>
   <p class="note-priv">Tippe auf eine Karte, um sie groß für die Klasse zu zeigen.</p>
-  <div class="rwcards"><button class="rwcard c1" data-big="1"><b>1.</b><span>Verwarnung</span></button><button class="rwcard c2" data-big="2"><b>2.</b><span>Verwarnung</span></button></div>
-  <h4>Verwarnung eintragen</h4>
+  <div class="rwcards"><button class="rwcard c1" data-big="1"><b>1.</b><span>Verwarnung</span></button><button class="rwcard c2" data-big="2"><b>2.</b><span>Verwarnung</span></button><button class="rwcard cx" data-big="3"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6H9v36h11"/><path d="M30 14l10 10-10 10M40 24H19"/></svg><span>Ausschluss von der Sitzung</span></button></div>
+  <h4>Verwarnung oder Ausschluss eintragen</h4>
   <div class="rwform">
-    <div class="seg" id="rwStage"><button data-stage="1" class="on">1. Verwarnung</button><button data-stage="2">2. Verwarnung</button></div>
+    <div class="seg" id="rwStage"><button data-stage="1" class="on">1. Verwarnung</button><button data-stage="2">2. Verwarnung</button><button data-stage="3">Ausschluss von der Sitzung</button></div>
     <label>Wer? (Name oder Namen)<input id="rwName" autocomplete="off"></label>
     <label>Welche Regel? (optional)<input id="rwRule" autocomplete="off" placeholder="z. B. Wir lassen andere ausreden."></label>
     <div class="row" style="justify-content:flex-start;margin-top:0"><button id="rwAdd" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">Eintragen</button><button id="rwShowBig">Groß zeigen</button></div>
@@ -246,10 +255,11 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
   <h4>Eingetragen</h4>
   <div id="rwList"></div>
   <label class="chk"><input type="checkbox" id="rwNames"> Namen anzeigen</label>
-  <p class="note-priv">Die Namen bleiben nur in diesem Browser und in der PDF. Zeig die Liste nicht über den Beamer. Lade die PDF in IServ hoch und leere danach die Liste.</p>
+  <p class="rwhint">Bei Verstößen: Speichere die PDF und lege sie am vereinbarten Ort ab (IServ, TaskCard oder Lehrkraft zusenden).</p>
+  <p class="note-priv">Die Namen bleiben nur in diesem Browser und in der PDF. Zeig die Liste nicht über den Beamer. Leere die Liste, wenn die PDF abgelegt ist.</p>
   <div class="row"><button id="rwPdf" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">Als PDF speichern</button><button id="rwClear">Liste leeren</button><button id="rwClose">Schließen</button></div>
 </dialog>
-<div id="bigCard" hidden role="dialog" aria-label="Verwarnung"><div class="bc c1" id="bcCard"><b id="bcNum">1.</b><span>Verwarnung</span><small id="bcRule"></small></div><p>Antippen zum Schließen</p></div>
+<div id="bigCard" hidden role="dialog" aria-label="Verwarnung"><div class="bc c1" id="bcCard"><b id="bcNum">1.</b><span id="bcTxt">Verwarnung</span><small id="bcRule"></small></div><p>Antippen zum Schließen</p></div>
 <div id="toast" hidden></div>
 <script src="jspdf.umd.min.js"></script>
 <script>
@@ -365,31 +375,32 @@ function paintRW(){document.querySelectorAll('#rwStage button').forEach(b=>b.cla
  if(!S.verw.length){const e=document.createElement('div');e.className='empty';e.textContent='Noch keine Verwarnung eingetragen.';l.append(e);return}
  S.verw.forEach(v=>{const row=document.createElement('div');row.className='rwrow';
   const tm=document.createElement('span');tm.textContent=new Date(v.t).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
-  const st=document.createElement('span');st.className='st '+(v.st===2?'c2 s2':'c1');st.textContent=v.st+'.';st.title=v.st+'. Verwarnung';
+  const st=document.createElement('span');st.className='st '+(v.st===3?'cx s2':v.st===2?'c2 s2':'c1');st.textContent=v.st===3?'Ausschluss':v.st+'.';st.title=v.st===3?'Ausschluss von der Sitzung':v.st+'. Verwarnung';
   const who=document.createElement('span');who.className='who';who.textContent=show?v.n:'•••';if(v.r){const sm=document.createElement('small');sm.textContent=v.r;who.append(sm)}
   const x=document.createElement('button');x.type='button';x.textContent='×';x.setAttribute('aria-label','Eintrag löschen');x.onclick=()=>{S.verw=S.verw.filter(y=>y!==v);save();paintRW()};
   row.append(tm,st,who,x);l.append(row)})}
 document.querySelectorAll('#rwStage button').forEach(b=>b.onclick=()=>{rwStage=+b.dataset.stage;paintRW()});
 $('#rwNames').onchange=paintRW;
 $('#rwAdd').onclick=()=>{const n=$('#rwName').value.trim();if(!n){toast('Bitte einen Namen eintragen');$('#rwName').focus();return}
- S.verw.push({id:uid(),t:new Date().toISOString(),st:rwStage,n,r:$('#rwRule').value.trim()});$('#rwName').value='';save();paintRW();toast('Verwarnung eingetragen')};
-function showBig(st,rule){$('#dRW').close();const c=$('#bcCard');c.className='bc '+(st===2?'c2':'c1');$('#bcNum').textContent=st+'.';$('#bcRule').textContent=rule||'';$('#bigCard').hidden=false}
+ S.verw.push({id:uid(),t:new Date().toISOString(),st:rwStage,n,r:$('#rwRule').value.trim()});$('#rwName').value='';save();paintRW();toast(rwStage===3?'Ausschluss eingetragen':'Verwarnung eingetragen')};
+function showBig(st,rule){$('#dRW').close();const c=$('#bcCard');c.className='bc '+(st===3?'cx':st===2?'c2':'c1');if(st===3){$('#bcNum').innerHTML=EXIT;$('#bcTxt').textContent='Ausschluss von der Sitzung'}else{$('#bcNum').textContent=st+'.';$('#bcTxt').textContent='Verwarnung'}$('#bcRule').textContent=rule||'';$('#bigCard').hidden=false}
 document.querySelectorAll('[data-big]').forEach(b=>b.onclick=()=>showBig(+b.dataset.big,$('#rwRule').value.trim()));
 $('#rwShowBig').onclick=()=>showBig(rwStage,$('#rwRule').value.trim());
 $('#bigCard').onclick=()=>{$('#bigCard').hidden=true;openRW()};
 $('#rwClose').onclick=()=>$('#dRW').close();
 $('#bRW').onclick=openRW;
+const EXIT='<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6H9v36h11"/><path d="M30 14l10 10-10 10M40 24H19"/></svg>';
 $('#rwClear').onclick=()=>{if(!S.verw.length)return;if(!confirm('Alle eingetragenen Verwarnungen löschen? Hast du die PDF gespeichert?'))return;S.verw=[];save();paintRW()};
 $('#rwPdf').onclick=()=>{const {jsPDF}=window.jspdf,d=new jsPDF({unit:'mm',format:'a4'}),W=210,M=18;let y=20;
- d.setFont('helvetica','bold');d.setFontSize(17);d.setTextColor(198,40,40);d.text(clean('Regelwache – Verwarnungen'+(S.klasse?' – '+S.klasse:'')),M,y);y+=8;
+ d.setFont('helvetica','bold');d.setFontSize(17);d.setTextColor(198,40,40);d.text(clean('Regelwache – Verwarnungen und Ausschlüsse'+(S.klasse?' – '+S.klasse:'')),M,y);y+=8;
  d.setFont('helvetica','normal');d.setFontSize(11);d.setTextColor(20,35,26);d.text(clean('Datum: '+dDe(S.datum)+'   ·   Sitzung '+S.nr+(S.regelwache?'   ·   Regelwache: '+S.regelwache:'')),M,y);y+=9;
  const cols=[[M,'Uhrzeit'],[M+20,'Stufe'],[M+52,'Name(n)'],[M+112,'Regel']];
  d.setFont('helvetica','bold');d.setFontSize(10.5);cols.forEach(([x,h])=>d.text(h,x,y));d.setDrawColor(150,150,150);d.line(M,y+2,W-M,y+2);y+=8;d.setFont('helvetica','normal');
  if(!S.verw.length){d.text('Keine Verwarnungen eingetragen.',M,y);y+=6}
  S.verw.forEach(v=>{const a=d.splitTextToSize(clean(v.n),56),b=d.splitTextToSize(clean(v.r||'–'),W-M-(M+112)),h=Math.max(a.length,b.length)*5+2;if(y+h>280){d.addPage();y=20}
-  d.text(new Date(v.t).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}),M,y);d.text(v.st+'. Verwarnung',M+20,y);d.text(a,M+52,y);d.text(b,M+112,y);y+=h;d.setDrawColor(220,220,220);d.line(M,y-3,W-M,y-3)});
- const n=d.getNumberOfPages();for(let p=1;p<=n;p++){d.setPage(p);d.setFontSize(8);d.setTextColor(90,100,95);d.text(clean('Enthält Namen: nur für die Klassenakte bzw. IServ · Klassenrat Dashboard, Daniel Beyrodt, CC BY-NC-SA 4.0 · Seite '+p+'/'+n),M,290)}
- d.save('Klassenrat-Verwarnungen_'+(S.klasse||'Klasse').replace(/[^\wÄÖÜäöüß-]+/g,'-')+'_'+(S.datum||today())+'.pdf');toast('PDF gespeichert. Lade sie in IServ hoch.')};
+  d.text(new Date(v.t).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}),M,y);d.text(v.st===3?'Ausschluss':v.st+'. Verwarnung',M+20,y);d.text(a,M+52,y);d.text(b,M+112,y);y+=h;d.setDrawColor(220,220,220);d.line(M,y-3,W-M,y-3)});
+ const n=d.getNumberOfPages();for(let p=1;p<=n;p++){d.setPage(p);d.setFontSize(8);d.setTextColor(90,100,95);d.text(clean('Enthält Namen: nur für den vereinbarten Ablageort (IServ, TaskCard oder Lehrkraft) · Klassenrat Dashboard, Daniel Beyrodt, CC BY-NC-SA 4.0 · Seite '+p+'/'+n),M,290)}
+ d.save('Klassenrat-Verwarnungen_'+(S.klasse||'Klasse').replace(/[^\wÄÖÜäöüß-]+/g,'-')+'_'+(S.datum||today())+'.pdf');toast('PDF gespeichert. Lege sie am vereinbarten Ort ab.')};
 /* Neue Sitzung */
 function newSession(){const carry=[...S.an,...S.na].map(i=>({id:i.id,t:i.t,n:i.n||'',from:true}));const nr=(parseInt(S.nr,10)||0)+1,kl=S.klasse;Object.assign(S,blank(),{klasse:kl,nr,an:carry,phase:-1,dirty:false});save();run=false;rem=0;paintMeta();paintLists();paintRefl();paintSteps();show();$('#dNew').close();toast('Sitzung '+nr+' gestartet')}
 $('#bNew').onclick=()=>$('#dNew').showModal();$('#newGo').onclick=newSession;$('#newNo').onclick=()=>$('#dNew').close();$('#newPdf').onclick=savePdf;
@@ -481,9 +492,11 @@ $('#aHous').onclick=e=>{if(mic.on){toast('Die Ampel wird gerade vom Mikrofon ges
  const lamp=e.target.closest('.lamp'),order=['green','yellow','red'];S.ampel.manual=lamp?lamp.dataset.l:order[(order.indexOf(S.ampel.manual)+1)%3];save();setLight(S.ampel.manual,true)};
 $('#aHous').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#aHous').click()}};
 /* Thema */
+function paintClean(){document.body.classList.toggle('clean',!!S.clean);$('#bClean').setAttribute('aria-pressed',String(!!S.clean))}
+$('#bClean').onclick=()=>{S.clean=!S.clean;save();paintClean();toast(S.clean?'Nur Anzeige: Einstellungen ausgeblendet':'Bearbeiten: Einstellungen eingeblendet')};
 function paintTheme(){document.documentElement.dataset.theme=S.theme;$('#bTheme').textContent=S.theme==='dark'?'Hell':'Dunkel'}
 $('#bTheme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save();paintTheme()};
-paintTheme();paintMeta();applyShow();paintRefl();paintLists();paintSteps();show();renderAmp();
+paintTheme();paintClean();paintMeta();applyShow();paintRefl();paintLists();paintSteps();show();renderAmp();
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 })();
 </script>
@@ -579,6 +592,21 @@ const D = {
      'Les noms restent uniquement dans ce navigateur et dans le PDF. Ne projette pas la liste. Dépose le PDF sur IServ puis vide la liste.'],
   'Als PDF speichern': ['Save as PDF', 'Enregistrer en PDF'],
   'Liste leeren': ['Clear list', 'Vider la liste'],
+  'Nur Anzeige': ['Display only', 'Affichage seul'],
+  'Bedienelemente aus- oder einblenden': ['Show or hide the controls', 'Afficher ou masquer les commandes'],
+  'Nur Anzeige: Einstellungen ausgeblendet': ['Display only: settings hidden', 'Affichage seul : réglages masqués'],
+  'Bearbeiten: Einstellungen eingeblendet': ['Editing: settings shown', 'Modification : réglages affichés'],
+  'Ausschluss von der Sitzung': ['Excluded from the meeting', 'Exclusion de la séance'],
+  'Ausschluss': ['Exclusion', 'Exclusion'],
+  'Verwarnung oder Ausschluss eintragen': ['Record a warning or exclusion', 'Noter un avertissement ou une exclusion'],
+  'Ausschluss eingetragen': ['Exclusion recorded', 'Exclusion notée'],
+  'Bei Verstößen: Speichere die PDF und lege sie am vereinbarten Ort ab (IServ, TaskCard oder Lehrkraft zusenden).':
+    ['For rule violations: save the PDF and put it in the agreed place (IServ, TaskCard or send it to the teacher).',
+     'En cas d’infraction : enregistre le PDF et dépose-le à l’endroit convenu (IServ, TaskCard ou envoi à l’enseignant·e).'],
+  'Die Namen bleiben nur in diesem Browser und in der PDF. Zeig die Liste nicht über den Beamer. Leere die Liste, wenn die PDF abgelegt ist.':
+    ['Names stay only in this browser and in the PDF. Don’t show the list on the projector. Clear the list once the PDF has been filed.',
+     'Les noms restent uniquement dans ce navigateur et dans le PDF. Ne projette pas la liste. Vide la liste une fois le PDF déposé.'],
+  'PDF gespeichert. Lege sie am vereinbarten Ort ab.': ['PDF saved. Put it in the agreed place.', 'PDF enregistré. Dépose-le à l’endroit convenu.'],
   'Schließen': ['Close', 'Fermer'],
   'Antippen zum Schließen': ['Tap to close', 'Toucher pour fermer'],
   'Eintrag löschen': ['Delete entry', 'Supprimer l’entrée'],
