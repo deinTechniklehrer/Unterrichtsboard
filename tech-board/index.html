@@ -482,7 +482,7 @@ body.alarm{animation:tbPulse 1s ease-in-out infinite;transition:none}
 @media (prefers-reduced-motion:reduce){body.alarm{animation:none;background:#ff1a1a}}
 header{background:var(--tile);border-radius:14px;padding:2px 8px}
 footer,footer a{color:#fff}
-#safeBand{flex:none;position:sticky;top:max(4px,env(safe-area-inset-top));z-index:5;display:grid;gap:var(--gap);grid-template-columns:2.4fr 1.2fr minmax(0,auto);height:clamp(48px,8.5vh,84px)}
+#safeBand{flex:none;position:sticky;top:max(4px,env(safe-area-inset-top));z-index:5;display:grid;gap:var(--gap);grid-template-columns:2.4fr .8fr 1.1fr minmax(0,auto);height:clamp(48px,8.5vh,84px)}
 body.tight #safeBand{height:clamp(44px,7vh,64px)}
 #safeBand button{border:0;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;min-width:0;padding:0 6px;font-size:clamp(16px,min(2.7vw,5vh),36px)}
 #safeBand svg{width:1.15em;height:1.15em;flex:none}
@@ -490,6 +490,23 @@ body.tight #safeBand{height:clamp(44px,7vh,64px)}
 body.safe #btnSafe{background:var(--safe)}
 #btnAlarm{background:#111a26;color:#fff;box-shadow:inset 0 0 0 4px #ff4d4d}
 body.alarm #btnAlarm{background:#fff;color:#a80000}
+#btnMeet{background:#1b6fb0;color:#fff;box-shadow:inset 0 0 0 4px rgba(255,255,255,.75);font-size:clamp(15px,min(2.1vw,4.2vh),30px)!important}
+.meetv{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;background:#0d4f8b;color:#fff;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.meetv[hidden]{display:none}
+.mv-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;text-align:center;animation:mvIn .35s ease-out}
+.mv-main>svg{width:min(20vh,18vw);height:auto;animation:mvPulse 1.6s ease-in-out 3}
+.mv-t{font-size:clamp(44px,min(11vw,17vh),170px);font-weight:900;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.mv-h{font-size:clamp(28px,min(6.4vw,10vh),100px);font-weight:900;color:#ffd23f;line-height:1.05;max-width:95vw;overflow-wrap:anywhere}
+.mv-s{font-size:clamp(17px,min(2.6vw,4vh),36px);font-weight:700;opacity:.92}
+.mv-bar{flex:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.mv-bar .btn{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.55);min-height:44px}
+.mv-bar .btn.sel{background:#fff;color:#0d4f8b;border-color:#fff}
+.mv-bar .btn.primary{background:#fff;color:#0d4f8b;border-color:#fff;font-weight:900}
+.mv-bar input{width:min(280px,80vw);min-height:44px;border-radius:12px;border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.12);color:#fff;padding:0 12px;font:inherit;font-weight:700}
+.mv-bar input::placeholder{color:rgba(255,255,255,.7)}
+@keyframes mvIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes mvPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.mv-main,.mv-main>svg{animation:none}}
 #tbClean{background:#fff4c8;color:#111;box-shadow:inset 0 0 0 3px #f5b700;font-size:clamp(13px,min(1.6vw,3vh),20px)!important;font-weight:800!important;padding:0 14px!important;gap:6px!important}
 #tbClean svg{width:1.3em;height:1.3em}
 #tbClean[aria-pressed="true"]{background:#f5b700}
@@ -606,6 +623,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
   <div id="safeBand">
     <button id="btnSafe" aria-pressed="false"></button>
     <button id="btnAlarm" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17v-6a6 6 0 0 1 12 0v6"/><path d="M4 17h16v3H4z"/><path d="M12 2v1.500M3.500 6 5 7M20.500 6 19 7"/></svg><span id="alarmTxt">ALARM</span></button>
+    <button id="btnMeet" title="Treffpunkt: alle kommen zusammen" aria-label="Treffpunkt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3.2"/><path d="M6 21v-2.2a6 6 0 0 1 12 0V21"/><circle cx="4.6" cy="10.2" r="2.3"/><path d="M1.2 19.5v-1.3a3.7 3.7 0 0 1 4.6-3.6"/><circle cx="19.4" cy="10.2" r="2.3"/><path d="M22.8 19.5v-1.3a3.7 3.7 0 0 0-4.6-3.6"/></svg><span>Treffpunkt</span></button>
     <button id="tbClean" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#tbTri"/></svg><span id="tbCleanTxt">Aufräumen</span></button>
   </div>
 
@@ -793,6 +811,15 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
   <footer>Tech-Board · Daniel Beyrodt · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutz</a></footer>
 </div>
 
+<div id="meetView" class="meetv" hidden role="dialog" aria-modal="true" aria-label="Treffpunkt">
+  <div class="mv-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3.2"/><path d="M6 21v-2.2a6 6 0 0 1 12 0V21"/><circle cx="4.6" cy="10.2" r="2.3"/><path d="M1.2 19.5v-1.3a3.7 3.7 0 0 1 4.6-3.6"/><circle cx="19.4" cy="10.2" r="2.3"/><path d="M22.8 19.5v-1.3a3.7 3.7 0 0 0-4.6-3.6"/></svg><div class="mv-t">Treffpunkt</div><div class="mv-h" id="meetHead" hidden></div><div class="mv-s">Alle kommen zusammen und hören zu.</div></div>
+  <div class="mv-bar">
+    <button class="btn" data-meet="Hinweis">Hinweis</button><button class="btn" data-meet="Sicherheitsunterweisung">Sicherheitsunterweisung</button><button class="btn" data-meet="Zwischenstand">Zwischenstand</button><button class="btn" data-meet="">Ohne Überschrift</button>
+    <input id="meetIn" maxlength="40" placeholder="Eigene Überschrift …" aria-label="Eigene Überschrift" autocomplete="off" enterkeyhint="done">
+    <button class="btn" id="meetTone">Ton nochmal</button>
+    <button class="btn primary" id="meetClose">Weiterarbeiten</button>
+  </div>
+</div>
 <div id="apeView" hidden role="dialog" aria-label="APE groß"><img id="apeViewImg" alt="Arbeitsplatzeinrichtung"><span>Antippen zum Schließen</span></div>
 <dialog id="dlg">
   <div class="dlg">
@@ -802,6 +829,9 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <label class="row">APE und Sicherheitsregeln <input type="checkbox" class="sw" data-show="ape"></label>
     <label class="row">Gefährdungen <input type="checkbox" class="sw" data-show="gefahr"></label>
     <label class="row">Timer <input type="checkbox" class="sw" data-show="timer"></label>
+    <div class="row">Größe des Timers (Querformat)
+      <div class="seg"><button class="btn" data-tsize-set="2x2">2 × 2</button><button class="btn" data-tsize-set="2x1">2 × 1</button></div>
+    </div>
     <label class="row">Stundenfahrplan <input type="checkbox" class="sw" data-show="plan"></label>
     <label class="row">Aufgabe <input type="checkbox" class="sw" data-show="aufgabe"></label>
     <label class="row">Sozialform <input type="checkbox" class="sw" data-show="sozial"></label>
@@ -834,11 +864,13 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 
     <h3>Gut zu wissen</h3>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
+    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen) sind 1 Spalte breit, Timer und Aufgabe 2. Den Timer kannst du oben in den Einstellungen auf 2 × 2 oder 2 × 1 stellen. Blendest du Kacheln aus, wird die Aufgabe 3 Spalten breit.</p>
     <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. Mit „Nur Anzeige“ (Auge oben) passt meist alles auf einen Blick.</p>
     <p><strong>Mikrofon:</strong> Die Lautstärkeampel hört nur mit, wenn das Board über eine sichere Adresse (https://) läuft, z. B. über GitHub Pages, und direkt im Browser bzw. als installierte App geöffnet ist (nicht in einer App-Vorschau). Klappt es nicht, zeigt das Board einen passenden Hinweis für dein Gerät. Es wird nichts aufgenommen oder gespeichert, nur der Pegel wird gemessen. Ohne Mikrofon schaltest du die Ampel per Tippen.</p>
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ mit rotem Hintergrund. Ein Tipp stellt auf „Sicher“ mit grünem Hintergrund. „Alarm“ gibt ein Signal und lässt den Hintergrund rot pulsieren, auch wenn der Signalton für den Timer aus ist. Ein zweiter Tipp beendet den Alarm. Am iPad muss der Ton laut gestellt sein.</p>
+    <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>APE und Gefährdungen:</strong> APE heißt Arbeitsplatzeinrichtung. Holz und Metall zeigen ein Foto, Antippen vergrößert es. Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
@@ -949,7 +981,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const KEY = 'techboard.v1';
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
-  theme: 'light', clean: false, sound: true, wake: true,
+  theme: 'light', tsize: '2x2', meetT: '', clean: false, sound: true, wake: true,
   show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: true, gefahr: true },
   raus: false,
   ape: [], rules: [], haz: [],
@@ -1203,6 +1235,54 @@ function scrollLayout(keys, W, H, gap) {
   p.rows.forEach((row, ri) => { let col = 1; row.forEach(e => { place.push({ k: e.k, col, cs: e.s, row: ri + 1, rs: 1 }); col += e.s; }); });
   return { cols: `repeat(${c}, 1fr)`, rows: hs, place, scroll: true };
 }
+/* ================= Raster mit 6 Spalten (Querformat) =================
+   Standard für alle Boards: Im Querformat liegen die Kacheln in einem Raster mit 6 Spalten.
+   Klein (1 Spalte): Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen.
+   Timer 2 Spalten, 2 oder 1 Zeile hoch (Einstellungen). Aufgabe, Fahrplan, APE 2 Spalten.
+   Bleibt Platz frei, wird zuerst die Aufgabe 3 breit, dann Fahrplan, APE und Timer, erst danach kleine Kacheln.
+   Hochkant und auf kleinen Bildschirmen ordnet das Board die Kacheln weiter automatisch an. */
+const G6_W = { timer: 2, aufgabe: 2, plan: 2, ape: 2 };
+const G6_MAX = { aufgabe: 3, plan: 3, ape: 3, timer: 3 };
+function grid6Layout(keys, W, H, gap) {
+  const C = 6;
+  if (W < 700 || W < H * 1.05 || !keys.length) return null;
+  const hasT = keys.includes('timer'), rest = keys.filter(k => k !== 'timer');
+  const ord = k => ORDER.indexOf(k);
+  for (let extra = 0; extra < 3; extra++) {
+    let trs = hasT ? (S.tsize === '2x1' ? 1 : 2) : 0;
+    const span = {}; rest.forEach(k => span[k] = G6_W[k] || 1);
+    let tcs = hasT ? 2 : 0;
+    const cells = () => tcs * trs + rest.reduce((a, k) => a + span[k], 0);
+    let n = Math.max(trs, Math.ceil(cells() / C)) + extra;
+    if (hasT && !rest.length) { n = 1; trs = 1; tcs = C; }
+    if (hasT && n < trs) trs = n;
+    // freie Zellen verteilen: Aufgabe, Fahrplan, APE, Timer, dann kleine Kacheln
+    let free = n * C - cells();
+    const grow = (k, mx) => { while (free > 0 && span[k] < mx) { span[k]++; free--; } };
+    ['aufgabe', 'plan', 'ape'].forEach(k => { if (k in span) grow(k, G6_MAX[k]); });
+    if (hasT && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / trs), G6_MAX.timer - tcs)); tcs += t; free -= t * trs; }
+    const small = rest.filter(k => !(k in G6_W));
+    for (let i = 0; free > 0 && small.length && i < small.length * 2; i++) { const k = small[i % small.length]; if (span[k] < 2 + Math.floor(i / small.length)) { span[k]++; free--; } }
+    for (let i = 0; free > 0 && rest.length && i < 40; i++) { span[rest[i % rest.length]]++; free--; }
+    // Zeilen füllen (größte zuerst), danach je Zeile in der gewohnten Reihenfolge
+    const cap = r => C - (hasT && r < trs ? tcs : 0);
+    const rows = Array.from({ length: n }, () => []), left = rows.map((_, r) => cap(r));
+    const byW = [...rest].sort((a, b) => span[b] - span[a] || ord(a) - ord(b));
+    let ok = true;
+    for (const k of byW) { const r = left.findIndex(x => x >= span[k]); if (r < 0) { ok = false; break; } rows[r].push(k); left[r] -= span[k]; }
+    if (!ok || left.some(x => x !== 0)) continue;
+    const rh = (H - (n - 1) * gap) / n, cw = (W - (C - 1) * gap) / C;
+    if (rh < 115 || cw < 95) return null;
+    const place = [];
+    if (hasT) place.push({ k: 'timer', col: 1, cs: tcs, row: 1, rs: trs });
+    rows.forEach((row, r) => {
+      let col = hasT && r < trs ? tcs + 1 : 1;
+      row.sort((a, b) => ord(a) - ord(b)).forEach(k => { place.push({ k, col, cs: span[k], row: r + 1, rs: 1 }); col += span[k]; });
+    });
+    return { cols: `repeat(${C}, minmax(0, 1fr))`, rows: `repeat(${n}, minmax(0, 1fr))`, place, rh };
+  }
+  return null;
+}
 let layoutRaf = 0;
 function queueLayout(fromResize) { cancelAnimationFrame(layoutRaf); layoutRaf = requestAnimationFrame(() => layout(fromResize === true)); }
 let lastW = 0;
@@ -1224,6 +1304,12 @@ function layout(fromResize) {
   const r = g.getBoundingClientRect();
   const gap = parseFloat(getComputedStyle(g).rowGap) || 8;
   const W = r.width, H = r.height;
+  const G6 = !tbCleaning ? grid6Layout(keys, W, H, gap) : null;
+  if (G6) {
+    MIN_F = 1; document.body.classList.toggle('tight', G6.rh < 210); g.style.gridTemplateColumns = G6.cols; g.style.gridTemplateRows = G6.rows;
+    for (const p of G6.place) { tiles[p.k].style.gridColumn = `${p.col} / span ${p.cs}`; tiles[p.k].style.gridRow = `${p.row} / span ${p.rs}`; }
+    fitTask(); sizePlan(); return;
+  }
   const others = keys.filter(k => k !== 'timer');
   // Auf iPad und größeren Bildschirmen lieber alles etwas kleiner als scrollen
   const steps = W >= 700 && H >= 500 ? [1, 0.88, 0.77, 0.67, 0.58] : [1];
@@ -2083,6 +2169,9 @@ function bind() {
     queueLayout();
   }));
   $$('[data-theme-set]').forEach(b => b.addEventListener('click', () => { S.theme = b.dataset.themeSet; save(); renderTheme(); }));
+  const renderTsize = () => $$('[data-tsize-set]').forEach(x => x.classList.toggle('sel', x.dataset.tsizeSet === (S.tsize === '2x1' ? '2x1' : '2x2')));
+  $$('[data-tsize-set]').forEach(b => b.addEventListener('click', () => { S.tsize = b.dataset.tsizeSet; save(); renderTsize(); queueLayout(); }));
+  renderTsize();
   $('#optSound').addEventListener('change', e => { S.sound = e.target.checked; save(); if (S.sound) unlockAudio(); });
   $('#optWake').addEventListener('change', e => { S.wake = e.target.checked; save(); S.wake ? wake() : unwake(); });
   $('#btnReset').addEventListener('click', () => {
@@ -2214,6 +2303,24 @@ function tbAlarm(v) {
   if (v) { unlockAudio(); const beat = () => { tbTone(880, .4, 0); tbTone(620, .4, .45); }; beat(); tbSiren = setInterval(beat, 900); }
   tbRender();
 }
+/* Treffpunkt: alle kommen zusammen, mit Gong und kurzer Überschrift */
+function meetChime() {
+  unlockAudio(); const c = ac(); if (!c) return;
+  [[523.25, 0], [659.25, .3], [783.99, .6], [1046.5, .9]].forEach(([f, t0]) => {
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.45, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.5);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + 1.6);
+  });
+}
+function meetRender() {
+  const h = $('#meetHead'), v = (S.meetT || '').trim();
+  h.textContent = v; h.hidden = !v;
+  $$('[data-meet]').forEach(b => b.classList.toggle('sel', b.dataset.meet === v));
+  const i = $('#meetIn'); if (document.activeElement !== i) i.value = $$('[data-meet]').some(b => b.dataset.meet === v) ? '' : v;
+}
+function openMeet() { meetRender(); $('#meetView').hidden = false; meetChime(); $('#meetClose').focus(); }
+function closeMeet() { $('#meetView').hidden = true; }
 function tbToggleBtn(cls, id, label, svg, arr) {
   const e = document.createElement('button'); e.type = 'button'; e.className = cls; e.dataset.id = id; e.innerHTML = svg;
   const sp = document.createElement('span'); sp.textContent = label; e.append(sp);
@@ -2318,6 +2425,13 @@ function tbInit() {
   $('#cleanRefl').addEventListener('click', () => { S.rfTab = 'aufr'; save(); openReflex(); });
   $('#btnSafe').addEventListener('click', () => { tbSafe = !tbSafe; tbRender(); });
   $('#btnAlarm').addEventListener('click', () => tbAlarm(!tbAlarmOn));
+  $('#btnMeet').addEventListener('click', openMeet);
+  $('#meetClose').addEventListener('click', closeMeet);
+  $('#meetTone').addEventListener('click', meetChime);
+  $$('[data-meet]').forEach(b => b.addEventListener('click', () => { S.meetT = b.dataset.meet; save(); $('#meetIn').value = ''; meetRender(); }));
+  $('#meetIn').addEventListener('input', e => { S.meetT = e.target.value; save(); meetRender(); });
+  $('#meetIn').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#meetView').hidden) closeMeet(); });
   $('#cleanEnd').addEventListener('click', tbEndClean);
   $('#tbClean').addEventListener('click', () => {
     if (tbCleaning) return tbEndClean();
@@ -2386,6 +2500,17 @@ const D = {
   'UNSICHER': ['UNSAFE', 'PAS SÛR'],
   'ALARM': ['ALARM', 'ALARME'],
   'STOPP': ['STOP', 'STOP'],
+  'Treffpunkt': ['Meeting point', 'Point de rencontre'],
+  'Treffpunkt: alle kommen zusammen': ['Meeting point: everyone gathers', 'Point de rencontre : tout le monde se rassemble'],
+  'Alle kommen zusammen und hören zu.': ['Everyone comes together and listens.', 'Tout le monde se rassemble et écoute.'],
+  'Hinweis': ['Notice', 'Information'],
+  'Sicherheitsunterweisung': ['Safety briefing', 'Consignes de sécurité'],
+  'Zwischenstand': ['Progress check', 'Point d’étape'],
+  'Ohne Überschrift': ['No heading', 'Sans titre'],
+  'Eigene Überschrift …': ['Own heading …', 'Titre personnalisé …'],
+  'Eigene Überschrift': ['Own heading', 'Titre personnalisé'],
+  'Ton nochmal': ['Play sound again', 'Rejouer le son'],
+  'Weiterarbeiten': ['Back to work', 'Reprendre le travail'],
   'Aufräumen': ['Tidy up', 'Rangement'],
   'Beenden': ['Finish', 'Terminer'],
   'Aufräumen beenden': ['End tidy-up', 'Terminer le rangement'],
@@ -2424,6 +2549,7 @@ const D = {
   'Mehr als 12 Phasen passen nicht in den Fahrplan.': ['The plan holds at most 12 phases.', 'Le déroulé contient au maximum 12 phases.'],
   // Kopfzeile
   'Nur Anzeige': ['Display only', 'Affichage seul'],
+  'Größe des Timers (Querformat)': ['Timer size (landscape)', 'Taille du minuteur (paysage)'],
   'Fahrplan': ['Plan', 'Déroulé'],
   'Reflexion': ['Reflection', 'Réflexion'],
   'Input': ['Input', 'Image'],

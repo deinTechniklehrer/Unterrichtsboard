@@ -681,6 +681,9 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 
     <h3>Kacheln anzeigen</h3>
     <label class="row">Timer <input type="checkbox" class="sw" data-show="timer"></label>
+    <div class="row">Größe des Timers (Querformat)
+      <div class="seg"><button class="btn" data-tsize-set="2x2">2 × 2</button><button class="btn" data-tsize-set="2x1">2 × 1</button></div>
+    </div>
     <label class="row">Stundenfahrplan <input type="checkbox" class="sw" data-show="plan"></label>
     <label class="row">Aufgabe <input type="checkbox" class="sw" data-show="aufgabe"></label>
     <label class="row">Sozialform <input type="checkbox" class="sw" data-show="sozial"></label>
@@ -713,6 +716,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 
     <h3>Gut zu wissen</h3>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
+    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort) sind 1 Spalte breit, Timer und Aufgabe 2. Den Timer kannst du oben in den Einstellungen auf 2 × 2 oder 2 × 1 stellen. Blendest du Kacheln aus, wird die Aufgabe 3 Spalten breit.</p>
     <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. Mit „Nur Anzeige“ (Auge oben) passt meist alles auf einen Blick.</p>
     <p><strong>Mikrofon:</strong> Die Lautstärkeampel hört nur mit, wenn das Board über eine sichere Adresse (https://) läuft, z. B. über GitHub Pages, und direkt im Browser bzw. als installierte App geöffnet ist (nicht in einer App-Vorschau). Klappt es nicht, zeigt das Board einen passenden Hinweis für dein Gerät. Es wird nichts aufgenommen oder gespeichert, nur der Pegel wird gemessen. Ohne Mikrofon schaltest du die Ampel per Tippen.</p>
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
@@ -822,7 +826,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const KEY = 'klassenboard.v1'; // interner Speichername bleibt, damit gespeicherte Einstellungen erhalten bleiben
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
-  theme: 'light', clean: false, sound: true, wake: true,
+  theme: 'light', tsize: '2x2', clean: false, sound: true, wake: true,
   show: { timer: true, plan: false, aufgabe: true, sozial: true, ampel: true, ipad: true, ki: true, raus: true },
   raus: false,
   aufgabe: '',
@@ -1054,6 +1058,54 @@ function scrollLayout(keys, W, H, gap) {
   p.rows.forEach((row, ri) => { let col = 1; row.forEach(e => { place.push({ k: e.k, col, cs: e.s, row: ri + 1, rs: 1 }); col += e.s; }); });
   return { cols: `repeat(${c}, 1fr)`, rows: hs, place, scroll: true };
 }
+/* ================= Raster mit 6 Spalten (Querformat) =================
+   Standard für alle Boards: Im Querformat liegen die Kacheln in einem Raster mit 6 Spalten.
+   Klein (1 Spalte): Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen.
+   Timer 2 Spalten, 2 oder 1 Zeile hoch (Einstellungen). Aufgabe, Fahrplan, APE 2 Spalten.
+   Bleibt Platz frei, wird zuerst die Aufgabe 3 breit, dann Fahrplan, APE und Timer, erst danach kleine Kacheln.
+   Hochkant und auf kleinen Bildschirmen ordnet das Board die Kacheln weiter automatisch an. */
+const G6_W = { timer: 2, aufgabe: 2, plan: 2, ape: 2 };
+const G6_MAX = { aufgabe: 3, plan: 3, ape: 3, timer: 3 };
+function grid6Layout(keys, W, H, gap) {
+  const C = 6;
+  if (W < 700 || W < H * 1.05 || !keys.length) return null;
+  const hasT = keys.includes('timer'), rest = keys.filter(k => k !== 'timer');
+  const ord = k => ORDER.indexOf(k);
+  for (let extra = 0; extra < 3; extra++) {
+    let trs = hasT ? (S.tsize === '2x1' ? 1 : 2) : 0;
+    const span = {}; rest.forEach(k => span[k] = G6_W[k] || 1);
+    let tcs = hasT ? 2 : 0;
+    const cells = () => tcs * trs + rest.reduce((a, k) => a + span[k], 0);
+    let n = Math.max(trs, Math.ceil(cells() / C)) + extra;
+    if (hasT && !rest.length) { n = 1; trs = 1; tcs = C; }
+    if (hasT && n < trs) trs = n;
+    // freie Zellen verteilen: Aufgabe, Fahrplan, APE, Timer, dann kleine Kacheln
+    let free = n * C - cells();
+    const grow = (k, mx) => { while (free > 0 && span[k] < mx) { span[k]++; free--; } };
+    ['aufgabe', 'plan', 'ape'].forEach(k => { if (k in span) grow(k, G6_MAX[k]); });
+    if (hasT && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / trs), G6_MAX.timer - tcs)); tcs += t; free -= t * trs; }
+    const small = rest.filter(k => !(k in G6_W));
+    for (let i = 0; free > 0 && small.length && i < small.length * 2; i++) { const k = small[i % small.length]; if (span[k] < 2 + Math.floor(i / small.length)) { span[k]++; free--; } }
+    for (let i = 0; free > 0 && rest.length && i < 40; i++) { span[rest[i % rest.length]]++; free--; }
+    // Zeilen füllen (größte zuerst), danach je Zeile in der gewohnten Reihenfolge
+    const cap = r => C - (hasT && r < trs ? tcs : 0);
+    const rows = Array.from({ length: n }, () => []), left = rows.map((_, r) => cap(r));
+    const byW = [...rest].sort((a, b) => span[b] - span[a] || ord(a) - ord(b));
+    let ok = true;
+    for (const k of byW) { const r = left.findIndex(x => x >= span[k]); if (r < 0) { ok = false; break; } rows[r].push(k); left[r] -= span[k]; }
+    if (!ok || left.some(x => x !== 0)) continue;
+    const rh = (H - (n - 1) * gap) / n, cw = (W - (C - 1) * gap) / C;
+    if (rh < 115 || cw < 95) return null;
+    const place = [];
+    if (hasT) place.push({ k: 'timer', col: 1, cs: tcs, row: 1, rs: trs });
+    rows.forEach((row, r) => {
+      let col = hasT && r < trs ? tcs + 1 : 1;
+      row.sort((a, b) => ord(a) - ord(b)).forEach(k => { place.push({ k, col, cs: span[k], row: r + 1, rs: 1 }); col += span[k]; });
+    });
+    return { cols: `repeat(${C}, minmax(0, 1fr))`, rows: `repeat(${n}, minmax(0, 1fr))`, place, rh };
+  }
+  return null;
+}
 let layoutRaf = 0;
 function queueLayout(fromResize) { cancelAnimationFrame(layoutRaf); layoutRaf = requestAnimationFrame(() => layout(fromResize === true)); }
 let lastW = 0;
@@ -1075,6 +1127,12 @@ function layout(fromResize) {
   const r = g.getBoundingClientRect();
   const gap = parseFloat(getComputedStyle(g).rowGap) || 8;
   const W = r.width, H = r.height;
+  const G6 = true ? grid6Layout(keys, W, H, gap) : null;
+  if (G6) {
+    g.style.gridTemplateColumns = G6.cols; g.style.gridTemplateRows = G6.rows;
+    for (const p of G6.place) { tiles[p.k].style.gridColumn = `${p.col} / span ${p.cs}`; tiles[p.k].style.gridRow = `${p.row} / span ${p.rs}`; }
+    fitTask(); sizePlan(); return;
+  }
   const cands = [];
   for (let c = 1; c <= keys.length; c++) { const x = candRows(keys, c, W, H, gap); if (x) cands.push(x); }
   const others = keys.filter(k => k !== 'timer');
@@ -1919,6 +1977,9 @@ function bind() {
     queueLayout();
   }));
   $$('[data-theme-set]').forEach(b => b.addEventListener('click', () => { S.theme = b.dataset.themeSet; save(); renderTheme(); }));
+  const renderTsize = () => $$('[data-tsize-set]').forEach(x => x.classList.toggle('sel', x.dataset.tsizeSet === (S.tsize === '2x1' ? '2x1' : '2x2')));
+  $$('[data-tsize-set]').forEach(b => b.addEventListener('click', () => { S.tsize = b.dataset.tsizeSet; save(); renderTsize(); queueLayout(); }));
+  renderTsize();
   $('#optSound').addEventListener('change', e => { S.sound = e.target.checked; save(); if (S.sound) unlockAudio(); });
   $('#optWake').addEventListener('change', e => { S.wake = e.target.checked; save(); S.wake ? wake() : unwake(); });
   $('#btnReset').addEventListener('click', () => {
@@ -2003,6 +2064,7 @@ const LANGS = ['de', 'en', 'fr'];
 const D = {
   // Kopfzeile
   'Nur Anzeige': ['Display only', 'Affichage seul'],
+  'Größe des Timers (Querformat)': ['Timer size (landscape)', 'Taille du minuteur (paysage)'],
   'Fahrplan': ['Plan', 'Déroulé'],
   'Reflexion': ['Reflection', 'Réflexion'],
   'Input': ['Input', 'Image'],
