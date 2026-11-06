@@ -470,7 +470,10 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .ape-split{flex:1;min-height:0;min-width:0;display:flex;gap:8px;container-type:inline-size}
 .ape-split[hidden]{display:none}
 .ape-split #rules{flex:1 1 0;min-width:0}
-.tb-photos{flex:0 1 44%;min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px}
+.tb-photos{flex:0 1 44%;}
+#tApe .tb-photos{flex:1 1 auto}
+.tb-photos:empty{display:none}
+.tb-photos{min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px}
 .tb-photo{flex:1 1 0;min-width:0;min-height:0;padding:0;border:0;border-radius:10px;background:none;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
 .tb-photo img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;object-position:center}
 @container (max-width:300px){.ape-split{flex-direction:column}.tb-photos{flex:0 1 38%}}
@@ -805,7 +808,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
       <div class="tb-body"><div class="tb-chips" id="apes"></div>
       <div class="ape-split" id="apeSplit" hidden><div class="tb-sym" id="rules" hidden></div>
       <div class="tb-photos" id="apePhotos"></div></div>
-      <div class="tb-hint" id="ruleHint">Wähle eine APE, dann erscheinen die Sicherheitsregeln.</div></div>
+      <div class="tb-hint" id="ruleHint">Wähle die APE für die heutige Arbeit.</div></div>
     </section>
     <section class="tile" id="tGefahr" data-k="gefahr">
       <div class="label">Gefährdungen</div>
@@ -832,6 +835,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <h2>Einstellungen</h2>
 
     <h3>Kacheln anzeigen</h3>
+    <label class="row">APE <input type="checkbox" class="sw" data-show="ape"></label>
     <label class="row">Gefährdungen <input type="checkbox" class="sw" data-show="gefahr"></label>
     <label class="row">Timer <input type="checkbox" class="sw" data-show="timer"></label>
     <div class="row">Größe des Timers (Querformat)
@@ -878,6 +882,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
+    <p><strong>APE:</strong> Wähle Robotik oder Arduino. Fotos der Arbeitsplätze können später ergänzt werden.</p>
     <p><strong>Gefährdungen:</strong> Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
     <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
@@ -987,7 +992,7 @@ const KEY = 'roboboard.v1';
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
   theme: 'light', tsize: '2x2', meetT: '', clean: false, sound: true, wake: true,
-  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: false, gefahr: true },
+  show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: true, gefahr: true },
   raus: false,
   ape: [], rules: [], haz: [],
   aufr: { n: 16, a: [] },
@@ -1059,6 +1064,8 @@ function load() {
   catch (e) { return clone(DEF); }
 }
 let S = load();
+// Robo-Board: APE (Robotik, Arduino) einmalig einblenden, alte Auswahl aus dem Tech-Board entfernen
+if (!S.apeRobo) { S.apeRobo = 1; S.show.ape = true; S.ape = (S.ape || []).filter(a => ['Robotik', 'Arduino'].includes(a)); }
 function cleanPlan() {
   if (!Array.isArray(S.plan)) S.plan = clone(DEF.plan);
   S.plan = S.plan.filter(x => x && typeof x === 'object').slice(0, 12)
@@ -2247,8 +2254,8 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
 /* ================= Tech-Board ================= */
 const tbBlue = b => `<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#1565c0"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${b}</g></svg>`;
 const tbTri = b => `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4 46 43H2z" fill="#f5b700" stroke="#111" stroke-width="2.500" stroke-linejoin="round"/><g fill="none" stroke="#111" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round">${b}</g></svg>`;
-const TB_APE = ['Holz', 'Metall', 'Elektro'];
-const TB_APE_IMG = { Holz: 'ape-holz.jpg', Metall: 'ape-metall.jpg' };
+const TB_APE = ['Robotik', 'Arduino']; // Robotiklabor
+const TB_APE_IMG = {}; // Fotos folgen
 const TB_RULES = [
   ['kipp', 'Fenster auf Kipp', tbBlue('<rect x="13" y="12" width="22" height="25" rx="1"/><path d="M13 37 19 15h22l-6 22"/>')],
   ['brille', 'Schutzbrille', "<svg viewBox=\"0 0 265 265\" aria-hidden=\"true\"><path fill=\"#005387\" d=\"M0 132.46C0 59.514 59.525 0 132.501 0 205.469 0 265 59.513 265 132.459 265 205.417 205.469 265 132.501 265 59.537 265 0 205.417 0 132.46\"/><path fill=\"#fff\" fill-rule=\"evenodd\" d=\"M132.509 235.575c-30.16.13-50.638-19.989-61.406-60.356-10.177 0-15.469-5.546-21.475-19.222-9.758-22.201-7.971-38.874 7.162-39.606-4.879-50.031 34.927-87.4 75.719-87.4 40.774 0 80.586 37.37 75.701 87.4 15.139.732 16.915 17.405 7.162 39.606-6.018 13.676-11.31 19.222-21.475 19.222-10.767 40.367-31.246 60.485-61.388 60.356m-7.882-8.401c-21.08-3.056-36.715-19.517-45.919-53.984l-1.563-5.853c-.867-3.493-5.859-3.186-6.909-.484-.761 2.024-7.688-1.044-13.393-14.024-4.649-10.561-5.953-18.614-5.186-23.446.584-3.676 4.018-6.395 6.301-5.168 1.215 5.994 8.602 3.522 7.865-.979l-.897-5.687 12.891 8.219-.059-6.826-13.458-8.219c-1.345-39.517 28.219-69.099 60.326-73.335q7.788-1.035 15.877 0c32.078 4.23 61.636 33.777 60.326 73.258l-13.593 8.295-.053 6.826 13.027-8.313-.903 5.782c-.737 4.502 6.643 6.974 7.853.979 2.289-1.227 5.735 1.493 6.307 5.168.773 4.832-.537 12.885-5.18 23.446-5.699 12.98-12.632 16.048-13.387 14.024-1.068-2.702-6.047-3.009-6.921.484l-1.563 5.853c-9.21 34.467-24.838 50.928-45.913 53.984a60 60 0 0 1-15.877 0m16.537-109.796c14.112-.808 28.614-.472 43.511 1.021l-.218 27.086c-.083 10.077-9.988 17.115-19.045 16.986l-3.965-.047c-11.67-.165-20.762-7.422-20.626-18.531zm38.591 5.469-.183 22.591c-.059 6.661-6.956 12.26-14.089 12.154l-3.965-.053c-9.788-.142-15.9-5.912-15.818-13.587l.283-21.918c11.021-.437 22.272-.165 33.771.814m-3.015 22.567c-.035 4.726-5.257 9.44-11.222 9.351l-3.965-.053c-8.637-.124-13.086-4.997-13.015-10.72l.242-19.228q13.815-.398 28.125.69zm19.835-34.721-9.363 5.375-2.277-.23a295 295 0 0 0-19.841-1.316c9.794-1.681 22.496-3.328 31.482-3.829m-9.422 17.806 7.735-4.92c-.614 6.342-1.858 13.758-3.752 21.67l-4.413 3.381c.195-1.009.283-2.053.307-3.127zm-63.317-11.121c-14.107-.808-28.614-.472-43.511 1.021l.23 27.086c.083 10.077 9.971 17.115 19.033 16.986l3.965-.047c11.67-.165 20.762-7.422 20.626-18.531zm-38.597 5.469.201 22.591c.053 6.661 6.95 12.26 14.077 12.154l3.971-.053c9.77-.142 15.906-5.912 15.8-13.587l-.277-21.918q-16.522-.655-33.771.814m3.021 22.567c.035 4.726 5.257 9.44 11.222 9.351l3.959-.053c8.637-.124 13.104-4.997 13.027-10.72l-.248-19.228q-13.815-.398-28.125.69zm-19.829-34.721 9.357 5.375 2.277-.23c6.69-.667 13.31-1.109 19.847-1.316-9.806-1.681-22.514-3.328-31.482-3.829m9.41 17.806-7.723-4.92c.619 6.342 1.864 13.758 3.752 21.67l4.407 3.381a18.7 18.7 0 0 1-.295-3.127zm48.986-6.59q5.272-5.212 11.334 0v2.95h-11.334zm0 7.251q5.272-5.213 11.334 0v2.95h-11.334z\"/></svg>"],
@@ -2267,7 +2274,6 @@ let tbCleaning = false, tbSafe = false, tbAlarmOn = false, tbSiren = 0;
 function tbVis(k) {
   if (tbCleaning) return k === 'timer' || k === 'cleanmsg';
   if (k === 'cleanmsg') return false;
-  if (k === 'ape') return false; // Robotiklabor: keine APE
   if (!S.show[k]) return false;
   return true;
 }
@@ -2297,7 +2303,8 @@ function tbRender() {
   $('#apePhotos').innerHTML = TB_APE.filter(a => S.ape.includes(a)).map(a => TB_APE_IMG[a]
     ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}: Werkzeug auf der Werkbank"></button>`
     : `<div class="tb-photo none">APE ${a}: Bild folgt</div>`).join('');
-  $('#rules').hidden = !S.ape.length; $('#apeSplit').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
+  // Robotiklabor: APE ohne Sicherheitssymbole
+  $('#rules').hidden = true; $('#apeSplit').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
 }
 function tbTone(f, d, t0) {
   const c = ac(); if (!c) return;
@@ -2424,7 +2431,6 @@ function clInit() {
 }
 function tbInit() {
   TB_APE.forEach(a => $('#apes').append(tbToggleBtn('tb-chip', a, a, '', 'ape')));
-  TB_RULES.forEach(r => $('#rules').append(tbToggleBtn('tb-s rule', r[0], r[1], r[2], 'rules')));
   TB_HAZ.forEach(h => $('#hazards').append(tbToggleBtn('tb-s haz', h[0], h[1], h[2], 'haz')));
   $('#apePhotos').addEventListener('click', e => {
     const b = e.target.closest('[data-img]'); if (!b) return;
@@ -2550,6 +2556,9 @@ const D = {
   'APE': ['Workstation', 'Poste de travail'],
   'Arbeitsplatzeinrichtung': ['Workstation setup', 'Aménagement du poste'],
   'Holz': ['Wood', 'Bois'],
+  'Robotik': ['Robotics', 'Robotique'],
+  'Arduino': ['Arduino', 'Arduino'],
+  'Wähle die APE für die heutige Arbeit.': ['Choose the workstation set-up for today.', 'Choisis l’aménagement du poste pour aujourd’hui.'],
   'Metall': ['Metal', 'Métal'],
   'Elektro': ['Electronics', 'Électro'],
   'Gefährdungen': ['Hazards', 'Dangers'],

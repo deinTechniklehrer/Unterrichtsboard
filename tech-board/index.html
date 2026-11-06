@@ -470,6 +470,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .ape-split{flex:1;min-height:0;min-width:0;display:flex;gap:8px;container-type:inline-size}
 .ape-split[hidden]{display:none}
 .ape-split #rules{flex:1 1 0;min-width:0}
+.tb-photos:empty{display:none}
 .tb-photos{flex:0 1 44%;min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px}
 .tb-photo{flex:1 1 0;min-width:0;min-height:0;padding:0;border:0;border-radius:10px;background:none;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
 .tb-photo img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;object-position:center}
@@ -879,7 +880,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
-    <p><strong>APE und Gefährdungen:</strong> APE heißt Arbeitsplatzeinrichtung. Holz und Metall zeigen ein Foto, Antippen vergrößert es. Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
+    <p><strong>APE und Gefährdungen:</strong> APE heißt Arbeitsplatzeinrichtung. Holz und Metall zeigen rechts ein Foto, Antippen vergrößert es. Die Sicherheitssymbole links kannst du immer antippen, auch ohne gewählte APE. Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
     <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
@@ -2297,7 +2298,8 @@ function tbRender() {
   $('#apePhotos').innerHTML = TB_APE.filter(a => S.ape.includes(a)).map(a => TB_APE_IMG[a]
     ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}: Werkzeug auf der Werkbank"></button>`
     : `<div class="tb-photo none">APE ${a}: Bild folgt</div>`).join('');
-  $('#rules').hidden = !S.ape.length; $('#apeSplit').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
+  // Sicherheitssymbole sind immer anklickbar, auch ohne gewählte APE
+  $('#rules').hidden = false; $('#apeSplit').hidden = false; $('#ruleHint').hidden = true;
 }
 function tbTone(f, d, t0) {
   const c = ac(); if (!c) return;
