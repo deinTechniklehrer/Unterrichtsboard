@@ -5,7 +5,7 @@
 Weitere Boards in diesem Repository:
 
 - [Tech-Board](https://deintechniklehrer.github.io/Unterrichtsboard/tech-board/) für den Technikunterricht: Sicherheit, Alarm, Treffpunkt, Timer, Aufräumphase, APE, Regeln und Gefährdungen
-- [Robo-Board](https://deintechniklehrer.github.io/Unterrichtsboard/robo-board/) für das Robotiklabor: wie das Tech-Board, ohne APE, mit eigenem Aufräumplan
+- [Robo-Board](https://deintechniklehrer.github.io/Unterrichtsboard/robo-board/) für das Robotiklabor: wie das Tech-Board, ohne APE, mit dem Aufräumplan des Robotiklabors
 - [Klassenrat Dashboard](https://deintechniklehrer.github.io/Unterrichtsboard/klassenrat/): Ablauf, Ämter, Protokoll mit PDF-Export, Reflexion (gut/mittel/schlecht) und Lärmampel mit Alarm; Kacheln und Vorgaben anpassbar
 
 Läuft im Browser und lässt sich als App auf dem Home-Bildschirm installieren (funktioniert danach auch offline).

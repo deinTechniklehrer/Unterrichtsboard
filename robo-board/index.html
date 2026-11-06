@@ -466,9 +466,14 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .toast.show{opacity:1; transform:translate(-50%,0)}
 
 /* ---------- Tech-Board ---------- */
-.tb-photos{flex:none;display:flex;gap:6px;min-width:0}
-.tb-photo{flex:1 1 0;min-width:0;padding:0;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:var(--tile)}
-.tb-photo img{display:block;width:100%;height:auto;max-height:22vh;object-fit:cover}
+/* APE: links Schutzmaßnahmen, rechts das ganze Bild (eingepasst, nie abgeschnitten) */
+.ape-split{flex:1;min-height:0;min-width:0;display:flex;gap:8px;container-type:inline-size}
+.ape-split[hidden]{display:none}
+.ape-split #rules{flex:1 1 0;min-width:0}
+.tb-photos{flex:0 1 44%;min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px}
+.tb-photo{flex:1 1 0;min-width:0;min-height:0;padding:0;border:0;border-radius:10px;background:none;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
+.tb-photo img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;object-position:center}
+@container (max-width:300px){.ape-split{flex-direction:column}.tb-photos{flex:0 1 38%}}
 .tb-photo.none{display:grid;place-items:center;min-height:56px;color:var(--muted);font-weight:700;font-size:13px;text-align:center;padding:4px}
 #apeView{position:fixed;inset:0;z-index:40;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;font-size:14px}
 #apeView[hidden]{display:none}
@@ -798,8 +803,8 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <section class="tile" id="tApe" data-k="ape">
       <div class="label">APE</div>
       <div class="tb-body"><div class="tb-chips" id="apes"></div>
-      <div class="tb-photos" id="apePhotos"></div>
-      <div class="tb-sym" id="rules" hidden></div>
+      <div class="ape-split" id="apeSplit" hidden><div class="tb-sym" id="rules" hidden></div>
+      <div class="tb-photos" id="apePhotos"></div></div>
       <div class="tb-hint" id="ruleHint">Wähle eine APE, dann erscheinen die Sicherheitsregeln.</div></div>
     </section>
     <section class="tile" id="tGefahr" data-k="gefahr">
@@ -2292,7 +2297,7 @@ function tbRender() {
   $('#apePhotos').innerHTML = TB_APE.filter(a => S.ape.includes(a)).map(a => TB_APE_IMG[a]
     ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}: Werkzeug auf der Werkbank"></button>`
     : `<div class="tb-photo none">APE ${a}: Bild folgt</div>`).join('');
-  $('#rules').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
+  $('#rules').hidden = !S.ape.length; $('#apeSplit').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
 }
 function tbTone(f, d, t0) {
   const c = ac(); if (!c) return;
@@ -2337,19 +2342,21 @@ function tbEndClean() {
 
 /* ================= Aufräumplan ================= */
 const CL_TASKS = [
-  { id: 'werkzeug', t: 'Werkzeug', d: 'Werkzeug auf Vollständigkeit prüfen und in die Schränke einsortieren.', p: 1 },
-  { id: 'material', t: 'Material', d: 'Material sortieren und in den Lagerraum bringen.', p: 1 },
-  { id: 'tasche', t: 'Taschenablage Seite', d: 'Ablage bei Bedarf aufräumen und abfegen. Auch die Fensterbank abfegen.', p: 1 },
-  { id: 'bohr', t: 'Werkbank Tischbohrmaschinen', d: 'Werkbank/Bohrmaschinen säubern und Werkzeuge in den Schränken auf Vollständigkeit prüfen. Schlüssel nach vorne bringen.', p: 1 },
-  { id: 'gang1', t: 'Gang 1 fegen', d: 'Gang an den Schränken fegen, auch unter den Schülerwerkbänken.', p: 2 },
-  { id: 'gang2', t: 'Gang 2 fegen', d: 'Mittelgang fegen, auch unter den Schülerwerkbänken. Vor der Tafel und der Lehrgangsstation fegen.', p: 2 },
-  { id: 'gang3', t: 'Gang 3 fegen', d: 'Gang am Fenster fegen, auch unter den Schülerwerkbänken und der Taschenablage.', p: 2 },
-  { id: 'wagen', t: 'Schraubstockwagen/\u200bSchraubzwingenwagen', d: 'Kontrollieren, ob die Wagen ordentlich sind (Schraubzwingen sortiert, Schraubstöcke zeigen nach außen).', p: 1 },
-  { id: 'wasch', t: 'Waschbecken', d: 'Das Waschbecken säubern, in der Umgebung des Waschbeckens kontrollieren, ob der Fußboden trocken ist. Die Handwaschpaste schließen.', p: 1 },
-  { id: 'baenke', t: 'Schülerwerkbänke', d: 'Abfegen, Schraubbacken lose zudrehen und auf Verunreinigungen prüfen (auch die Löcher für die Spannelemente).', p: 1 }
+  /* Aufräumplan Robotiklabor (großer Raum), nach der Vorlage im Robotiklabor der KGS Gronau */
+  { id: 'tische', t: 'Tische', d: 'Kontrollieren, ob die Tische sauber sind. Ist dies nicht der Fall, Tische säubern lassen. Bei Gekritzel der Lehrkraft Bescheid geben. Not-Aus-Schalter reindrücken.', p: 2 },
+  { id: 'dobots', t: 'Dobots', d: 'Prüfen auf: richtiger Platz auf dem Wagen, vorhandene Defekte, alle Kabel in der Kiste, alle Grundplatten auf dem Wagen. Wagen nach hinten fahren.', p: 2 },
+  { id: 'station', t: 'Dobot Materialstation', d: 'Materialien in den Schränken sortieren. Oberfläche der Werkbank säubern.', p: 2 },
+  { id: 'challenges', t: 'Dobot Challenges/\u200bHow-to', d: 'Challenges richtig einsortieren. How-to-Guides einsammeln und zählen (9 Stück). Challenges und Guides auf Verunreinigungen prüfen.', p: 2 },
+  { id: 'laptops', t: 'Laptops/\u200bComputermäuse', d: 'Prüfen, ob die Laptops vollständig an ihrem Standort sind und das Netzkabel angeschlossen ist. Kabel der Mäuse richtig aufwickeln.', p: 2 },
+  { id: 'fegen', t: 'Fegen Robotiklabor (großer Raum)', d: 'Den Raum fegen, auch unter den Tischen und unter der Werkbank.', p: 2 },
+  { id: 'druck', t: '3D-Drucker-Raum', d: 'Werkzeuge (Spachtel und Seitenschneider) in ihre Halterungen räumen. 3D-Druck-Reste und Staub neben den Druckern auffegen und in den Müll bringen. Filamentreste in den Behälter dafür räumen.', p: 2 },
+  { id: 'fegen3d', t: 'Fegen 3D-Drucker-Raum', d: 'Den Raum fegen, auch unter der Werkbank, dem Rolltisch und den Regalen.', p: 2 },
+  { id: 'kaffee', t: 'Kaffeemaschine/\u200bTassen', d: 'Dreckige Tassen im kleinen Raum abwaschen und umgedreht zum Trocknen in die Geschirrkiste stellen. Kaffeemaschine abwischen und Reste des Kaffeepulvers auffegen.', p: 2 },
+  { id: 'arduino', t: 'Arduino-Kästen', d: 'Arduino-Kästen in den Schrank bringen. Überprüfen, ob alle Kästen an der richtigen Position sind. Den Schrank abschließen und den Schlüssel der Lehrkraft bringen.', p: 2 }
 ];
-// Reihenfolge beim Verteilen: erst die wichtigsten Aufträge, dann die zweiten Plätze beim Fegen
-const CL_ORDER = ['werkzeug', 'baenke', 'gang1', 'gang2', 'gang3', 'wasch', 'bohr', 'wagen', 'tasche', 'material', 'gang1', 'gang2', 'gang3'];
+// Reihenfolge beim Verteilen: erst jeder Auftrag einmal, dann die zweiten Plätze (wie auf dem Plan im Raum)
+const CL_ORDER = ['tische', 'fegen', 'druck', 'fegen3d', 'laptops', 'dobots', 'arduino', 'station', 'challenges', 'kaffee',
+  'tische', 'fegen', 'druck', 'fegen3d', 'laptops', 'dobots', 'arduino', 'station', 'challenges', 'kaffee'];
 let clSel = 0, clDrag = null;
 function clState() {
   if (!S.aufr || typeof S.aufr !== 'object') S.aufr = { n: 16, a: [] };
@@ -2478,6 +2485,26 @@ const D = {
   'Eine Person weniger': ['One person less', 'Une personne de moins'],
   'Eine Person mehr': ['One person more', 'Une personne de plus'],
   'Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.': ['Tap a number, then tap a job, or drag the number.', 'Touche un numéro puis une tâche, ou fais glisser le numéro.'],
+  'Tische': ['Tables', 'Tables'],
+  'Kontrollieren, ob die Tische sauber sind. Ist dies nicht der Fall, Tische säubern lassen. Bei Gekritzel der Lehrkraft Bescheid geben. Not-Aus-Schalter reindrücken.': ['Check that the tables are clean. If not, have them cleaned. Tell the teacher about any scribbles. Press in the emergency stop switch.', 'Vérifier que les tables sont propres. Sinon, les faire nettoyer. Signaler les gribouillages à l’enseignant·e. Enfoncer l’arrêt d’urgence.'],
+  'Dobots': ['Dobots', 'Dobots'],
+  'Prüfen auf: richtiger Platz auf dem Wagen, vorhandene Defekte, alle Kabel in der Kiste, alle Grundplatten auf dem Wagen. Wagen nach hinten fahren.': ['Check: right place on the trolley, any defects, all cables in the box, all base plates on the trolley. Push the trolley to the back.', 'Vérifier : bonne place sur le chariot, défauts éventuels, tous les câbles dans la caisse, toutes les plaques de base sur le chariot. Ranger le chariot au fond.'],
+  'Dobot Materialstation': ['Dobot material station', 'Station de matériel Dobot'],
+  'Materialien in den Schränken sortieren. Oberfläche der Werkbank säubern.': ['Sort the materials in the cupboards. Clean the workbench surface.', 'Trier le matériel dans les armoires. Nettoyer le plan de l’établi.'],
+  'Dobot Challenges/\u200bHow-to': ['Dobot challenges/\u200bhow-to', 'Défis Dobot/\u200btutoriels'],
+  'Challenges richtig einsortieren. How-to-Guides einsammeln und zählen (9 Stück). Challenges und Guides auf Verunreinigungen prüfen.': ['File the challenges correctly. Collect and count the how-to guides (9). Check challenges and guides for dirt.', 'Ranger correctement les défis. Ramasser et compter les tutoriels (9). Vérifier que défis et tutoriels sont propres.'],
+  'Laptops/\u200bComputermäuse': ['Laptops/\u200bcomputer mice', 'Ordinateurs portables/\u200bsouris'],
+  'Prüfen, ob die Laptops vollständig an ihrem Standort sind und das Netzkabel angeschlossen ist. Kabel der Mäuse richtig aufwickeln.': ['Check that all laptops are in their place with the power cable plugged in. Wind up the mouse cables properly.', 'Vérifier que tous les ordinateurs sont à leur place et branchés. Enrouler correctement les câbles des souris.'],
+  'Fegen Robotiklabor (großer Raum)': ['Sweep robotics lab (large room)', 'Balayer le labo de robotique (grande salle)'],
+  'Den Raum fegen, auch unter den Tischen und unter der Werkbank.': ['Sweep the room, also under the tables and the workbench.', 'Balayer la salle, aussi sous les tables et sous l’établi.'],
+  '3D-Drucker-Raum': ['3D printer room', 'Salle des imprimantes 3D'],
+  'Werkzeuge (Spachtel und Seitenschneider) in ihre Halterungen räumen. 3D-Druck-Reste und Staub neben den Druckern auffegen und in den Müll bringen. Filamentreste in den Behälter dafür räumen.': ['Put the tools (spatula and side cutters) back in their holders. Sweep up 3D print waste and dust next to the printers and take it to the bin. Put filament scraps in their container.', 'Remettre les outils (spatule et pince coupante) sur leurs supports. Balayer les restes d’impression et la poussière près des imprimantes et les jeter. Mettre les chutes de filament dans leur bac.'],
+  'Fegen 3D-Drucker-Raum': ['Sweep 3D printer room', 'Balayer la salle des imprimantes 3D'],
+  'Den Raum fegen, auch unter der Werkbank, dem Rolltisch und den Regalen.': ['Sweep the room, also under the workbench, the rolling table and the shelves.', 'Balayer la salle, aussi sous l’établi, la table roulante et les étagères.'],
+  'Kaffeemaschine/\u200bTassen': ['Coffee machine/\u200bmugs', 'Machine à café/\u200btasses'],
+  'Dreckige Tassen im kleinen Raum abwaschen und umgedreht zum Trocknen in die Geschirrkiste stellen. Kaffeemaschine abwischen und Reste des Kaffeepulvers auffegen.': ['Wash dirty mugs in the small room and put them upside down in the dish box to dry. Wipe the coffee machine and sweep up coffee powder.', 'Laver les tasses sales dans la petite salle et les poser à l’envers dans la caisse à vaisselle. Essuyer la machine à café et balayer le café renversé.'],
+  'Arduino-Kästen': ['Arduino boxes', 'Boîtes Arduino'],
+  'Arduino-Kästen in den Schrank bringen. Überprüfen, ob alle Kästen an der richtigen Position sind. Den Schrank abschließen und den Schlüssel der Lehrkraft bringen.': ['Put the Arduino boxes in the cupboard. Check that all boxes are in the right place. Lock the cupboard and bring the key to the teacher.', 'Ranger les boîtes Arduino dans l’armoire. Vérifier que toutes sont à la bonne place. Fermer l’armoire à clé et rapporter la clé à l’enseignant·e.'],
   'Werkzeug': ['Tools', 'Outils'],
   'Werkzeug auf Vollständigkeit prüfen und in die Schränke einsortieren.': ['Check that all tools are there and put them back in the cupboards.', 'Vérifier que tous les outils sont là et les ranger dans les armoires.'],
   'Material sortieren und in den Lagerraum bringen.': ['Sort the material and take it to the storeroom.', 'Trier le matériel et l’apporter à la réserve.'],

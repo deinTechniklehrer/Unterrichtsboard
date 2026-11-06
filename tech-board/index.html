@@ -466,9 +466,14 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .toast.show{opacity:1; transform:translate(-50%,0)}
 
 /* ---------- Tech-Board ---------- */
-.tb-photos{flex:none;display:flex;gap:6px;min-width:0}
-.tb-photo{flex:1 1 0;min-width:0;padding:0;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:var(--tile)}
-.tb-photo img{display:block;width:100%;height:auto;max-height:22vh;object-fit:cover}
+/* APE: links Schutzmaßnahmen, rechts das ganze Bild (eingepasst, nie abgeschnitten) */
+.ape-split{flex:1;min-height:0;min-width:0;display:flex;gap:8px;container-type:inline-size}
+.ape-split[hidden]{display:none}
+.ape-split #rules{flex:1 1 0;min-width:0}
+.tb-photos{flex:0 1 44%;min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px}
+.tb-photo{flex:1 1 0;min-width:0;min-height:0;padding:0;border:0;border-radius:10px;background:none;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
+.tb-photo img{display:block;width:100%;height:100%;min-height:0;object-fit:contain;object-position:center}
+@container (max-width:300px){.ape-split{flex-direction:column}.tb-photos{flex:0 1 38%}}
 .tb-photo.none{display:grid;place-items:center;min-height:56px;color:var(--muted);font-weight:700;font-size:13px;text-align:center;padding:4px}
 #apeView{position:fixed;inset:0;z-index:40;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;font-size:14px}
 #apeView[hidden]{display:none}
@@ -798,8 +803,8 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <section class="tile" id="tApe" data-k="ape">
       <div class="label">APE</div>
       <div class="tb-body"><div class="tb-chips" id="apes"></div>
-      <div class="tb-photos" id="apePhotos"></div>
-      <div class="tb-sym" id="rules" hidden></div>
+      <div class="ape-split" id="apeSplit" hidden><div class="tb-sym" id="rules" hidden></div>
+      <div class="tb-photos" id="apePhotos"></div></div>
       <div class="tb-hint" id="ruleHint">Wähle eine APE, dann erscheinen die Sicherheitsregeln.</div></div>
     </section>
     <section class="tile" id="tGefahr" data-k="gefahr">
@@ -2292,7 +2297,7 @@ function tbRender() {
   $('#apePhotos').innerHTML = TB_APE.filter(a => S.ape.includes(a)).map(a => TB_APE_IMG[a]
     ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}: Werkzeug auf der Werkbank"></button>`
     : `<div class="tb-photo none">APE ${a}: Bild folgt</div>`).join('');
-  $('#rules').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
+  $('#rules').hidden = !S.ape.length; $('#apeSplit').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
 }
 function tbTone(f, d, t0) {
   const c = ac(); if (!c) return;
