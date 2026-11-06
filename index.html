@@ -357,7 +357,8 @@ body.clean .tclear, .tclear[hidden]{display:none}
   border-radius:999px; border:2px solid var(--line); background:var(--tile); color:var(--muted); font-size:13px; font-weight:800;
 }
 body.clean .tcorner{display:none}
-#tPlan .label{right:120px}
+#tPlan .label{right:50px}
+.tcorner.ic{width:36px;padding:0;display:grid;place-items:center}.tcorner.ic svg{width:17px;height:17px}
 body.clean #tPlan .label, body.clean #tAufgabe .label{right:14px}
 .plan-vis{align-items:stretch; justify-content:stretch}
 .plan-list{position:relative; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; gap:var(--pgap,6px)}
@@ -539,8 +540,8 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 
     <!-- Stundenfahrplan -->
     <section class="tile" id="tPlan" data-k="plan">
-      <div class="label">Stundenfahrplan</div>
-      <button class="tcorner" id="planEditBtn">Bearbeiten</button>
+      <div class="label">Fahrplan</div>
+      <button class="tcorner ic" id="planEditBtn" title="Fahrplan bearbeiten" aria-label="Fahrplan bearbeiten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></button>
       <div class="vis plan-vis">
         <div class="plan-list" id="planList"></div>
       </div>
@@ -716,12 +717,12 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 
     <h3>Gut zu wissen</h3>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
-    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort) sind 1 Spalte breit, Timer und Aufgabe 2. Den Timer kannst du oben in den Einstellungen auf 2 × 2 oder 2 × 1 stellen. Blendest du Kacheln aus, wird die Aufgabe 3 Spalten breit.</p>
-    <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. Mit „Nur Anzeige“ (Auge oben) passt meist alles auf einen Blick.</p>
+    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort) sind 1 Spalte breit, der Stundenfahrplan 1 Spalte und 2 Zeilen hoch, Timer und Aufgabe 2 Spalten. Den Timer kannst du oben in den Einstellungen auf 2 × 2 oder 2 × 1 stellen. Blendest du Kacheln aus, wird die Aufgabe 3 Spalten breit.</p>
+    <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. „Nur Anzeige“ (Auge oben) blendet nur die Knöpfe aus, Ort und Größe der Kacheln bleiben gleich.</p>
     <p><strong>Mikrofon:</strong> Die Lautstärkeampel hört nur mit, wenn das Board über eine sichere Adresse (https://) läuft, z. B. über GitHub Pages, und direkt im Browser bzw. als installierte App geöffnet ist (nicht in einer App-Vorschau). Klappt es nicht, zeigt das Board einen passenden Hinweis für dein Gerät. Es wird nichts aufgenommen oder gespeichert, nur der Pegel wird gemessen. Ohne Mikrofon schaltest du die Ampel per Tippen.</p>
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
-    <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit „Bearbeiten“ beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu.</p>
+    <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
     <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
@@ -970,11 +971,11 @@ const TIMER_WEIGHT = 1.6; // Timer soll etwas größer werden als die anderen Ka
 function minOf(k) {
   if (k === 'plan') { // hängt von der Anzahl der Phasen ab
     const n = Math.max(3, S.plan.length);
-    return S.clean ? [190, 48 + n * 32] : [220, 100 + n * 38];
+    return [220, 100 + n * 38]; // gleiche Größe mit und ohne „Nur Anzeige“
   }
   const m = MIN[k];
-  if (S.clean) return m.clean;
-  if (k === 'ampel' && mic.on) return m.mic;
+  // Ort und Größe bleiben gleich, ob „Nur Anzeige“ an ist oder das Mikrofon läuft
+  if (k === 'ampel') return m.mic;
   return m.ctrl;
 }
 // Kacheln in Zeilen mit c Spalten verteilen
@@ -1061,46 +1062,49 @@ function scrollLayout(keys, W, H, gap) {
 /* ================= Raster mit 6 Spalten (Querformat) =================
    Standard für alle Boards: Im Querformat liegen die Kacheln in einem Raster mit 6 Spalten.
    Klein (1 Spalte): Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen.
-   Timer 2 Spalten, 2 oder 1 Zeile hoch (Einstellungen). Aufgabe, Fahrplan, APE 2 Spalten.
-   Bleibt Platz frei, wird zuerst die Aufgabe 3 breit, dann Fahrplan, APE und Timer, erst danach kleine Kacheln.
+   Stundenfahrplan immer 1 Spalte breit und 2 Zeilen hoch. Timer 2 Spalten, 2 oder 1 Zeile hoch (Einstellungen).
+   Aufgabe und APE 2 Spalten. Bleibt Platz frei, wird zuerst die Aufgabe 3 breit, dann APE und Timer,
+   erst danach kleine Kacheln. Mit und ohne „Nur Anzeige“ bleiben Ort und Größe gleich.
    Hochkant und auf kleinen Bildschirmen ordnet das Board die Kacheln weiter automatisch an. */
-const G6_W = { timer: 2, aufgabe: 2, plan: 2, ape: 2 };
-const G6_MAX = { aufgabe: 3, plan: 3, ape: 3, timer: 3 };
+const G6_W = { aufgabe: 2, ape: 2 };
+const G6_MAX = { aufgabe: 3, ape: 3, timer: 3 };
 function grid6Layout(keys, W, H, gap) {
   const C = 6;
   if (W < 700 || W < H * 1.05 || !keys.length) return null;
-  const hasT = keys.includes('timer'), rest = keys.filter(k => k !== 'timer');
   const ord = k => ORDER.indexOf(k);
+  const tall = keys.filter(k => k === 'timer' || k === 'plan'), rest = keys.filter(k => !tall.includes(k));
   for (let extra = 0; extra < 3; extra++) {
-    let trs = hasT ? (S.tsize === '2x1' ? 1 : 2) : 0;
+    // Blöcke links: Fahrplan (1 Spalte, 2 Zeilen) und Timer (2 Spalten, 2 oder 1 Zeile)
+    const blk = tall.map(k => k === 'timer' ? { k, cs: 2, rs: S.tsize === '2x1' ? 1 : 2 } : { k, cs: 1, rs: 2 });
     const span = {}; rest.forEach(k => span[k] = G6_W[k] || 1);
-    let tcs = hasT ? 2 : 0;
-    const cells = () => tcs * trs + rest.reduce((a, k) => a + span[k], 0);
-    let n = Math.max(trs, Math.ceil(cells() / C)) + extra;
-    if (hasT && !rest.length) { n = 1; trs = 1; tcs = C; }
-    if (hasT && n < trs) trs = n;
-    // freie Zellen verteilen: Aufgabe, Fahrplan, APE, Timer, dann kleine Kacheln
+    const cells = () => blk.reduce((a, b) => a + b.cs * b.rs, 0) + rest.reduce((a, k) => a + span[k], 0);
+    const maxRs = blk.reduce((a, b) => Math.max(a, b.rs), 0);
+    const n = rest.length ? Math.max(maxRs, Math.ceil(cells() / C)) + extra : Math.max(1, maxRs);
+    if (!rest.length) { blk.forEach(b => b.rs = n); const t = blk.find(b => b.k === 'timer') || blk[0]; t.cs += C - blk.reduce((a, b) => a + b.cs, 0); }
+    // freie Zellen verteilen: Aufgabe, APE, Timer, dann kleine Kacheln
     let free = n * C - cells();
     const grow = (k, mx) => { while (free > 0 && span[k] < mx) { span[k]++; free--; } };
-    ['aufgabe', 'plan', 'ape'].forEach(k => { if (k in span) grow(k, G6_MAX[k]); });
-    if (hasT && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / trs), G6_MAX.timer - tcs)); tcs += t; free -= t * trs; }
+    ['aufgabe', 'ape'].forEach(k => { if (k in span) grow(k, G6_MAX[k]); });
+    const tb = blk.find(b => b.k === 'timer');
+    if (tb && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / tb.rs), G6_MAX.timer - tb.cs)); tb.cs += t; free -= t * tb.rs; }
     const small = rest.filter(k => !(k in G6_W));
     for (let i = 0; free > 0 && small.length && i < small.length * 2; i++) { const k = small[i % small.length]; if (span[k] < 2 + Math.floor(i / small.length)) { span[k]++; free--; } }
     for (let i = 0; free > 0 && rest.length && i < 40; i++) { span[rest[i % rest.length]]++; free--; }
-    // Zeilen füllen (größte zuerst), danach je Zeile in der gewohnten Reihenfolge
-    const cap = r => C - (hasT && r < trs ? tcs : 0);
-    const rows = Array.from({ length: n }, () => []), left = rows.map((_, r) => cap(r));
+    // höhere Blöcke ganz links, damit jede Zeile ohne Lücke weiterläuft
+    blk.sort((a, b) => b.rs - a.rs || ord(a.k) - ord(b.k));
+    const lead = r => blk.filter(b => r < b.rs).reduce((a, b) => a + b.cs, 0);
+    const rows = Array.from({ length: n }, () => []), left = rows.map((_, r) => C - lead(r));
     const byW = [...rest].sort((a, b) => span[b] - span[a] || ord(a) - ord(b));
     let ok = true;
     for (const k of byW) { const r = left.findIndex(x => x >= span[k]); if (r < 0) { ok = false; break; } rows[r].push(k); left[r] -= span[k]; }
     if (!ok || left.some(x => x !== 0)) continue;
     const rh = (H - (n - 1) * gap) / n, cw = (W - (C - 1) * gap) / C;
     if (rh < 115 || cw < 95) return null;
-    const place = [];
-    if (hasT) place.push({ k: 'timer', col: 1, cs: tcs, row: 1, rs: trs });
+    const place = []; let col = 1;
+    blk.forEach(b => { place.push({ k: b.k, col, cs: b.cs, row: 1, rs: b.rs }); col += b.cs; });
     rows.forEach((row, r) => {
-      let col = hasT && r < trs ? tcs + 1 : 1;
-      row.sort((a, b) => ord(a) - ord(b)).forEach(k => { place.push({ k, col, cs: span[k], row: r + 1, rs: 1 }); col += span[k]; });
+      let c = lead(r) + 1;
+      row.sort((a, b) => ord(a) - ord(b)).forEach(k => { place.push({ k, col: c, cs: span[k], row: r + 1, rs: 1 }); c += span[k]; });
     });
     return { cols: `repeat(${C}, minmax(0, 1fr))`, rows: `repeat(${n}, minmax(0, 1fr))`, place, rh };
   }
@@ -1116,8 +1120,8 @@ function layout(fromResize) {
   lastW = innerWidth;
   const tiles = {};
   $$('.tile', g).forEach(t => { tiles[t.dataset.k] = t; t.hidden = !S.show[t.dataset.k]; t.style.gridColumn = ''; t.style.gridRow = ''; });
-  // In „Nur Anzeige“ wird eine leere Aufgaben-Kachel weggelassen
-  const keys = ORDER.filter(k => S.show[k] && !(k === 'aufgabe' && S.clean && !getTask().trim()));
+  // Gleiche Kacheln mit und ohne „Nur Anzeige“, damit sich nichts verschiebt
+  const keys = ORDER.filter(k => S.show[k]);
   tiles.aufgabe.hidden = !keys.includes('aufgabe');
   $('#empty').hidden = keys.length > 0;
   document.body.classList.remove('scroll');
@@ -2066,6 +2070,7 @@ const D = {
   'Nur Anzeige': ['Display only', 'Affichage seul'],
   'Größe des Timers (Querformat)': ['Timer size (landscape)', 'Taille du minuteur (paysage)'],
   'Fahrplan': ['Plan', 'Déroulé'],
+  'Fahrplan bearbeiten': ['Edit plan', 'Modifier le déroulé'],
   'Reflexion': ['Reflection', 'Réflexion'],
   'Input': ['Input', 'Image'],
   'Dunkel': ['Dark', 'Sombre'],
