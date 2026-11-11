@@ -73,6 +73,30 @@ dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
 .role{display:flex;gap:8px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:6px 8px;background:var(--soft);min-width:0}
 .role .ric{width:46px;height:46px;flex:none}
 .role label{flex:1;min-width:0}
+.drawbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;min-height:44px;border-radius:12px;border:2px dashed var(--line);background:var(--tile);font-weight:800}
+.drawbtn svg{width:22px;height:22px}
+#dDraw{max-width:min(760px,calc(100vw - 16px));width:100%}
+#dDraw h3{display:flex;align-items:center;gap:8px;font-size:22px}#dDraw h3 svg{width:28px;height:28px}
+#dDraw textarea{width:100%;min-height:150px;border:2px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;background:var(--tile);color:var(--ink);margin-top:4px}
+#dDraw button{min-height:44px;border-radius:10px;border:2px solid var(--line);background:var(--tile);font-weight:800;padding:0 12px;display:inline-flex;align-items:center;gap:6px}
+#dDraw button svg{width:20px;height:20px}
+#dDraw .dpri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.dr-hint{font-size:15px;color:var(--muted)}
+.drchips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+#dDraw .drchips button{min-height:38px;border-radius:999px;font-weight:700}
+#dDraw .drchips button.off{opacity:.45;text-decoration:line-through;border-style:dashed}
+.drout{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+.drout li{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;border:2px solid var(--line);border-radius:14px;padding:8px 10px;background:var(--soft)}
+.drout li.turn{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 25%,transparent)}
+.drout .dn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:20px}
+.drout .dname{font-size:clamp(20px,3.2vw,28px);font-weight:900;overflow-wrap:anywhere}
+.drout .dname small{font-size:14px;font-weight:800;color:var(--accent);margin-left:8px}
+.drout .droles{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+#dDraw .droles button{flex-direction:column;justify-content:center;padding:4px;font-size:13px;min-height:64px;gap:2px}
+#dDraw .droles button .ric{width:30px;height:30px}
+#dDraw .droles button.sel{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--tile))}
+#dDraw .droles button:disabled{opacity:.35}
+@media (max-width:480px){.drout .droles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .role .rwb{flex:none;min-height:40px;min-width:40px;border-radius:10px;border:2px solid #c62828;background:var(--tile);color:#c62828;font-weight:800;padding:0 8px;font-size:13px}
 .hb svg{width:20px;height:20px;vertical-align:-5px}
 .hb.ic{min-width:48px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:4px}
@@ -206,6 +230,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
   <div class="tile" data-card="meta"><h2>Sitzung und Ämter</h2>
     <div class="grid2" id="meta"></div>
     <div class="roles" id="roles"></div>
+    <button class="drawbtn" id="bDraw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg><span>Ämter auslosen</span></button>
   </div>
 </section>
 <section class="cols">
@@ -241,6 +266,22 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 <button id="alarmBar" hidden>ALARM · Antippen zum Beenden</button>
 <dialog id="dSet"><h3>Zeiten im Ablauf (Minuten)</h3><div id="setList"></div><div class="row"><button id="setOk">Fertig</button></div></dialog>
 <dialog id="dNew"><h3>Neue Sitzung starten?</h3><p>Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.</p><p>Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.</p><p>Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.</p><div class="row"><button id="newPdf">Erst PDF speichern</button><button id="newGo">Neue Sitzung</button><button id="newNo">Abbrechen</button></div></dialog>
+<dialog id="dDraw">
+  <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg> Ämter auslosen</h3>
+  <div id="drEditBox">
+    <label>Namen der Klasse<textarea id="drList" rows="8" placeholder="Ein Name pro Zeile" autocomplete="off" spellcheck="false"></textarea></label>
+    <div class="row" style="justify-content:flex-start"><button id="drSave" class="dpri">Namen übernehmen</button></div>
+  </div>
+  <div id="drChipsBox">
+    <p class="dr-hint">Tippe auf einen Namen, wenn jemand heute fehlt. <b><span id="drN">0</span> / <span id="drT">0</span></b> <span>anwesend</span></p>
+    <div class="drchips" id="drChips"></div>
+    <div class="row" style="justify-content:flex-start"><button id="drGo" class="dpri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg><span>4 auslosen</span></button><button id="drEdit">Namen bearbeiten</button></div>
+  </div>
+  <ol class="drout" id="drOut"></ol>
+  <p class="dr-hint" id="drHow" hidden>In dieser Reihenfolge wählen die vier ihr Amt. Tippe beim Namen auf das gewählte Amt.</p>
+  <p class="note-priv">Die Namen bleiben nur in diesem Browser. In die Protokoll-PDF kommen nur die vier Ämter.</p>
+  <div class="row"><button id="drClose" class="dpri">Fertig</button></div>
+</dialog>
 <dialog id="dRW">
   <h3><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg>Regelwache</h3>
   <p class="note-priv">Tippe auf eine Karte, um sie groß für die Klasse zu zeigen.</p>
@@ -269,7 +310,7 @@ const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth
 const PH0=[['Eröffnung','Vorsitz begrüßt, Regeln, Ämter',2],['Rückblick','Letztes Protokoll: Was wurde umgesetzt?',5],['Themen','Besprechen und beschließen',25],['Abschluss','Beschlüsse vorlesen, nächste Sitzung',3]];
 const defPh=()=>PH0.map(p=>({n:p[0],d:p[1],m:p[2]}));
 const defRq=()=>[{id:'r1',t:'Wie lief unser Klassenrat insgesamt?'},{id:'r2',t:'Durften alle ausreden und wurden alle gehört?'},{id:'r3',t:'Haben wir uns an die Regeln gehalten?'}];
-const blank=()=>({klasse:'',datum:today(),nr:1,vorsitz:'',protokoll:'',zeitwache:'',regelwache:'',an:[],ge:[],na:[],verw:[],rv:{}});
+const blank=()=>({klasse:'',datum:today(),nr:1,vorsitz:'',protokoll:'',zeitwache:'',regelwache:'',an:[],ge:[],na:[],verw:[],rv:{},draw:[],absent:[]});
 let S;try{S=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
 S=Object.assign({theme:'light',phase:-1,dirty:false},blank(),S||{});
 S.show=Object.assign({ablauf:true,zeit:true,meta:true,an:true,ge:true,na:true,refl:true,ampel:true},S.show||{});
@@ -279,6 +320,7 @@ delete S.min;
 if(!Array.isArray(S.rq)||!S.rq.length)S.rq=defRq();
 if(!S.rv||typeof S.rv!=='object')S.rv={};
 if(S.phase>=S.ph.length)S.phase=-1;
+if(!Array.isArray(S.kl))S.kl=[];if(!Array.isArray(S.draw))S.draw=[];if(!Array.isArray(S.absent))S.absent=[];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function toast(t){const n=$('#toast');n.textContent=t;n.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>n.hidden=true,2600)}
@@ -290,6 +332,46 @@ const RICON={"vorsitz": `<svg class="ric" viewBox="0 0 48 48" aria-hidden="true"
  i.placeholder='Name';const w=document.createElement('div');w.className='role';w.insertAdjacentHTML('afterbegin',RICON[k]);w.append(lb);
  $('#roles').append(w)});
 function paintMeta(){['klasse','datum','vorsitz','protokoll','zeitwache','regelwache'].forEach(k=>{$('#m_'+k).value=S[k]||''})}
+/* Ämter auslosen: Klassenliste (nur im Browser), vier Namen in Reihenfolge, dann wählt jede:r ein Amt */
+const RKEYS=[['vorsitz','Vorsitz'],['protokoll','Protokoll'],['zeitwache','Zeitwache'],['regelwache','Regelwache']];
+let drEditing=false,drAnim=0;
+const drPool=()=>S.kl.filter(n=>!S.absent.includes(n));
+function drRand(n){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}
+function drShuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=drRand(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
+function paintDraw(){
+ const ed=!S.kl.length||drEditing;
+ $('#drEditBox').hidden=!ed;$('#drChipsBox').hidden=ed;
+ if(ed)$('#drList').value=S.kl.join('\n');
+ const ch=$('#drChips');ch.textContent='';
+ S.kl.forEach(n=>{const b=document.createElement('button');b.textContent=n;b.className=S.absent.includes(n)?'off':'';b.title=S.absent.includes(n)?'fehlt heute':'anwesend';
+  b.onclick=()=>{S.absent=S.absent.includes(n)?S.absent.filter(x=>x!==n):[...S.absent,n];S.draw=S.draw.filter(x=>x!==n);save();paintDraw()};ch.append(b)});
+ $('#drN').textContent=drPool().length;$('#drT').textContent=S.kl.length;
+ const out=$('#drOut');out.textContent='';
+ const turn=S.draw.findIndex(n=>!RKEYS.some(([k])=>S[k]===n));
+ S.draw.forEach((n,i)=>{
+  const li=document.createElement('li');if(i===turn&&!drAnim)li.className='turn';
+  const num=document.createElement('span');num.className='dn';num.textContent=i+1;
+  const nm=document.createElement('span');nm.className='dname';nm.textContent=n;
+  if(i===turn&&!drAnim){const t=document.createElement('small');t.textContent='ist dran';nm.append(t)}
+  const rs=document.createElement('div');rs.className='droles';
+  RKEYS.forEach(([k,l])=>{const b=document.createElement('button');b.insertAdjacentHTML('afterbegin',RICON[k]);const sp=document.createElement('span');sp.textContent=l;b.append(sp);
+   const mine=S[k]===n,taken=!!S[k]&&!mine&&S.draw.includes(S[k]);b.className=mine?'sel':'';b.disabled=taken||!!drAnim;b.setAttribute('aria-pressed',mine);
+   b.onclick=()=>{RKEYS.forEach(([q])=>{if(S[q]===n)S[q]=''});if(!mine)S[k]=n;S.dirty=true;save();paintMeta();paintDraw()};rs.append(b)});
+  li.append(num,nm,rs);out.append(li)});
+ $('#drHow').hidden=!S.draw.length;
+}
+function drGo(){
+ const pool=drPool();if(pool.length<4){toast('Mindestens 4 anwesende Namen nötig.');return}
+ const pick=drShuffle(pool).slice(0,4);
+ RKEYS.forEach(([k])=>{S[k]=''});paintMeta();
+ const fin=()=>{drAnim=0;S.draw=pick;S.dirty=true;save();paintDraw();toast('Ämter ausgelost')};
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){fin();return}
+ let t=0;clearInterval(drAnim);drAnim=setInterval(()=>{t+=80;S.draw=Array.from({length:4},()=>pool[drRand(pool.length)]);paintDraw();if(t>=1000){clearInterval(drAnim);fin()}},80);
+}
+$('#bDraw').onclick=()=>{drEditing=false;paintDraw();$('#dDraw').showModal()};
+$('#drSave').onclick=()=>{const seen=new Set();S.kl=$('#drList').value.split(/\n|;/).map(x=>x.trim().replace(/\s+/g,' ')).filter(x=>x&&!seen.has(x.toLowerCase())&&seen.add(x.toLowerCase())).slice(0,40);S.absent=S.absent.filter(n=>S.kl.includes(n));S.draw=S.draw.filter(n=>S.kl.includes(n));drEditing=false;save();paintDraw()};
+$('#drEdit').onclick=()=>{drEditing=true;paintDraw();$('#drList').focus()};
+$('#drGo').onclick=drGo;$('#drClose').onclick=()=>$('#dDraw').close();
 /* Protokoll */
 const lab={an:'Was liegt an?',ge:'Was wurde geklärt?',na:'Beim nächsten Mal'};
 function move(it,from,to){S[from]=S[from].filter(x=>x!==it);S[to].push(it);S.dirty=true;save();paintLists()}
@@ -569,6 +651,20 @@ const D = {
   'Themen': ['Topics', 'Sujets'],
   'Abschluss': ['Closing', 'Clôture'],
   'Fertig': ['Done', 'Terminé'],
+  'Ämter auslosen': ['Draw roles', 'Tirer les rôles au sort'],
+  'Namen der Klasse': ['Names in the class', 'Noms de la classe'],
+  'Ein Name pro Zeile': ['One name per line', 'Un nom par ligne'],
+  'Namen übernehmen': ['Save names', 'Enregistrer les noms'],
+  'Namen bearbeiten': ['Edit names', 'Modifier les noms'],
+  '4 auslosen': ['Draw 4', 'Tirer 4 au sort'],
+  'anwesend': ['present', 'présents'],
+  'Tippe auf einen Namen, wenn jemand heute fehlt.': ['Tap a name if someone is absent today.', 'Touche un nom si quelqu’un est absent aujourd’hui.'],
+  'In dieser Reihenfolge wählen die vier ihr Amt. Tippe beim Namen auf das gewählte Amt.': ['The four choose their role in this order. Tap the chosen role next to the name.', 'Les quatre choisissent leur rôle dans cet ordre. Touche le rôle choisi à côté du nom.'],
+  'ist dran': ['chooses now', 'choisit'],
+  'fehlt heute': ['absent today', 'absent aujourd’hui'],
+  'Die Namen bleiben nur in diesem Browser. In die Protokoll-PDF kommen nur die vier Ämter.': ['Names stay only in this browser. Only the four roles go into the minutes PDF.', 'Les noms restent uniquement dans ce navigateur. Seuls les quatre rôles figurent dans le PDF du compte rendu.'],
+  'Mindestens 4 anwesende Namen nötig.': ['At least 4 present names needed.', 'Il faut au moins 4 noms présents.'],
+  'Ämter ausgelost': ['Roles drawn', 'Rôles tirés au sort'],
   'Neue Sitzung starten?': ['Start a new meeting?', 'Commencer une nouvelle séance ?'],
   'Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.': ['Have you saved the minutes as a PDF? After starting, they will no longer be shown here.', 'As-tu enregistré le procès-verbal en PDF ? Après le démarrage, il ne sera plus visible ici.'],
   'Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.': ['Open topics and everything from “Next time” move to “What’s on the agenda?”.', 'Les sujets ouverts et tout ce qui est prévu « la prochaine fois » passent à l’ordre du jour.'],
