@@ -393,8 +393,8 @@ body.clean #tPlan .label, body.clean #tAufgabe .label{right:14px}
 body.clean .plan-ctrl .btn.plan-auto:not([aria-pressed="true"]){visibility:hidden}
 .plan-ctrl{gap:5px}
 .plan-ctrl .btn{min-width:0}
-.plan-ctrl .btn.plan-add{flex:0 1 var(--btn-h); min-width:34px}
-@container (max-width:190px){ #planQuickAdd{display:none} }
+.plan-ctrl .btn.plan-add{flex:0 1 var(--btn-h); min-width:30px}
+@container (max-width:120px){ #planQuickAdd{display:none} }
 @container (max-width:300px){ #soBtns .btn{flex:1 1 22%; padding:0 2px} #soBtns .btn svg{width:24px; height:24px} }
 .prow .ptask{flex:none; width:.9em; height:.9em; opacity:.55}
 .prow .pmin{flex:none; font-size:.78em; font-weight:800; color:var(--muted); font-variant-numeric:tabular-nums}
@@ -974,7 +974,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 
     <h3>Gut zu wissen</h3>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
-    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen, QR-Code) sind 1 Spalte breit, der Stundenfahrplan 1 Spalte und 2 Zeilen hoch, Timer und Aufgabe 2 Spalten. Die APE ist immer quadratisch: 2 × 2, wenn Platz ist, sonst 1 × 1. Den Timer kannst du oben in den Einstellungen auf 2 × 2 oder 2 × 1 stellen.</p>
+    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen, QR-Code) sind 1 Spalte breit, der Stundenfahrplan 1 × 1 (ab 5 Phasen 1 Spalte und 2 Zeilen hoch), Timer und Aufgabe 2 Spalten. Die APE ist immer quadratisch: 2 × 2, wenn Platz ist, sonst 1 × 1. Den Timer kannst du oben in den Einstellungen auf 2 × 2 oder 2 × 1 stellen.</p>
     <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. „Nur Anzeige“ (Auge oben) blendet nur die Knöpfe aus, Ort und Größe der Kacheln bleiben gleich.</p>
     <p><strong>Mikrofon:</strong> Die Lautstärkeampel hört nur mit, wenn das Board über eine sichere Adresse (https://) läuft, z. B. über GitHub Pages, und direkt im Browser bzw. als installierte App geöffnet ist (nicht in einer App-Vorschau). Klappt es nicht, zeigt das Board einen passenden Hinweis für dein Gerät. Es wird nichts aufgenommen oder gespeichert, nur der Pegel wird gemessen. Ohne Mikrofon schaltest du die Ampel per Tippen.</p>
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
@@ -1388,11 +1388,13 @@ function grid6Try(keys, W, H, gap, mode) {
   const apeBig = mode === 'big';
   const C = 6;
   const ord = k => ORDER.indexOf(k);
-  const isBlk = k => k === 'timer' || k === 'plan' || (k === 'ape' && apeBig);
+  // Fahrplan: 1 × 1, ab 5 Phasen 1 × 2
+  const planTall = S.show.plan && S.plan.length >= 5;
+  const isBlk = k => k === 'timer' || (k === 'plan' && planTall) || (k === 'ape' && apeBig);
   const tall = keys.filter(isBlk), rest = keys.filter(k => !isBlk(k));
-  const fix = k => G6_FIX.includes(k) || (k === 'ape' && mode === 'small');
+  const fix = k => G6_FIX.includes(k) || k === 'plan' || (k === 'ape' && mode === 'small');
   for (let extra = 0; extra < 3; extra++) for (const tgOn of [true, false]) {
-    // Blöcke links: Fahrplan (1 × 2), Timer (2 × 2 oder 2 × 1), APE groß (2 × 2)
+    // Blöcke links: Fahrplan ab 5 Phasen (1 × 2), Timer (2 × 2 oder 2 × 1), APE groß (2 × 2)
     const blk = tall.map(k => k === 'timer' ? { k, cs: 2, rs: S.tsize === '2x1' ? 1 : 2 } : k === 'ape' ? { k, cs: 2, rs: 2 } : { k, cs: 1, rs: 2 });
     const span = {}; rest.forEach(k => span[k] = fix(k) ? 1 : (G6_W[k] || 1));
     const cells = () => blk.reduce((a, b) => a + b.cs * b.rs, 0) + rest.reduce((a, k) => a + span[k], 0);
