@@ -147,7 +147,10 @@ body.clean .hint{display:none}
 @keyframes blink{0%{background:var(--tile)}100%{background:var(--no-bg)}}
 .t-main .btn{flex:1 1 0; min-width:0; max-width:150px; padding:0 8px}
 .t-main .btn.primary{flex:1.4 1 0; max-width:180px}
-@container (max-width:360px){ .t-main .u{display:none} }
+@container (max-width:560px){ .t-main .u{display:none} }
+.t-main{gap:6px}
+.t-main .btn.t10{flex:.9 1 0;color:var(--accent)}
+@container (max-width:330px){ .t-main .btn{padding:0 2px} }
 /* Schnellwahl: eine Zeile, wischbar, wenn sie nicht passt */
 .presets{justify-content:flex-start; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding:0 2px}
 .presets::-webkit-scrollbar{display:none}
@@ -528,12 +531,14 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
         <div class="t-num"><div class="t-digits" id="tDigits">05:00</div><div class="t-state" id="tState">bereit</div><div class="t-end" id="tEnd"></div></div>
       </div>
       <div class="ctrl t-main">
+        <button class="btn t10" data-add="-600" aria-label="Zehn Minuten weniger">−10</button>
         <button class="btn" data-add="-60" aria-label="Eine Minute weniger">−1<span class="u">&nbsp;min</span></button>
         <button class="btn primary" id="tStart">Start</button>
         <button class="btn" id="tReset" aria-label="Zurücksetzen" title="Zurücksetzen">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
         </button>
         <button class="btn" data-add="60" aria-label="Eine Minute mehr">+1<span class="u">&nbsp;min</span></button>
+        <button class="btn t10" data-add="600" aria-label="Zehn Minuten mehr">+10</button>
       </div>
       <div class="ctrl presets" id="tPresets"></div>
     </section>
@@ -1336,6 +1341,9 @@ function tToggle() { if (doneFlag) return tReset(); S.timer.endAt ? tPause() : t
 function tSet(min) { const t = S.timer; t.duration = min * 60; t.remaining = t.duration; t.endAt = null; doneFlag = false; save(); renderTimer(); }
 function tAdd(sec) {
   const t = S.timer, wasDone = doneFlag; doneFlag = false;
+  // −10: nicht unter 1 Minute fallen, sondern auf 1 Minute gehen
+  const cur = t.endAt ? remaining() : t.remaining;
+  if (sec < -60 && cur > 60 && cur + sec < 60) sec = 60 - cur;
   if (t.endAt) {
     const r = remaining();
     if (r + sec <= 0) return;
@@ -2097,6 +2105,8 @@ const D = {
   'Weiter': ['Next', 'Suivant'],
   'Zurücksetzen': ['Reset', 'Réinitialiser'],
   'Timer starten oder pausieren': ['Start or pause the timer', 'Démarrer ou mettre en pause'],
+  'Zehn Minuten weniger': ['Ten minutes less', 'Dix minutes de moins'],
+  'Zehn Minuten mehr': ['Ten minutes more', 'Dix minutes de plus'],
   'Eine Minute weniger': ['One minute less', 'Une minute de moins'],
   'Eine Minute mehr': ['One minute more', 'Une minute de plus'],
   // Stundenfahrplan
