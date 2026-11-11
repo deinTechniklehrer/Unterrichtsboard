@@ -978,6 +978,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ (rote Karte oben). Ein Tipp stellt auf „Sicher“ (grüne Karte). „Alarm“ gibt dreimal einen deutlichen Signalton und sagt dann mit der Stimme des Geräts „Achtung! Ein Sicherheitsverstoß liegt vor. Alle setzen sich auf ihren Platz.“ Das wiederholt sich, und der Hintergrund blinkt rot, bis du den Alarm mit einem zweiten Tipp beendest. Die Ansage lässt sich in den Einstellungen abschalten. Am iPad muss der Ton laut gestellt sein.</p>
+    <p><strong>Ansagen:</strong> Alarm- und Aufräumansage auf Englisch und Französisch sind Audiodateien, erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Auf Deutsch spricht die Stimme des Geräts. Die Dateien werden mit dem Board offline gespeichert.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
@@ -2561,7 +2562,7 @@ function cleanCue() {
     const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(l));
     if (v) u.voice = v;
     speechSynthesis.cancel();
-    setTimeout(() => speechSynthesis.speak(u), S.cleanTone ? 1100 : 0);
+    setTimeout(async () => { if (await voicePlay('clean')) return; speechSynthesis.speak(u); }, S.cleanTone ? 1100 : 0);
   } catch (e) { }
 }
 let cleanCued = false;
@@ -2608,7 +2609,30 @@ const ALARM_SAY = {
   en: 'Attention! There is a safety violation. Everyone sit down in your place.',
   fr: 'Attention ! Il y a une infraction à la sécurité. Tout le monde s’assoit à sa place.'
 };
-let tbAlarmTok = 0, tbAlarmTm = 0;
+let tbAlarmTok = 0, tbAlarmTm = 0, tbVoiceSrc = null;
+/* Ansagen als Audiodatei (KI-Stimme, offline gespeichert); fehlt eine Datei, spricht die Stimme des Geräts */
+const VOICE_FILES = {
+  alarm: { en: 'audio/alarm-en.mp3', fr: 'audio/alarm-fr.mp3' },
+  clean: { en: 'audio/clean-en.mp3', fr: 'audio/clean-fr.mp3' }
+};
+const voiceBuf = {};
+function voiceLoad(key, l) {
+  const url = VOICE_FILES[key] && VOICE_FILES[key][l]; const c = ac();
+  if (!url || !c) return Promise.resolve(null);
+  if (!voiceBuf[url]) voiceBuf[url] = fetch(url).then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error('fehlt')))
+    .then(b => new Promise((res, rej) => c.decodeAudioData(b, res, rej)))
+    .catch(() => { delete voiceBuf[url]; return null; });
+  return voiceBuf[url];
+}
+// Spielt die Ansage als Datei. true = läuft (onEnd kommt am Ende), false = keine Datei, also Gerätestimme nehmen
+async function voicePlay(key, onEnd, alive) {
+  const buf = await voiceLoad(key, window.tbLang || 'de'), c = ac();
+  if (!buf || !c) return false;
+  if (alive && !alive()) return true;
+  const src = c.createBufferSource(); src.buffer = buf; src.connect(c.destination);
+  src.onended = () => { if (tbVoiceSrc === src) tbVoiceSrc = null; if (onEnd) onEnd(); };
+  tbVoiceSrc = src; src.start(); return true;
+}
 function tbMaep(t0) {
   const c = ac(); if (!c) return;
   const t = c.currentTime + t0, g = c.createGain(), comp = c.createDynamicsCompressor();
@@ -2618,6 +2642,7 @@ function tbMaep(t0) {
 }
 function tbSirenStop() {
   tbAlarmTok++; clearTimeout(tbAlarmTm); tbAlarmTm = 0;
+  if (tbVoiceSrc) { const s = tbVoiceSrc; tbVoiceSrc = null; s.onended = null; try { s.stop(); } catch (e) { } }
   try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) { }
 }
 function tbSirenStart() {
@@ -2627,7 +2652,9 @@ function tbSirenStart() {
     [0, 0.42, 0.84].forEach(tbMaep);
     const next = ms => { clearTimeout(tbAlarmTm); tbAlarmTm = setTimeout(round, ms); };
     if (!S.alarmVoice || !('speechSynthesis' in window)) { next(2600); return; }
-    tbAlarmTm = setTimeout(() => {
+    tbAlarmTm = setTimeout(async () => {
+      if (tok !== tbAlarmTok) return;
+      if (await voicePlay('alarm', () => { if (tok === tbAlarmTok) next(700); }, () => tok === tbAlarmTok)) return;
       if (tok !== tbAlarmTok) return;
       try {
         const l = ALARM_SAY[window.tbLang] ? window.tbLang : 'de';
