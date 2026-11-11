@@ -65,8 +65,8 @@ label input{margin-top:2px;color:var(--ink);font-weight:500}
 .note-priv{font-size:13px;color:var(--muted)}
 footer{font-size:12px;color:var(--muted);text-align:center;padding:2px}
 footer a{color:var(--accent)}
-dialog{margin:auto;border:0;border-radius:16px;padding:16px;max-width:min(460px,calc(100vw - 24px));background:var(--tile);color:var(--ink)}
-dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog{margin:auto;border:0;border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,.35);padding:16px;max-width:min(460px,calc(100vw - 24px));background:var(--tile);color:var(--ink)}
+dialog::backdrop{background:rgba(5,10,18,.5)}
 dialog h3{margin-bottom:8px}dialog p{margin:6px 0}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--tile);padding:10px 14px;border-radius:10px;font-weight:700;max-width:calc(100vw - 24px)}
 .roles{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:8px}
@@ -187,11 +187,33 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 :root[data-theme="dark"] .vb.v2{color:#ff6b61;border-color:#ff6b61}
 .vrs{min-width:44px;min-height:52px;border-radius:12px;border:2px solid var(--line);background:var(--tile);color:var(--muted);font-size:18px;font-weight:800}
 .rfh{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:14px 0 0;font-weight:800}
-#dView{max-width:min(720px,calc(100vw - 16px));width:100%;max-height:92dvh;overflow:auto}
-#dView h4{margin:16px 0 6px;font-size:16px}
-.prow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+#dView{padding:0;border-radius:22px;width:min(600px,94vw);max-width:none;max-height:90dvh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+#dView .dlg{padding:20px 20px 18px;overflow:auto;max-height:90dvh}
+#dView h2{font-size:22px;margin:0 0 12px;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:800}
+#dView label.srow{flex-wrap:nowrap}
+#dView .sh{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:18px 0 6px;font-weight:800}
+#dView p{font-size:15px;line-height:1.45;color:var(--muted);margin:6px 0}
+#dView p strong{color:var(--ink)}#dView a{color:var(--accent)}
+#dView .srow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:17px;font-weight:600;color:var(--ink);margin:0;flex-wrap:wrap}
+#dView .srow input.sw{width:52px;margin:0}
+.sw{appearance:none;-webkit-appearance:none;width:52px;height:32px;border-radius:16px;background:var(--line);border:0;padding:0;position:relative;flex:none;cursor:pointer;transition:background .2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.sw:checked{background:var(--accent)}.sw:checked::after{transform:translateX(20px)}
+#dView .seg{display:flex;gap:6px;flex-wrap:wrap}
+#dView .dlg>.seg{margin-top:10px}
+#dView .btn{height:44px;min-width:44px;padding:0 14px;border-radius:999px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font-weight:800;font-size:16px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
+#dView .btn.sel{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--tile))}
+#dView .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);min-width:5.4em}
+#dView .btn:active{transform:scale(.96)}
+#dView .dlg-foot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+#dView .lic{margin-top:16px;font-size:13px}
+@media (max-width:520px){#dView .prow .px{order:1}#dView .prow .pd{order:2;flex:1 1 150px;margin-left:28px}#dView .prow .pm{order:3}#dView .prow .pq{flex:1 1 150px}}
+@media (prefers-reduced-motion:reduce){.sw,.sw::after{transition:none}#dView .btn:active{transform:none}}
+.prow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.prow input{height:42px;background:var(--tile);font-size:17px}.prow .pnr{width:22px;flex:none;text-align:center;font-weight:800;color:var(--muted)}
 .prow .pn{flex:1 1 130px;width:auto}.prow .pd{flex:3 1 200px;width:auto}.prow .pm{flex:none;width:72px}.prow .pq{flex:1 1 260px;width:auto}
-.prow .px{flex:none;min-width:44px;min-height:44px;border-radius:10px;border:2px solid var(--line);background:var(--tile);font-size:20px;color:var(--muted)}
+.prow .px{flex:none;width:44px;height:42px;border-radius:10px;border:2px solid var(--line);background:var(--tile);font-size:22px;font-weight:800;color:#c62828;padding:0}
+:root[data-theme="dark"] .prow .px{color:#ff6b61}
 .prow .px:disabled{opacity:.4}
 </style>
 </head>
@@ -209,7 +231,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
   <button class="hb ic" id="bClean" aria-pressed="false" title="Bedienelemente aus- oder einblenden" aria-label="Nur Anzeige"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
   <button class="hb ic" id="bView" title="Kacheln und Vorgaben anpassen" aria-label="Einstellungen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
   <button class="hb ic" id="bRW" title="Regelwache: Verwarnungen zeigen und eintragen" aria-label="Regelwache"><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg></button>
-  <button class="hb" id="bTheme">Dunkel</button>
+  <button class="hb ic" id="bTheme" aria-label="Auf dunkel umschalten"></button>
   <button class="hb ic" id="bLang" aria-label="Sprache / Language / Langue" data-noi18n><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.8 6 3.8 9.5s-1.2 6.7-3.8 9.5c-2.6-2.8-3.8-6-3.8-9.5S9.4 5.3 12 2.5z"/></svg><span class="lcode" id="langCode">DE</span></button>
 </header>
 <section class="top">
@@ -242,17 +264,34 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 <footer>Klassenrat Dashboard · Daniel Beyrodt · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/ueber-mich/" target="_blank" rel="noopener">Über mich</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutz</a></footer>
 </div>
 <dialog id="dView">
-  <h3>Einstellungen</h3>
-  <h4>Kacheln anzeigen</h4>
-  <div id="vCards"></div>
-  <h4>Ablauf anpassen</h4>
-  <p class="note-priv">Name, Beschreibung und Minuten jeder Phase. Die Änderungen gelten für alle weiteren Sitzungen.</p>
-  <div id="vPh"></div>
-  <div class="row" style="justify-content:flex-start"><button id="vPhAdd">Phase hinzufügen</button><button id="vPhDef">Standard</button></div>
-  <h4>Reflexionsfragen anpassen</h4>
-  <div id="vRq"></div>
-  <div class="row" style="justify-content:flex-start"><button id="vRqAdd">Frage hinzufügen</button><button id="vRqDef">Standard</button></div>
-  <div class="row"><button id="vOk" style="background:var(--accent);color:var(--accent-ink);border-color:var(--accent)">Fertig</button></div>
+  <div class="dlg">
+    <h2>Einstellungen</h2>
+    <h3 class="sh">Kacheln anzeigen</h3>
+    <div id="vCards"></div>
+    <h3 class="sh">Ablauf anpassen</h3>
+    <p>Name, Beschreibung und Minuten jeder Phase. Die Änderungen gelten für alle weiteren Sitzungen.</p>
+    <div id="vPh"></div>
+    <div class="seg"><button class="btn" id="vPhAdd">+ Phase hinzufügen</button><button class="btn" id="vPhDef">Standard</button></div>
+    <h3 class="sh">Reflexionsfragen anpassen</h3>
+    <div id="vRq"></div>
+    <div class="seg"><button class="btn" id="vRqAdd">+ Frage hinzufügen</button><button class="btn" id="vRqDef">Standard</button></div>
+    <h3 class="sh">Darstellung</h3>
+    <div class="srow">Farben
+      <div class="seg"><button class="btn" data-theme-set="light">Hell</button><button class="btn" data-theme-set="dark">Dunkel</button></div>
+    </div>
+    <div class="srow">Sprache
+      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button></div>
+    </div>
+    <h3 class="sh">Gut zu wissen</h3>
+    <p><strong>Nur Anzeige:</strong> Das Auge oben blendet alle Knöpfe aus, damit über den Beamer nichts versehentlich geändert wird. Ort und Größe der Kacheln bleiben gleich.</p>
+    <p><strong>Ablauf und Reflexion:</strong> Antippen einer Phase schiebt die Markierung weiter. Die Reflexion ist immer der letzte Schritt und öffnet sich groß.</p>
+    <p><strong>Ämter auslosen:</strong> Trag die Namen der Klasse einmal ein. Wer fehlt, tippst du an. Das Board zieht vier Namen in Reihenfolge, die vier wählen nacheinander ihr Amt.</p>
+    <p><strong>Regelwache:</strong> Das Schild oben zeigt 1. und 2. Verwarnung oder den Ausschluss von der Sitzung groß. Eingetragene Verstöße kommen in die PDF.</p>
+    <p><strong>Protokoll:</strong> „Protokoll als PDF“ speichert die Sitzung. Mit „PDF laden“ holst du sie zurück, z. B. für die nächste Sitzung oder auf einem anderen Gerät.</p>
+    <p><strong>Datenschutz:</strong> Alles bleibt nur in diesem Browser, es werden keine Daten verschickt. Die Lärmampel misst nur den Pegel, nichts wird aufgenommen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
+    <div class="dlg-foot"><span></span><button class="btn primary" id="vOk">Fertig</button></div>
+    <p class="lic">Klassenrat Dashboard von Daniel Beyrodt (deinTechniklehrer), Fachmoderator AWT. Lizenz: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>. Du darfst das Board teilen und anpassen, nicht kommerziell und unter gleicher Lizenz.</p>
+  </div>
 </dialog>
 <div class="rfov" id="rfView" role="dialog" aria-modal="true" aria-label="Reflexion" hidden>
   <div class="rfov-head"><span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5A8.5 8.5 0 1 1 21 12z"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.8.6-.8 1.2v.4M12 16.6v.1"/></svg>Reflexion</span><span class="sp"></span><button class="hb" id="rfClose">Schließen</button></div>
@@ -492,14 +531,14 @@ function applyShow(){document.querySelectorAll('[data-card]').forEach(e=>{e.hidd
 function fixPhase(){if(S.phase>=S.ph.length)S.phase=-1}
 const mkIn=(v,al,ph,fn,cls)=>{const x=document.createElement('input');x.value=v;x.setAttribute('aria-label',al);x.placeholder=ph||'';x.className=cls||'';x.autocomplete='off';x.oninput=()=>fn(x);return x};
 const mkX=(fn,dis)=>{const x=document.createElement('button');x.type='button';x.className='px';x.textContent='×';x.setAttribute('aria-label','Entfernen');x.disabled=!!dis;x.onclick=fn;return x};
-function paintPhEdit(){const l=$('#vPh');l.textContent='';S.ph.forEach((p,i)=>{const r=document.createElement('div');r.className='prow';
+function paintPhEdit(){const l=$('#vPh');l.textContent='';S.ph.forEach((p,i)=>{const r=document.createElement('div');r.className='prow';const nr=document.createElement('span');nr.className='pnr';nr.textContent=i+1;r.append(nr);
  const m=mkIn(p.m,'Minuten','min',x=>{p.m=Math.max(0,Math.min(90,parseInt(x.value,10)||0));save();paintSteps()},'pm');m.type='number';m.min=0;m.max=90;m.inputMode='numeric';
  r.append(mkIn(p.n,'Name der Phase','Name',x=>{p.n=x.value;save();paintSteps()},'pn'),mkIn(p.d,'Beschreibung der Phase','Beschreibung',x=>{p.d=x.value;save();paintSteps()},'pd'),m,
   mkX(()=>{S.ph.splice(i,1);fixPhase();save();paintPhEdit();paintSteps()},S.ph.length<=1));l.append(r)})}
-function paintRqEdit(){const l=$('#vRq');l.textContent='';S.rq.forEach((q,i)=>{const r=document.createElement('div');r.className='prow';
+function paintRqEdit(){const l=$('#vRq');l.textContent='';S.rq.forEach((q,i)=>{const r=document.createElement('div');r.className='prow';const nr=document.createElement('span');nr.className='pnr';nr.textContent=i+1;r.append(nr);
  r.append(mkIn(q.t,'Reflexionsfrage','Frage',x=>{q.t=x.value;save();paintRefl()},'pq'),mkX(()=>{delete S.rv[q.id];S.rq.splice(i,1);save();paintRqEdit();paintRefl()}));l.append(r)})}
 function openView(){const l=$('#vCards');l.textContent='';
- CARDS.forEach(([k,t])=>{const lb=document.createElement('label');lb.className='chk';const c=document.createElement('input');c.type='checkbox';c.checked=!!S.show[k];c.onchange=()=>{S.show[k]=c.checked;save();applyShow()};lb.append(c,t);l.append(lb)});
+ CARDS.forEach(([k,t])=>{const lb=document.createElement('label');lb.className='srow';const c=document.createElement('input');c.type='checkbox';c.className='sw';c.checked=!!S.show[k];c.onchange=()=>{S.show[k]=c.checked;save();applyShow()};lb.append(t,c);l.append(lb)});
  paintPhEdit();paintRqEdit();$('#dView').showModal()}
 $('#bView').onclick=openView;$('#vOk').onclick=()=>$('#dView').close();
 $('#vPhAdd').onclick=()=>{S.ph.push({n:'Neue Phase',d:'',m:5});save();paintPhEdit();paintSteps()};
@@ -576,7 +615,9 @@ $('#aHous').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$(
 /* Thema */
 function paintClean(){document.body.classList.toggle('clean',!!S.clean);$('#bClean').setAttribute('aria-pressed',String(!!S.clean))}
 $('#bClean').onclick=()=>{S.clean=!S.clean;save();paintClean();toast(S.clean?'Nur Anzeige: Einstellungen ausgeblendet':'Bearbeiten: Einstellungen eingeblendet')};
-function paintTheme(){document.documentElement.dataset.theme=S.theme;$('#bTheme').textContent=S.theme==='dark'?'Hell':'Dunkel'}
+const IC_MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg>',IC_SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>';
+function paintTheme(){const d=S.theme==='dark';document.documentElement.dataset.theme=S.theme;const b=$('#bTheme');b.innerHTML=d?IC_SUN:IC_MOON;b.setAttribute('aria-label',d?'Auf hell umschalten':'Auf dunkel umschalten');b.title=b.getAttribute('aria-label');document.querySelectorAll('[data-theme-set]').forEach(x=>x.classList.toggle('sel',x.dataset.themeSet===S.theme))}
+document.querySelectorAll('[data-theme-set]').forEach(x=>x.onclick=()=>{S.theme=x.dataset.themeSet;save();paintTheme()});
 $('#bTheme').onclick=()=>{S.theme=S.theme==='dark'?'light':'dark';save();paintTheme()};
 paintTheme();paintClean();paintMeta();applyShow();paintRefl();paintLists();paintSteps();show();renderAmp();
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
@@ -727,6 +768,14 @@ const D = {
   'Standard': ['Default', 'Par défaut'],
   'Reflexionsfragen anpassen': ['Adjust reflection questions', 'Adapter les questions de réflexion'],
   'Frage hinzufügen': ['Add question', 'Ajouter une question'],
+  '+ Phase hinzufügen': ['+ Add phase', '+ Ajouter une phase'],
+  '+ Frage hinzufügen': ['+ Add question', '+ Ajouter une question'],
+  'Darstellung': ['Display', 'Affichage'],
+  'Farben': ['Colours', 'Couleurs'],
+  'Sprache': ['Language', 'Langue'],
+  'Gut zu wissen': ['Good to know (in German)', 'Bon à savoir (en allemand)'],
+  'Auf hell umschalten': ['Switch to light', 'Passer en mode clair'],
+  'Auf dunkel umschalten': ['Switch to dark', 'Passer en mode sombre'],
   'Name der Phase': ['Name of the phase', 'Nom de la phase'],
   'Beschreibung der Phase': ['Description of the phase', 'Description de la phase'],
   'Beschreibung': ['Description', 'Description'],
