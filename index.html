@@ -381,6 +381,10 @@ body.clean #tPlan .label, body.clean #tAufgabe .label{right:14px}
 .plan-ctrl .btn{flex:1 1 0; max-width:170px; min-width:0}
 .plan-ctrl .btn.plan-add{flex:0 0 auto; width:var(--btn-h); padding:0}
 .prow .ptask{flex:none; width:.9em; height:.9em; opacity:.55}
+.prow .pmin{flex:none; font-size:.78em; font-weight:800; color:var(--muted); font-variant-numeric:tabular-nums}
+.pe-minw{display:flex; align-items:center; gap:4px; flex:none; font-weight:700; color:var(--muted); font-size:14px}
+.pe-min{width:64px; height:42px; border:2px solid var(--line); border-radius:10px; padding:0 6px; font:inherit; font-size:17px; text-align:center; color:var(--ink); background:var(--tile)}
+.pe-min:focus{outline:none; border-color:var(--accent)}
 .pe-task{flex:1 1 100%; margin-left:30px; min-height:56px; resize:vertical; border:2px solid var(--line); border-radius:10px; padding:8px 10px; font:inherit; font-size:15px; line-height:1.35; color:var(--ink); background:var(--tile); -webkit-user-select:text; user-select:text}
 .pe-task:focus{outline:none; border-color:var(--accent)}
 .plan-ctrl .btn svg{width:20px; height:20px}
@@ -460,6 +464,43 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .dlg-foot{display:flex; justify-content:space-between; gap:10px; margin-top:18px; flex-wrap:wrap}
 .btn.danger{color:var(--no); border-color:var(--no)}
 
+
+/* QR-Code-Kachel: immer 1 × 1, Antippen vergrößert */
+.qr-vis{container-type:size;gap:4px}
+.qr-box{flex:1 1 auto;min-height:0;aspect-ratio:1;max-width:100%;padding:6px;border:0;border-radius:12px;background:#fff;display:flex;cursor:zoom-in}
+.qr-box svg{width:100%;height:100%;display:block}
+.qr-sub{flex:none;font-size:clamp(11px,1vw,15px);font-weight:700;color:var(--muted);text-align:center}
+#qrView{position:fixed;inset:0;z-index:45;background:#fff;color:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;text-align:center}
+#qrView[hidden]{display:none}
+#qrView .qrv-box{width:min(78vh,90vw);aspect-ratio:1}
+#qrView .qrv-box svg{width:100%;height:100%;display:block}
+#qrView b{font-size:clamp(22px,4vh,40px)}
+#qrView span{font-size:clamp(14px,2.2vh,20px);color:#444}
+#qrView .qrv-close{font-size:14px;color:#777}
+
+/* Treffpunkt */
+.meetv{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;background:#0d4f8b;color:#fff;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.meetv[hidden]{display:none}
+.mv-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;text-align:center;animation:mvIn .35s ease-out}
+.mv-main>svg{width:min(20vh,18vw);height:auto;animation:mvPulse 1.6s ease-in-out 3}
+.mv-t{font-size:clamp(44px,min(11vw,17vh),170px);font-weight:900;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.mv-h{font-size:clamp(28px,min(6.4vw,10vh),100px);font-weight:900;color:#ffd23f;line-height:1.05;max-width:95vw;overflow-wrap:anywhere}
+.mv-h .mv-tri{width:1.15em;height:auto;flex:none}
+.mv-h:has(.mv-tri){display:flex;align-items:center;justify-content:center;gap:.35em;font-size:clamp(22px,min(5.2vw,9vh),90px)}
+.mv-h:has(.mv-tri) span{overflow-wrap:normal;hyphens:manual;min-width:0}
+.mv-s{font-size:clamp(17px,min(2.6vw,4vh),36px);font-weight:700;opacity:.92}
+.mv-bar{flex:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.mv-bar .btn{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.55);min-height:44px}
+.mv-bar .btn.sel{background:#fff;color:#0d4f8b;border-color:#fff}
+.mv-bar .btn.primary{background:#fff;color:#0d4f8b;border-color:#fff;font-weight:900}
+.mv-bar input{width:min(280px,80vw);min-height:44px;border-radius:12px;border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.12);color:#fff;padding:0 12px;font:inherit;font-weight:700}
+.mv-bar input::placeholder{color:rgba(255,255,255,.7)}
+@keyframes mvIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes mvPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.mv-main,.mv-main>svg{animation:none}}
+#btnMeet{background:#1b6fb0;color:#fff;border-color:#1b6fb0}
+#btnMeet[hidden]{display:none}
+@media (max-width:1180px){ #btnMeet .lbl{display:none} #btnMeet{width:clamp(38px,5.4vh,50px); padding:0} }
 /* ---------- Hinweis-Toast ---------- */
 .toast{
   position:fixed; left:50%; bottom:max(24px,env(safe-area-inset-bottom)); transform:translate(-50%,20px);
@@ -492,6 +533,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6h11M10 12h11M10 18h11"/><path d="M3 9.5l3 2.5-3 2.5z" fill="currentColor"/></svg>
       <span class="lbl">Fahrplan</span>
     </button>
+    <button class="hbtn" id="btnMeet" title="Treffpunkt: alle kommen zusammen" aria-label="Treffpunkt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3.2"/><path d="M6 21v-2.2a6 6 0 0 1 12 0V21"/><circle cx="4.6" cy="10.2" r="2.3"/><path d="M1.2 19.5v-1.3a3.7 3.7 0 0 1 4.6-3.6"/><circle cx="19.4" cy="10.2" r="2.3"/><path d="M22.8 19.5v-1.3a3.7 3.7 0 0 0-4.6-3.6"/></svg><span class="lbl">Treffpunkt</span></button>
     <button class="hbtn" id="btnReflex" title="Reflexion öffnen" aria-label="Reflexion">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5A8.5 8.5 0 1 1 21 12z"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.8.6-.8 1.2v.4M12 16.6v.1"/></svg>
       <span class="lbl">Reflexion</span>
@@ -675,12 +717,31 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
       </div>
     </section>
 
+
+    <!-- QR-Code zu den Lernplattformen AWT (Schülerversion) -->
+    <section class="tile" id="tQr" data-k="qr">
+      <div class="label">QR-Code</div>
+      <div class="vis qr-vis">
+        <button class="qr-box" id="qrBox" type="button" aria-label="QR-Code groß anzeigen"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" aria-hidden="true"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#000" d="M2 2.5h7m2 0h5m2 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m3 0h6m1 0h2m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h3m3 0h2m4 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h1m1 0h1m2 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m4 0h1m3 0h5m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h2m2 0h1m2 0h1m2 0h1m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m3 0h1m5 0h5m-23 1h1m1 0h5m2 0h1m3 0h5m1 0h1m2 0h1m3 0h5m-29 1h3m2 0h1m3 0h2m1 0h1m1 0h1m2 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h2m5 0h4m3 0h1m1 0h1m3 0h1m1 0h2m-31 1h1m1 0h2m2 0h3m1 0h2m2 0h1m4 0h2m1 0h1m2 0h1m1 0h3m1 0h1m-30 1h2m1 0h2m1 0h3m4 0h2m1 0h1m2 0h2m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h2m4 0h2m1 0h3m2 0h1m1 0h2m1 0h1m1 0h1m2 0h1m4 0h2m-33 1h1m1 0h1m2 0h3m1 0h3m2 0h5m6 0h2m2 0h3m-29 1h3m1 0h2m1 0h1m2 0h1m1 0h2m1 0h5m1 0h3m2 0h2m-30 1h1m2 0h1m1 0h2m1 0h7m1 0h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h1m-33 1h3m5 0h1m1 0h2m1 0h2m1 0h5m2 0h1m2 0h2m1 0h2m1 0h1m-30 1h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m-29 1h2m3 0h1m2 0h1m5 0h1m1 0h2m1 0h2m1 0h1m1 0h5m1 0h1m-30 1h6m2 0h5m1 0h1m1 0h1m2 0h4m1 0h3m-30 1h2m1 0h1m3 0h2m2 0h1m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m2 0h1m2 0h1m-33 1h1m3 0h3m2 0h2m2 0h1m1 0h1m4 0h2m2 0h2m1 0h1m1 0h1m1 0h1m-32 1h1m1 0h1m2 0h1m4 0h3m1 0h3m3 0h2m6 0h1m1 0h2m-32 1h1m2 0h1m1 0h3m1 0h6m2 0h1m4 0h7m2 0h2m-25 1h2m3 0h1m2 0h1m2 0h3m2 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h1m2 0h1m1 0h2m4 0h1m2 0h2m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h3m1 0h1m3 0h1m4 0h1m1 0h2m3 0h4m-32 1h1m1 0h3m1 0h1m1 0h7m2 0h1m1 0h1m2 0h1m1 0h6m1 0h1m-32 1h1m1 0h3m1 0h1m1 0h4m4 0h1m1 0h3m2 0h3m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h5m1 0h1m1 0h3m1 0h2m1 0h1m-30 1h1m5 0h1m2 0h3m3 0h2m1 0h1m1 0h2m6 0h3m-31 1h7m1 0h1m1 0h1m2 0h1m1 0h1m1 0h3m2 0h3m2 0h1m2 0h2"/></svg></button>
+        <div class="qr-sub">Lernplattformen AWT</div>
+      </div>
+    </section>
     <div class="empty" id="empty" hidden>Alle Kacheln sind ausgeblendet.<br>Öffne die Einstellungen (Zahnrad oben rechts).</div>
   </main>
 
   <footer>Unterrichtsboard · Daniel Beyrodt · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a> · <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutz</a></footer>
 </div>
 
+<div id="meetView" class="meetv" hidden role="dialog" aria-modal="true" aria-label="Treffpunkt">
+  <div class="mv-main"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3.2"/><path d="M6 21v-2.2a6 6 0 0 1 12 0V21"/><circle cx="4.6" cy="10.2" r="2.3"/><path d="M1.2 19.5v-1.3a3.7 3.7 0 0 1 4.6-3.6"/><circle cx="19.4" cy="10.2" r="2.3"/><path d="M22.8 19.5v-1.3a3.7 3.7 0 0 0-4.6-3.6"/></svg><div class="mv-t">Treffpunkt</div><div class="mv-h" id="meetHead" hidden></div><div class="mv-s">Alle kommen zusammen und hören zu.</div></div>
+  <div class="mv-bar">
+    <button class="btn" data-meet="Präsentation">Präsentation</button><button class="btn" data-meet="Reflexion">Reflexion</button><button class="btn" data-meet="Zwischenstand">Zwischenstand</button><button class="btn" data-meet="Hinweis">Hinweis</button><button class="btn" data-meet="">Ohne Überschrift</button>
+    <input id="meetIn" maxlength="40" placeholder="Eigene Überschrift …" aria-label="Eigene Überschrift" autocomplete="off" enterkeyhint="done">
+    <button class="btn" id="meetTone">Ton nochmal</button>
+    <button class="btn primary" id="meetClose">Weiterarbeiten</button>
+  </div>
+</div>
+<div id="qrView" hidden role="dialog" aria-label="QR-Code groß"><div class="qrv-box"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" aria-hidden="true"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#000" d="M2 2.5h7m2 0h5m2 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m3 0h6m1 0h2m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h3m3 0h2m4 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h1m1 0h1m2 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m4 0h1m3 0h5m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h2m2 0h1m2 0h1m2 0h1m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m3 0h1m5 0h5m-23 1h1m1 0h5m2 0h1m3 0h5m1 0h1m2 0h1m3 0h5m-29 1h3m2 0h1m3 0h2m1 0h1m1 0h1m2 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h2m5 0h4m3 0h1m1 0h1m3 0h1m1 0h2m-31 1h1m1 0h2m2 0h3m1 0h2m2 0h1m4 0h2m1 0h1m2 0h1m1 0h3m1 0h1m-30 1h2m1 0h2m1 0h3m4 0h2m1 0h1m2 0h2m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h2m4 0h2m1 0h3m2 0h1m1 0h2m1 0h1m1 0h1m2 0h1m4 0h2m-33 1h1m1 0h1m2 0h3m1 0h3m2 0h5m6 0h2m2 0h3m-29 1h3m1 0h2m1 0h1m2 0h1m1 0h2m1 0h5m1 0h3m2 0h2m-30 1h1m2 0h1m1 0h2m1 0h7m1 0h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h1m-33 1h3m5 0h1m1 0h2m1 0h2m1 0h5m2 0h1m2 0h2m1 0h2m1 0h1m-30 1h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m-29 1h2m3 0h1m2 0h1m5 0h1m1 0h2m1 0h2m1 0h1m1 0h5m1 0h1m-30 1h6m2 0h5m1 0h1m1 0h1m2 0h4m1 0h3m-30 1h2m1 0h1m3 0h2m2 0h1m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m2 0h1m2 0h1m-33 1h1m3 0h3m2 0h2m2 0h1m1 0h1m4 0h2m2 0h2m1 0h1m1 0h1m1 0h1m-32 1h1m1 0h1m2 0h1m4 0h3m1 0h3m3 0h2m6 0h1m1 0h2m-32 1h1m2 0h1m1 0h3m1 0h6m2 0h1m4 0h7m2 0h2m-25 1h2m3 0h1m2 0h1m2 0h3m2 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h1m2 0h1m1 0h2m4 0h1m2 0h2m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h3m1 0h1m3 0h1m4 0h1m1 0h2m3 0h4m-32 1h1m1 0h3m1 0h1m1 0h7m2 0h1m1 0h1m2 0h1m1 0h6m1 0h1m-32 1h1m1 0h3m1 0h1m1 0h4m4 0h1m1 0h3m2 0h3m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h5m1 0h1m1 0h3m1 0h2m1 0h1m-30 1h1m5 0h1m2 0h3m3 0h2m1 0h1m1 0h2m6 0h3m-31 1h7m1 0h1m1 0h1m2 0h1m1 0h1m1 0h3m2 0h3m2 0h1m2 0h2"/></svg></div><b>Lernplattformen AWT</b><span>deintechniklehrer.github.io/Lernplattformen/schueler</span><span class="qrv-close">Antippen zum Schließen</span></div>
 <dialog id="dlg">
   <div class="dlg">
     <h2>Einstellungen</h2>
@@ -697,6 +758,8 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <label class="row">iPad-Nutzung <input type="checkbox" class="sw" data-show="ipad"></label>
     <label class="row">KI-Nutzung <input type="checkbox" class="sw" data-show="ki"></label>
     <label class="row">Arbeiten außerhalb des Klassenraums <input type="checkbox" class="sw" data-show="raus"></label>
+    <label class="row">QR-Code Lernplattformen AWT <input type="checkbox" class="sw" data-show="qr"></label>
+    <label class="row">Treffpunkt-Knopf oben <input type="checkbox" class="sw" id="optMeet"></label>
 
     <h3>Darstellung &amp; Ton</h3>
     <div class="row">Farben
@@ -731,6 +794,9 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
     <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
+    <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Präsentation“, „Reflexion“, „Zwischenstand“ oder „Hinweis“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster. Den Knopf kannst du in den Einstellungen ausblenden.</p>
+    <p><strong>QR-Code:</strong> Die Kachel (anfangs aus, Einstellungen) führt zur Übersicht „Deine Lernplattformen AWT“ für Schüler:innen. Antippen zeigt den Code bildschirmfüllend.</p>
+    <p><strong>Timer und Fahrplan:</strong> −10 und +10 stellen die Zeit in Zehn-Minuten-Schritten. Jede Phase im Fahrplan kann eine Dauer in Minuten haben (Vorlage: Einstieg 10, Arbeitsphase 70, Sicherung 10). Beim Wechsel der Phase lädt der Timer diese Zeit.</p>
     <p><strong>Reflexion:</strong> Der Sprechblasen-Knopf oben öffnet die Reflexion am Stundenende im Vollbild. Die Klasse schätzt sich ein, du kannst die gewählte Karte antippen. Mit „Text anpassen“ änderst du Frage und Stufen. Im Reiter „Flow“ setzt jede:r einen Punkt ins Flow-Diagramm (Können gegen Anforderung): grün = Flow, rot = Überforderung, blau = Langeweile. Im Reiter „Offenes Arbeiten“ stehen acht Aussagen von grün (lief gut) bis rot (schwierig): Jedes Antippen zählt eins hoch, „−“ korrigiert, „Auswerten“ sortiert die Aussagen nach Anzahl.</p>
     <p><strong>Sozialform:</strong> Neben Einzel, Partner, Gruppe und Plenum gibt es „max. 2 SuS“ (allein oder zu zweit) und „max. 3 SuS“ (allein, zu zweit oder zu dritt). Gestrichelte Figuren heißen: kann dazukommen, muss aber nicht.</p>
     <p><strong>Arbeitsort:</strong> Zeigt, ob die Klasse auch außerhalb des Klassenraums arbeiten darf.</p>
@@ -833,16 +899,17 @@ const KEY = 'klassenboard.v1'; // interner Speichername bleibt, damit gespeicher
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
   theme: 'light', tsize: '2x2', clean: false, sound: true, wake: true,
-  show: { timer: true, plan: false, aufgabe: true, sozial: true, ampel: true, ipad: true, ki: true, raus: true },
+  show: { timer: true, plan: false, aufgabe: true, sozial: true, ampel: true, ipad: true, ki: true, raus: true, qr: false },
+  meetT: '', meetBtn: true,
   raus: false,
   aufgabe: '',
   plan: [
-    { text: 'Einstieg', so: 'plenum' },
-    { text: 'Arbeitsphase', so: 'gruppe' },
-    { text: 'Präsentation', so: 'plenum' },
-    { text: 'Sicherung', so: 'einzel' }
+    { text: 'Einstieg', so: 'plenum', min: 10 },
+    { text: 'Arbeitsphase', so: 'gruppe', min: 70 },
+    { text: 'Präsentation', so: 'plenum', min: 0 },
+    { text: 'Sicherung', so: 'einzel', min: 10 }
   ],
-  planCur: 0,
+  planCur: 0, planMin: 0, planAuto: false,
   timer: { duration: 300, remaining: 300, endAt: null },
   sozial: 'einzel', ipad: true, ipadPos: 'open', ki: false, kiLvl: 0,
   reflex: {
@@ -892,10 +959,14 @@ let S = load();
 function cleanPlan() {
   if (!Array.isArray(S.plan)) S.plan = clone(DEF.plan);
   S.plan = S.plan.filter(x => x && typeof x === 'object').slice(0, 12)
-    .map(x => ({ text: String(x.text || '').slice(0, 120), so: ['einzel', 'partner', 'gruppe', 'plenum', 'max2', 'max3'].includes(x.so) ? x.so : '', task: String(x.task || '').slice(0, 600) }));
+          .map(x => ({ text: String(x.text || '').slice(0, 120), so: ['einzel', 'partner', 'gruppe', 'plenum', 'max2', 'max3'].includes(x.so) ? x.so : '', task: String(x.task || '').slice(0, 600), min: Math.max(0, Math.min(240, Math.round(+x.min || 0))) }));
   S.planCur = Math.max(0, Math.min(S.plan.length - 1, Math.round(+S.planCur || 0)));
 }
 cleanPlan();
+if (!S.planMin) { // Fahrpläne von früher: Standardminuten bei gleichnamigen Phasen eintragen
+  S.planMin = 1;
+  S.plan.forEach(p => { if (!p.min) { const d = DEF.plan.find(x => x.text.toLowerCase() === (p.text || '').trim().toLowerCase()); if (d) p.min = d.min; } });
+}
 let saveT = 0;
 function save() {
   clearTimeout(saveT);
@@ -904,6 +975,26 @@ function save() {
 
 /* ================= Hinweis-Toast ================= */
 let toastT = 0;
+/* Treffpunkt: alle kommen zusammen, mit Gong und kurzer Überschrift */
+function meetChime() {
+  unlockAudio(); const c = ac(); if (!c) return;
+  [[523.25, 0], [659.25, .3], [783.99, .6], [1046.5, .9]].forEach(([f, t0]) => {
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+    o.type = 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.45, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.5);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + 1.6);
+  });
+}
+function meetRender() {
+  const h = $('#meetHead'), v = (S.meetT || '').trim();
+  h.textContent = v;
+  h.hidden = !v;
+  $$('[data-meet]').forEach(b => b.classList.toggle('sel', b.dataset.meet === v));
+  const i = $('#meetIn'); if (document.activeElement !== i) i.value = $$('[data-meet]').some(b => b.dataset.meet === v) ? '' : v;
+}
+function openMeet() { meetRender(); $('#meetView').hidden = false; meetChime(); $('#meetClose').focus(); }
+function closeMeet() { $('#meetView').hidden = true; }
+function renderMeetBtn() { $('#btnMeet').hidden = !S.meetBtn; $('#optMeet').checked = !!S.meetBtn; }
 function toast(msg, ms = 5000) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), ms);
@@ -962,7 +1053,7 @@ function clock() {
    Das Board probiert mehrere Anordnungen aus und nimmt die, bei der alles
    am größten und lesbarsten ist. Passt nichts auf einen Bildschirm,
    werden die Kacheln untereinander gesetzt und die Seite darf scrollen. */
-const ORDER = ['timer', 'plan', 'aufgabe', 'sozial', 'ampel', 'ipad', 'ki', 'raus'];
+const ORDER = ['timer', 'plan', 'aufgabe', 'sozial', 'ampel', 'ipad', 'ki', 'raus', 'qr'];
 const MIN = {
   timer:  { ctrl: [250, 290], clean: [160, 150] },
   aufgabe:{ ctrl: [220, 125], clean: [200, 100] },
@@ -970,7 +1061,8 @@ const MIN = {
   raus:   { ctrl: [160, 190], clean: [120, 112] },
   ampel:  { ctrl: [170, 190], mic: [180, 250], clean: [120, 112] },
   ipad:   { ctrl: [180, 250], clean: [120, 115] },
-  ki:     { ctrl: [170, 200], clean: [120, 115] }
+  ki:     { ctrl: [170, 200], clean: [120, 115] },
+  qr:     { ctrl: [150, 175], clean: [150, 175] }
 };
 const TIMER_WEIGHT = 1.6; // Timer soll etwas größer werden als die anderen Kacheln
 function minOf(k) {
@@ -1081,7 +1173,7 @@ function grid6Layout(keys, W, H, gap) {
   for (let extra = 0; extra < 3; extra++) {
     // Blöcke links: Fahrplan (1 Spalte, 2 Zeilen) und Timer (2 Spalten, 2 oder 1 Zeile)
     const blk = tall.map(k => k === 'timer' ? { k, cs: 2, rs: S.tsize === '2x1' ? 1 : 2 } : { k, cs: 1, rs: 2 });
-    const span = {}; rest.forEach(k => span[k] = G6_W[k] || 1);
+    const span = {}; rest.forEach(k => span[k] = k === 'qr' ? 1 : (G6_W[k] || 1));
     const cells = () => blk.reduce((a, b) => a + b.cs * b.rs, 0) + rest.reduce((a, k) => a + span[k], 0);
     const maxRs = blk.reduce((a, b) => Math.max(a, b.rs), 0);
     const n = rest.length ? Math.max(maxRs, Math.ceil(cells() / C)) + extra : Math.max(1, maxRs);
@@ -1092,9 +1184,11 @@ function grid6Layout(keys, W, H, gap) {
     ['aufgabe', 'ape'].forEach(k => { if (k in span) grow(k, G6_MAX[k]); });
     const tb = blk.find(b => b.k === 'timer');
     if (tb && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / tb.rs), G6_MAX.timer - tb.cs)); tb.cs += t; free -= t * tb.rs; }
-    const small = rest.filter(k => !(k in G6_W));
+    const growable = rest.filter(k => k !== 'qr'); // QR-Code bleibt 1 × 1
+    const small = growable.filter(k => !(k in G6_W));
     for (let i = 0; free > 0 && small.length && i < small.length * 2; i++) { const k = small[i % small.length]; if (span[k] < 2 + Math.floor(i / small.length)) { span[k]++; free--; } }
-    for (let i = 0; free > 0 && rest.length && i < 40; i++) { span[rest[i % rest.length]]++; free--; }
+    for (let i = 0; free > 0 && growable.length && i < 40; i++) { span[growable[i % growable.length]]++; free--; }
+    if (free > 0) continue;
     // höhere Blöcke ganz links, damit jede Zeile ohne Lücke weiterläuft
     blk.sort((a, b) => b.rs - a.rs || ord(a.k) - ord(b.k));
     const lead = r => blk.filter(b => r < b.rs).reduce((a, b) => a + b.cs, 0);
@@ -1176,7 +1270,7 @@ function renderPlan() {
     box.innerHTML = S.plan.map((p, i) => {
       const st = i < S.planCur ? 'past' : i === S.planCur ? 'cur' : '';
       const so = SOZIAL[p.so] ? SOZIAL[p.so].name : '';
-      return `<div class="prow ${st}" data-i="${i}" role="button" aria-label="Phase ${i + 1}: ${esc(p.text)}${so ? ', ' + so : ''}">${soIcon(p.so)}<span class="ptxt">${esc(p.text) || '&nbsp;'}</span></div>`;
+      return `<div class="prow ${st}" data-i="${i}" role="button" aria-label="Phase ${i + 1}: ${esc(p.text)}${so ? ', ' + so : ''}">${soIcon(p.so)}<span class="ptxt">${esc(p.text) || '&nbsp;'}</span>${p.min ? `<span class="pmin">${p.min}′</span>` : ''}</div>`;
     }).join('') + `<div class="parrow" id="pArrow">${ARROW}</div>`;
   }
   $('#planPrev').disabled = S.planCur <= 0;
@@ -1210,9 +1304,14 @@ function placeArrow() {
   if (!a || !row) return;
   a.style.top = (row.offsetTop + (row.offsetHeight - a.offsetHeight) / 2).toFixed(1) + 'px';
 }
+const PLAN_AUTO = () => !!S.planAuto && !!S.show.plan && false;
 function setPlanCur(i) {
   if (!S.plan.length) return;
+  const prev = S.planCur;
   S.planCur = Math.max(0, Math.min(S.plan.length - 1, i));
+  // Minuten der Phase in den Timer laden; im Auto-Modus läuft er gleich los
+  const pm = S.plan[S.planCur].min;
+  if (pm > 0 && (S.planCur !== prev || PLAN_AUTO())) { tSet(pm); if (PLAN_AUTO()) tStart(); }
   const so = S.plan[S.planCur].so;
   if (SOZIAL[so] && S.sozial !== so) { S.sozial = so; renderSozial(); }
   save();
@@ -1245,6 +1344,7 @@ function renderPlanEditor() {
     <div class="pe-row" data-i="${i}">
       <span class="pe-num">${i + 1}</span>
       <input class="pe-txt" type="text" maxlength="120" value="${esc(p.text)}" placeholder="z. B. Einstieg" aria-label="Text für Phase ${i + 1}">
+      <label class="pe-minw"><input class="pe-min" type="number" min="0" max="240" step="1" inputmode="numeric" value="${p.min || ''}" placeholder="–" aria-label="Minuten für Phase ${i + 1}">min</label>
       <div class="pe-tools">
         <div class="pe-so" role="group" aria-label="Sozialform">
           <button data-so="" class="${p.so ? '' : 'sel'}" title="Keine Sozialform" aria-label="Keine Sozialform">–</button>
@@ -1361,7 +1461,10 @@ function tAdd(sec) {
 function renderTimer() {
   const t = S.timer, tile = $('#tTimer');
   const r = remaining();
-  if (t.endAt && r <= 0) { t.endAt = null; t.remaining = 0; doneFlag = true; save(); gong(); }
+  if (t.endAt && r <= 0) {
+    t.endAt = null; t.remaining = 0; doneFlag = true; save(); gong();
+    if (PLAN_AUTO() && S.planCur < S.plan.length - 1) { doneFlag = false; setTimeout(() => setPlanCur(S.planCur + 1), 0); }
+  }
   const frac = t.duration > 0 ? Math.min(1, r / t.duration) : 0;
   const d = $('#tDigits');
   const txt = doneFlag ? '00:00' : fmt(r);
@@ -1840,6 +1943,17 @@ function bind() {
   $('#ipUse').addEventListener('click', e => { const b = e.target.closest('[data-use]'); if (b) setIpadUse(b.dataset.use === '1'); });
   // Reflexion
   $('#btnReflex').addEventListener('click', openReflex);
+  $('#btnMeet').addEventListener('click', openMeet);
+  $('#meetClose').addEventListener('click', closeMeet);
+  $('#meetTone').addEventListener('click', meetChime);
+  $$('[data-meet]').forEach(b => b.addEventListener('click', () => { S.meetT = b.dataset.meet; save(); $('#meetIn').value = ''; meetRender(); }));
+  $('#meetIn').addEventListener('input', e => { S.meetT = e.target.value; save(); meetRender(); });
+  $('#meetIn').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#meetView').hidden) closeMeet(); });
+  $('#optMeet').addEventListener('change', e => { S.meetBtn = e.target.checked; save(); renderMeetBtn(); });
+  renderMeetBtn();
+  $('#qrBox').addEventListener('click', () => { $('#qrView').hidden = false; });
+  $('#qrView').addEventListener('click', () => { $('#qrView').hidden = true; });
   // Input: Bild vom Gerät groß zeigen. Es bleibt nur für diese Sitzung (sessionStorage), nicht im Export.
   const IMGKEY = 'unterrichtsboard-input-bild';
   const getImg = () => { try { return sessionStorage.getItem(IMGKEY); } catch (e) { return null; } };
@@ -1956,6 +2070,7 @@ function bind() {
     const i = +row.dataset.i;
     if (e.target.classList.contains('pe-txt')) S.plan[i].text = e.target.value;
     else if (e.target.classList.contains('pe-task')) S.plan[i].task = e.target.value;
+    else if (e.target.classList.contains('pe-min')) S.plan[i].min = Math.max(0, Math.min(240, Math.round(+e.target.value || 0)));
     else return;
     save(); renderPlan(); renderTask();
   });
@@ -2105,6 +2220,24 @@ const D = {
   'Weiter': ['Next', 'Suivant'],
   'Zurücksetzen': ['Reset', 'Réinitialiser'],
   'Timer starten oder pausieren': ['Start or pause the timer', 'Démarrer ou mettre en pause'],
+  'min': ['min', 'min'],
+  'Treffpunkt': ['Meeting point', 'Point de rencontre'],
+  'Treffpunkt: alle kommen zusammen': ['Meeting point: everyone gathers', 'Point de rencontre : tout le monde se rassemble'],
+  'Alle kommen zusammen und hören zu.': ['Everyone comes together and listens.', 'Tout le monde se rassemble et écoute.'],
+  'Hinweis': ['Notice', 'Information'],
+  'Zwischenstand': ['Progress check', 'Point d’étape'],
+  'Ohne Überschrift': ['No heading', 'Sans titre'],
+  'Eigene Überschrift …': ['Own heading …', 'Titre personnalisé …'],
+  'Eigene Überschrift': ['Own heading', 'Titre personnalisé'],
+  'Ton nochmal': ['Play sound again', 'Rejouer le son'],
+  'Weiterarbeiten': ['Back to work', 'Reprendre le travail'],
+  'Treffpunkt-Knopf oben': ['Meeting point button at the top', 'Bouton point de rencontre en haut'],
+  'QR-Code': ['QR code', 'Code QR'],
+  'Lernplattformen AWT': ['AWT learning platforms', 'Plateformes AWT'],
+  'QR-Code groß anzeigen': ['Show QR code large', 'Afficher le code QR en grand'],
+  'QR-Code Lernplattformen AWT': ['QR code AWT learning platforms', 'Code QR plateformes AWT'],
+  'QR-Code groß': ['Large QR code', 'Code QR en grand'],
+  'Antippen zum Schließen': ['Tap to close', 'Touchez pour fermer'],
   'Zehn Minuten weniger': ['Ten minutes less', 'Dix minutes de moins'],
   'Zehn Minuten mehr': ['Ten minutes more', 'Dix minutes de plus'],
   'Eine Minute weniger': ['One minute less', 'Une minute de moins'],
@@ -2296,6 +2429,7 @@ const P = [
   [/^Phase (\d+): (.*)$/, (i, m) => 'Phase ' + m[1] + ': ' + one(i, m[2])],
   [/^Text für Phase (\d+)$/, (i, m) => ['Text for phase ', 'Texte de la phase '][i] + m[1]],
   [/^Aufgabe für Phase (\d+)$/, (i, m) => ['Task for phase ', 'Consigne de la phase '][i] + m[1]],
+  [/^Minuten für Phase (\d+)$/, (i, m) => ['Minutes for phase ', 'Minutes de la phase '][i] + m[1]],
   [/^Gespeichert als „(.+)“\.$/, (i, m) => [`Saved as “${m[1]}”.`, `Enregistré sous « ${m[1]} ».`][i]]
 ];
 let lang = 'de';
