@@ -74,7 +74,9 @@ body.standalone #btnFS{display:none}
 :root[data-theme="dark"] .hbtn .i-sun{display:block}
 :root[data-theme="dark"] .hbtn .i-moon{display:none}
 @media (max-width:1180px){ #btnTheme .lbl, #btnFS .lbl{display:none} #btnTheme, #btnFS{width:clamp(38px,5.4vh,50px); padding:0} }
-@media (max-width:900px){ #btnReflex .lbl, #btnPlan .lbl{display:none} #btnReflex, #btnPlan{width:clamp(38px,5.4vh,50px); padding:0} }
+@media (max-width:900px){ #btnReflex .lbl, #btnPlan .lbl, #btnInput .lbl{display:none} #btnReflex, #btnPlan, #btnInput{width:clamp(38px,5.4vh,50px); padding:0} }
+@media (max-width:480px){ #btnFS{display:none} .logo{max-width:24vw} #btnReflex, #btnPlan, #btnInput, #btnTheme, #btnMeet{width:36px; height:36px} }
+@media (max-width:360px){ .logo{display:none!important} }
 @media (max-width:400px){ .clock{display:none} }
 @media (max-width:720px){
   .hbtn .lbl{display:none}
@@ -501,6 +503,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 #btnMeet{background:#1b6fb0;color:#fff;border-color:#1b6fb0}
 #btnMeet[hidden]{display:none}
 @media (max-width:1180px){ #btnMeet .lbl{display:none} #btnMeet{width:clamp(38px,5.4vh,50px); padding:0} }
+@media (max-width:480px){ #btnMeet{width:36px; height:36px} }
 /* ---------- Hinweis-Toast ---------- */
 .toast{
   position:fixed; left:50%; bottom:max(24px,env(safe-area-inset-bottom)); transform:translate(-50%,20px);

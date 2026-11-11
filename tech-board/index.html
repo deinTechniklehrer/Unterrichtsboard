@@ -391,6 +391,11 @@ body.clean #tPlan .label, body.clean #tAufgabe .label{right:14px}
 .plan-ctrl .btn.plan-auto svg{margin-top:-6px}
 .plan-ctrl .btn.plan-auto[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
 body.clean .plan-ctrl .btn.plan-auto:not([aria-pressed="true"]){visibility:hidden}
+.plan-ctrl{gap:5px}
+.plan-ctrl .btn{min-width:0}
+.plan-ctrl .btn.plan-add{flex:0 1 var(--btn-h); min-width:34px}
+@container (max-width:190px){ #planQuickAdd{display:none} }
+@container (max-width:300px){ #soBtns .btn{flex:1 1 22%; padding:0 2px} #soBtns .btn svg{width:24px; height:24px} }
 .prow .ptask{flex:none; width:.9em; height:.9em; opacity:.55}
 .prow .pmin{flex:none; font-size:.78em; font-weight:800; color:var(--muted); font-variant-numeric:tabular-nums}
 .pe-minw{display:flex; align-items:center; gap:4px; flex:none; font-weight:700; color:var(--muted); font-size:14px}
