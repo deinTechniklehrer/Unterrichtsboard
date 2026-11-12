@@ -1,7 +1,7 @@
 /* Unterrichtsboard – Offline-Speicher (Service Worker)
    Die Seite wird beim ersten Öffnen gespeichert und funktioniert danach auch ohne Internet.
    Mit Internet wird immer zuerst die neueste Version geladen. */
-const CACHE = 'unterrichtsboard-v12';
+const CACHE = 'unterrichtsboard-v13';
 const ROOT = new URL('./', self.location).pathname;
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './audio/ipad-closed-de.mp3', './audio/ipad-bag-de.mp3', './audio/ipad-rules-de.mp3', './audio/ipad-closed-en.mp3', './audio/ipad-closed-fr.mp3', './audio/ipad-closed-es.mp3', './audio/ipad-bag-en.mp3', './audio/ipad-bag-fr.mp3', './audio/ipad-bag-es.mp3', './audio/ipad-rules-en.mp3', './audio/ipad-rules-fr.mp3', './audio/ipad-rules-es.mp3'];
 

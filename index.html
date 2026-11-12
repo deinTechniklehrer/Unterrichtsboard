@@ -833,7 +833,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
     <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
     <p><strong>Basic:</strong> Der Knopf mit den vier Kästchen oben schaltet auf die Grundausstattung: Timer, Aufgabe, Sozialform und iPad. Fahrplan und Input holst du dir über ihre Knöpfe oben dazu, Treffpunkt und Reflexion sind in Basic ausgeblendet. Basic blendet nur aus, alles Eingestellte bleibt erhalten. Ein zweiter Tipp auf „Basic“ bringt das Board zurück, wie du es eingestellt hast.</p>
-    <p><strong>iPad-Verstoß:</strong> Den Knopf schaltest du in den Einstellungen ein (anfangs aus). Ein Tipp zeigt groß „iPad-Verstoß“, spielt einen Warnton und sagt an, was die Klasse tun soll. Gleichzeitig geht die iPad-Nutzung eine Stufe herunter: erlaubt → zugeklappt auf dem Tisch → Schultasche. Die Ansage passt dazu („Alle klappen jetzt ihr iPad zu“ oder „Alle packen jetzt ihr iPad in die Schultasche“). In den Einstellungen kannst du das Herunterschalten und den Ton einzeln ausschalten. Ohne Herunterschalten heißt die Ansage, je nach Stand, „Bitte haltet euch an die iPad-Regeln“. Das Fenster schließt sich nach 15 Sekunden von selbst.</p>
+    <p><strong>iPad-Verstoß:</strong> Den Knopf schaltest du in den Einstellungen ein (anfangs aus). Ein Tipp zeigt groß „iPad-Verstoß“, spielt einen Gong und sagt an, was die Klasse tun soll. Gleichzeitig geht die iPad-Nutzung eine Stufe herunter: erlaubt → zugeklappt auf dem Tisch → Schultasche. Die Ansage passt dazu („Alle klappen jetzt ihr iPad zu“ oder „Alle packen jetzt ihr iPad in die Schultasche“). In den Einstellungen kannst du das Herunterschalten und den Ton einzeln ausschalten. Ohne Herunterschalten heißt die Ansage, je nach Stand, „Bitte haltet euch an die iPad-Regeln“. Das Fenster schließt sich nach 15 Sekunden von selbst.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Präsentation“, „Reflexion“, „Zwischenstand“ oder „Hinweis“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster. Den Knopf kannst du in den Einstellungen ausblenden.</p>
     <p><strong>QR-Code:</strong> Die Kachel (anfangs aus, Einstellungen) führt zur Übersicht „Deine Lernplattformen AWT“ für Schüler:innen. Antippen zeigt den Code bildschirmfüllend.</p>
     <p><strong>Timer und Fahrplan:</strong> −10 und +10 stellen die Zeit in Zehn-Minuten-Schritten. Jede Phase im Fahrplan kann eine Dauer in Minuten haben (Vorlage: Einstieg 10, Arbeitsphase 70, Sicherung 10). Beim Wechsel der Phase lädt der Timer diese Zeit.</p>
@@ -1045,15 +1045,36 @@ function ipvQuiet() {
   if (tbVoiceSrc) { const s = tbVoiceSrc; tbVoiceSrc = null; s.onended = null; try { s.stop(); } catch (e) { } }
   try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) { }
 }
+/* Gongschlag für den iPad-Verstoß: unharmonische Teiltöne mit Schwebung, Schlägel-Geräusch, etwas Raumhall */
+let ipvOut = null;
+function ipvBus(c) {
+  if (ipvOut && ipvOut.context === c) return ipvOut;
+  const comp = c.createDynamicsCompressor(); comp.threshold.value = -16; comp.connect(c.destination);
+  const conv = c.createConvolver(), len = Math.floor(c.sampleRate * 1.6), ir = c.createBuffer(2, len, c.sampleRate);
+  for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4); }
+  conv.buffer = ir; const wet = c.createGain(); wet.gain.value = 0.18;
+  ipvOut = c.createGain(); ipvOut.connect(comp); ipvOut.connect(conv); conv.connect(wet).connect(comp);
+  return ipvOut;
+}
+const IPV_MODES = [[1, 1, 1], [1.006, .55, .95], [1.52, .45, .7], [2.0, .5, .75], [2.012, .25, .7], [2.44, .3, .55], [2.93, .28, .5], [3.41, .18, .42], [4.07, .14, .35], [4.98, .09, .28], [5.83, .06, .22]];
+function ipvGong(c) {
+  const out = ipvBus(c), t = c.currentTime + 0.03, f = 165, dur = 4.5, vol = 0.55;
+  IPV_MODES.forEach(([m, a, dk]) => {
+    const o = c.createOscillator(), g = c.createGain(), d = dur * dk;
+    o.type = 'sine'; o.frequency.value = f * m;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(a * vol, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g).connect(out); o.start(t); o.stop(t + d + 0.05);
+  });
+  const len = Math.floor(c.sampleRate * 0.05), b = c.createBuffer(1, len, c.sampleRate), dd = b.getChannelData(0);
+  for (let i = 0; i < len; i++) dd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+  const s = c.createBufferSource(), bp = c.createBiquadFilter(), ng = c.createGain();
+  s.buffer = b; bp.type = 'bandpass'; bp.frequency.value = 650; bp.Q.value = 0.9; ng.gain.value = 0.5 * vol;
+  s.connect(bp).connect(ng).connect(out); s.start(t);
+}
 function ipvSound() {
   ipvQuiet(); if (!S.ipvSound) return;
   unlockAudio(); const c = ac();
-  if (c) [[880, 0], [622, 0.32], [880, 0.64], [622, 0.96]].forEach(([f, t0]) => {
-    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
-    o.type = 'triangle'; o.frequency.value = f;
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.45, t + 0.02); g.gain.setValueAtTime(0.45, t + 0.22); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
-    o.connect(g).connect(c.destination); o.start(t); o.stop(t + 0.32);
-  });
+  if (c) ipvGong(c);
   ipvSayTm = setTimeout(async () => {
     if ($('#ipvView').hidden) return;
     if (await voicePlay('ipad-' + ipvKey, null, () => !$('#ipvView').hidden)) return;
@@ -1065,7 +1086,7 @@ function ipvSound() {
       const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(l)); if (v) u.voice = v;
       speechSynthesis.cancel(); speechSynthesis.speak(u);
     } catch (e) { }
-  }, 1400);
+  }, 1600);
 }
 function ipadViolation() {
   const lvl = S.ipadPos === 'bag' ? 2 : S.ipadPos === 'closed' ? 1 : 0;
