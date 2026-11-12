@@ -1105,7 +1105,7 @@ function unlockAudio() {
   try { const b = c.createBuffer(1, 1, 22050), s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0); } catch (e) {}
 }
 /* Ansagen als Audiodatei (KI-Stimme, offline gespeichert); fehlt eine Datei, spricht die Stimme des Geräts */
-const VOICE_FILES = {"ipad-closed": {"en": "audio/ipad-closed-en.mp3", "fr": "audio/ipad-closed-fr.mp3", "es": "audio/ipad-closed-es.mp3"}, "ipad-bag": {"en": "audio/ipad-bag-en.mp3", "fr": "audio/ipad-bag-fr.mp3", "es": "audio/ipad-bag-es.mp3"}, "ipad-rules": {"en": "audio/ipad-rules-en.mp3", "fr": "audio/ipad-rules-fr.mp3", "es": "audio/ipad-rules-es.mp3"}};
+const VOICE_FILES = {"ipad-closed": {"de": "audio/ipad-closed-de.mp3", "en": "audio/ipad-closed-en.mp3", "fr": "audio/ipad-closed-fr.mp3", "es": "audio/ipad-closed-es.mp3"}, "ipad-bag": {"de": "audio/ipad-bag-de.mp3", "en": "audio/ipad-bag-en.mp3", "fr": "audio/ipad-bag-fr.mp3", "es": "audio/ipad-bag-es.mp3"}, "ipad-rules": {"de": "audio/ipad-rules-de.mp3", "en": "audio/ipad-rules-en.mp3", "fr": "audio/ipad-rules-fr.mp3", "es": "audio/ipad-rules-es.mp3"}};
 const voiceBuf = {}; let tbVoiceSrc = null;
 function voiceLoad(key, l) {
   const url = VOICE_FILES[key] && VOICE_FILES[key][l]; const c = ac();

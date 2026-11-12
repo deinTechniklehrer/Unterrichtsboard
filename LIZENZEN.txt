@@ -1,7 +1,7 @@
 Unterrichtsboard, Daniel Beyrodt, CC BY-NC-SA 4.0, ausgenommen:
 
 Sprachansagen (Ordner audio):
-Deutsch: erzeugt mit fobizz (KI-Stimme), Daniel Beyrodt (sobald vorhanden; sonst spricht die Stimme des Geräts).
+Deutsch: erzeugt mit fobizz (KI-Stimme), Daniel Beyrodt.
 Englisch, Französisch, Spanisch: erzeugt mit Piper TTS (https://github.com/rhasspy/piper, MIT-Lizenz).
 - Englisch: Stimme „kathleen“, Datensatz https://github.com/rhasspy/dataset-voice-kathleen, CC0.
 - Französisch: Stimme „siwis“, Datensatz SIWIS French Speech Synthesis Database, https://datashare.ed.ac.uk/handle/10283/2353, CC BY 4.0.
