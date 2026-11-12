@@ -211,11 +211,17 @@ body.clean .hint{display:none}
 .imgview{position:fixed; inset:0; z-index:30; display:none; align-items:center; justify-content:center; background:#000; cursor:zoom-out;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .imgview.open{display:flex}
-.imgview img{max-width:100%; max-height:100%; object-fit:contain; display:block}
-.imgview .imgbar{position:absolute; left:50%; transform:translateX(-50%); bottom:max(14px,env(safe-area-inset-bottom)); display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px;
+.imgview{flex-direction:column; gap:10px}
+.imgview img{flex:1 1 0; min-height:0; width:100%; max-height:100%; object-fit:contain; display:block}
+/* Bildunterschrift unter dem Bild, groß und gut lesbar */
+.imgview .imgcap{flex:none; max-width:94%; color:#fff; font-weight:800; font-size:clamp(20px,min(4.6vh,3.4vw),52px); line-height:1.2; text-align:center; overflow-wrap:anywhere; white-space:pre-line; padding:0 8px max(10px,env(safe-area-inset-bottom))}
+.imgview .imgcap:empty{display:none}
+.imgview .imgbar{flex:none; margin-bottom:max(14px,env(safe-area-inset-bottom)); display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px;
   max-width:calc(100% - 24px); padding:8px 12px; border-radius:16px; background:rgba(255,255,255,.9); color:#111; font-size:14px; cursor:default}
 .imgview .imgbar button{font:inherit; font-weight:700; padding:8px 12px; border-radius:10px; border:1.5px solid #333; background:#fff; color:#111; cursor:pointer}
 .imgview .imgbar small{flex-basis:100%; text-align:center; color:#444}
+.imgview .imgbar input{flex:1 1 260px; min-width:0; max-width:520px; height:40px; border:1.5px solid #333; border-radius:10px; padding:0 10px; font:inherit; font-size:16px; color:#111; background:#fff}
+body:not(.clean) .imgview .imgcap{padding-bottom:0}
 body.clean .imgview .imgbar{display:none}
 #btnInput.has{position:relative}
 #btnInput.has::after{content:""; position:absolute; top:6px; right:6px; width:10px; height:10px; border-radius:50%; background:#2fa463; box-shadow:0 0 0 2px var(--tile,#fff)}
@@ -1033,7 +1039,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu. Jede Phase kann eine Dauer in Minuten haben (Vorlage: Einstieg 5, Arbeitsphase 70, Aufräumen 10, Sicherung 5). Beim Wechsel der Phase lädt der Timer diese Zeit. Mit dem Auto-Knopf (Pfeilkreis mit Play-Zeichen) springt der Fahrplan nach Ablauf der Zeit selbst zur nächsten Phase und startet den Timer neu. Bei einer Phase mit „Sicherung“ im Namen wechselt die Sozialform auf Plenum (wenn die Phase keine eigene hat) und der Arbeitsort auf „Nur im Raum“.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
-    <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
+    <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. Im Feld „Bildunterschrift“ unten schreibst du einen Satz dazu, er steht groß unter dem Bild. Ein neues Bild beginnt ohne Unterschrift. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
     <p><strong>Reflexion:</strong> Der Sprechblasen-Knopf oben öffnet die Reflexion am Stundenende im Vollbild. Die Klasse schätzt sich ein, du kannst die gewählte Karte antippen. Mit „Text anpassen“ änderst du Frage und Stufen. Im Reiter „Flow“ setzt jede:r einen Punkt ins Flow-Diagramm (Können gegen Anforderung): grün = Flow, rot = Überforderung, blau = Langeweile. In den Reitern „Offenes Arbeiten“ und „Aufräumen“ stehen je sechs Aussagen, klar abgestuft: zwei gute (grün), zwei mittlere (gelb/orange), zwei schlechte (rot). Jedes Antippen zählt eins hoch, „−“ korrigiert, „Auswerten“ sortiert die Aussagen nach Anzahl.</p>
     <p><strong>Sozialform:</strong> Neben Einzel, Partner, Gruppe und Plenum gibt es „max. 2 SuS“ (allein oder zu zweit), „max. 3 SuS“ (allein, zu zweit oder zu dritt), Stationenarbeit und Freie Form (Sozialform frei wählbar). Gestrichelte Figuren heißen: kann dazukommen, muss aber nicht.</p>
     <p><strong>Arbeitsort:</strong> Zeigt, ob die Klasse auch außerhalb des Klassenraums arbeiten darf.</p>
@@ -1095,7 +1101,8 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 <div class="imgview" id="imgView" role="dialog" aria-modal="true" aria-label="Bild im Vollbild">
   <img id="imgViewImg" alt="Gezeigtes Bild">
   <button class="imgclose" id="imgClose" type="button" aria-label="Bild schließen">×</button>
-  <div class="imgbar" id="imgBar"><button type="button" id="imgNew">Anderes Bild</button><button type="button" id="imgDel">Bild entfernen</button>
+  <div class="imgcap" id="imgCap" data-noi18n></div>
+  <div class="imgbar" id="imgBar"><input type="text" id="imgCapIn" maxlength="160" placeholder="Bildunterschrift …" aria-label="Bildunterschrift" autocomplete="off" enterkeyhint="done"><button type="button" id="imgNew">Anderes Bild</button><button type="button" id="imgDel">Bild entfernen</button>
     <small>Das Bild bleibt nur in diesem Browser-Tab, bis du ihn schließt. Beim Exportieren wird es nicht mitgespeichert.</small></div>
 </div>
 <div class="overlay" id="reflex" role="dialog" aria-modal="true" aria-label="Reflexion">
@@ -2363,7 +2370,10 @@ function bind() {
   const IMGKEY = 'roboboard.unterrichtsboard-input-bild';
   const getImg = () => { try { return sessionStorage.getItem(IMGKEY); } catch (e) { return null; } };
   const markImg = () => $('#btnInput').classList.toggle('has', !!getImg());
-  const showImg = src => { $('#imgViewImg').src = src; $('#imgView').classList.add('open'); };
+  const CAPKEY = IMGKEY + '.unterschrift';
+  const getCap = () => { try { return sessionStorage.getItem(CAPKEY) || ''; } catch (e) { return ''; } };
+  const setCap = v => { try { if (v) sessionStorage.setItem(CAPKEY, v); else sessionStorage.removeItem(CAPKEY); } catch (e) { } $('#imgCap').textContent = v; };
+  const showImg = src => { $('#imgViewImg').src = src; const c = getCap(); $('#imgCap').textContent = c; $('#imgCapIn').value = c; $('#imgView').classList.add('open'); };
   const closeImg = () => { $('#imgView').classList.remove('open'); $('#imgViewImg').removeAttribute('src'); };
   const shrink = f => new Promise((res, rej) => {
     const url = URL.createObjectURL(f), im = new Image();
@@ -2378,13 +2388,15 @@ function bind() {
     const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
     let src; try { src = await shrink(f); } catch (err) { return; }
     try { sessionStorage.setItem(IMGKEY, src); } catch (err) { /* zu groß oder nicht erlaubt: nur anzeigen */ }
-    markImg(); showImg(src);
+    setCap(''); markImg(); showImg(src);
   });
+  $('#imgCapIn').addEventListener('input', e => setCap(e.target.value.trim() ? e.target.value : ''));
+  $('#imgCapIn').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); e.stopPropagation(); });
   $('#imgView').addEventListener('click', e => { if (!e.target.closest('#imgBar')) closeImg(); });
   $('#imgNew').addEventListener('click', () => $('#inputFile').click());
-  $('#imgDel').addEventListener('click', () => { try { sessionStorage.removeItem(IMGKEY); } catch (e) { } markImg(); closeImg(); });
+  $('#imgDel').addEventListener('click', () => { try { sessionStorage.removeItem(IMGKEY); } catch (e) { } setCap(''); markImg(); closeImg(); });
   markImg();
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#imgView').classList.contains('open')) closeImg(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#imgView').classList.contains('open') && document.activeElement !== $('#imgCapIn')) closeImg(); });
   $('#rfClose').addEventListener('click', closeReflex);
   $('#rfEdit').addEventListener('click', () => setReflexEdit(!$('#reflex').classList.contains('editing')));
   $('#rfCards').addEventListener('click', e => {
@@ -3451,6 +3463,8 @@ const D = {
   'Öffne die Einstellungen (Zahnrad oben rechts).': ['Open the settings (gear icon, top right).', 'Ouvre les réglages (roue dentée en haut à droite).'],
   'Impressum': ['Legal notice', 'Mentions légales'],
   'Datenschutz': ['Privacy', 'Confidentialité'],
+  'Bildunterschrift …': ['Caption …', 'Légende …'],
+  'Bildunterschrift': ['Caption', 'Légende'],
   'Lernplattformen Technik': ['Technology learning platforms', 'Plateformes technologie'],
   'QR-Code Lernplattformen Technik': ['QR code technology learning platforms', 'Code QR plateformes technologie'],
   'Übersicht für Lehrkräfte': ['Overview for teachers', 'Vue d’ensemble pour les enseignants'],
@@ -3849,6 +3863,8 @@ const ES = {
   "Öffne die Einstellungen (Zahnrad oben rechts).": "Abre los ajustes (rueda dentada arriba a la derecha).",
   "Impressum": "Aviso legal",
   "Datenschutz": "Privacidad",
+  "Bildunterschrift …": "Pie de foto …",
+  "Bildunterschrift": "Pie de foto",
   "Lernplattformen Technik": "Plataformas de aprendizaje de Tecnología",
   "QR-Code Lernplattformen Technik": "Código QR plataformas de Tecnología",
   "Übersicht für Lehrkräfte": "Resumen para docentes",
