@@ -285,11 +285,11 @@ body.clean .ominus{display:none}
 .fl-y b{writing-mode:vertical-rl; transform:rotate(180deg)}
 .fl-y b,.fl-x b{color:var(--ink); font-size:1.2em}
 .fl-col{flex:1; min-width:0; display:flex; flex-direction:column; gap:6px}
-.fl-plot{position:relative; flex:1; min-height:0; border-radius:16px; overflow:hidden; border:3px solid var(--line); cursor:crosshair; touch-action:manipulation}
+.fl-plot{position:relative; flex:1; min-height:0; border-radius:16px; overflow:hidden; border:3px solid var(--line); cursor:crosshair; touch-action:manipulation; background:var(--tile)}
 .fl-plot svg{position:absolute; inset:0; width:100%; height:100%}
-.z-over{fill:color-mix(in srgb,var(--no) 20%,var(--tile))}
-.z-bore{fill:color-mix(in srgb,#2f86c4 20%,var(--tile))}
-.z-flow{fill:color-mix(in srgb,var(--ok) 26%,var(--tile))}
+.z-over{fill:var(--no); fill-opacity:.2}
+.z-bore{fill:#2f86c4; fill-opacity:.2}
+.z-flow{fill:var(--ok); fill-opacity:.26} /* ohne color-mix: ältere Safari-Versionen füllten die Flächen sonst schwarz */
 .z-mid{stroke:var(--ok); stroke-width:.4; stroke-dasharray:1.5 1.5; vector-effect:non-scaling-stroke; opacity:.6}
 .fl-lab{position:absolute; font-weight:900; font-size:clamp(16px,min(3.4vw,4vh),40px); pointer-events:none; opacity:.85}
 .fl-lab.over{left:6%; top:7%; color:var(--no)}
@@ -2585,10 +2585,10 @@ function tbVis(k) {
 const tbIsClean = p => !!p && /aufr[äa]um/i.test(p.text || '');
 /* Aufräumen: Ton und Sprachansage beim Start (Stimme des Geräts, offline, nichts geht ins Netz) */
 const CLEAN_SAY = {
-  de: 'Achtung! Aufräumzeit. Erledigt jetzt eure Aufgabe nach dem Aufräumplan.',
-  en: 'Attention! Time to tidy up. Please do your job on the clean-up plan now.',
-  fr: 'Attention ! C’est l’heure de ranger. Faites maintenant votre tâche du plan de rangement.',
-  es: '¡Atención! Hora de recoger. Haced ahora vuestra tarea según el plan de limpieza.'
+  de: 'Achtung, Aufräumzeit! Räumt zuerst euren Arbeitsplatz auf. Erledigt danach eure Aufgabe nach dem Aufräumplan.',
+  en: 'Attention, time to tidy up! First tidy up your workplace. Then do your job on the clean-up plan.',
+  fr: 'Attention, c’est l’heure de ranger ! Rangez d’abord votre poste de travail. Ensuite, faites votre tâche du plan de rangement.',
+  es: '¡Atención, hora de recoger! Primero recoged vuestro puesto de trabajo. Después haced vuestra tarea según el plan de limpieza.'
 };
 function cleanCue() {
   if (S.cleanTone) { unlockAudio(); tbTone(988, 0.22, 0); tbTone(784, 0.22, 0.26); tbTone(659, 0.45, 0.52); }
