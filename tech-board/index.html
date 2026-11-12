@@ -1833,6 +1833,7 @@ const FOKUS = {
     '<path d="M66 72 l6 6 12-12" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' }
 };
 const FO_KEYS = Object.keys(FOKUS);
+const FO_SHORT = { sicher: 'Unterweisung' }; // kurze Beschriftung für die Knöpfe
 function renderFokus() {
   if (!FOKUS[S.fokus]) S.fokus = 'frei';
   const f = FOKUS[S.fokus];
@@ -1848,7 +1849,7 @@ function buildFokus() {
   FO_KEYS.forEach(k => {
     const b = document.createElement('button');
     b.className = 'btn'; b.dataset.fo = k; b.title = FOKUS[k].name; b.setAttribute('aria-label', FOKUS[k].name);
-    b.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true">${FOKUS[k].svg}</svg>`;
+    b.innerHTML = `<svg viewBox="0 0 100 100" aria-hidden="true">${FOKUS[k].svg}</svg><span class="lbl">${FO_SHORT[k] || FOKUS[k].name}</span>`;
     b.addEventListener('click', () => { S.fokus = k; save(); renderFokus(); });
     box.appendChild(b);
   });
@@ -2953,6 +2954,7 @@ const D = {
   'Auto: Nach Ablauf der Zeit springt der Fahrplan zur nächsten Phase. Starte den Timer.': ['Auto: when time is up, the plan moves to the next phase. Start the timer.', 'Auto : à la fin du temps, le plan passe à la phase suivante. Lance le minuteur.'],
   'Auto aus: Du schaltest die Phasen selbst weiter.': ['Auto off: you move the phases on yourself.', 'Auto désactivé : tu fais avancer les phases toi-même.'],
   'Auto': ['Auto', 'Auto'],
+  'Unterweisung': ['Safety briefing', 'Consignes'],
   'Sprachansage beim Alarm': ['Spoken announcement during alarm', 'Annonce vocale pendant l’alarme'],
   'Sicherheits\u00adunterweisung': ['Safety briefing', 'Consignes de sécurité'],
   'Alle hören zu': ['Everyone listens', 'Tout le monde écoute'],
