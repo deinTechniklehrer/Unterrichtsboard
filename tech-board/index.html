@@ -619,7 +619,24 @@ body.scroll .cl-head svg{width:40px}body.scroll .cl-head b{font-size:20px}body.s
 .cl-n .btn{min-width:38px;padding:0}
 .cl-n b{min-width:2ch;text-align:center;font-size:18px}
 .cl-hint{font-size:12.5px;color:#555;flex-basis:100%;text-align:center}
-/* Aufräumplan bleibt auch in „Nur Anzeige“ voll bedienbar */
+/* Aufräumplan bleibt auch in „Nur Anzeige“ voll bedienbar; mit PIN sperrbar */
+.cl-lockbtn{display:inline-flex;align-items:center;gap:6px}
+.cl-lockbtn svg{width:18px;height:18px}
+.cl-lockhint{display:none;font-size:12.5px;color:#555;flex-basis:100%;text-align:center;font-weight:700}
+body.cl-locked .cl-lockhint{display:block}
+body.cl-locked .cl-hint,body.cl-locked #clShuffle,body.cl-locked .cl-n,body.cl-locked #clAllFree,body.cl-locked #clEditBtn{display:none}
+body.cl-locked .cl-lockbtn{background:#111;color:#fff}
+body.cl-locked #tCleanMsg .puck{cursor:default}
+#pinDlg{width:min(380px,92vw)}
+.pin-dlg{text-align:center}
+.pin-in{display:block;width:100%;height:56px;margin:10px 0 0;border:2px solid var(--line);border-radius:14px;background:var(--tile);color:var(--ink);font:inherit;font-size:30px;font-weight:900;letter-spacing:.5em;text-align:center;padding-left:.5em}
+.pin-in:focus{outline:none;border-color:var(--accent)}
+.pin-in::placeholder{font-size:16px;letter-spacing:0;font-weight:600;color:var(--muted)}
+.pin-in[hidden]{display:none}
+.pin-msg{min-height:1.4em;margin-top:8px;font-weight:800;color:#c62828}
+@keyframes pinShake{0%,100%{transform:none}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.pin-dlg.shake{animation:pinShake .3s 2}
+@media (prefers-reduced-motion:reduce){.pin-dlg.shake{animation:none}}
 .tb-clean-btns{flex:none}
 .tb-clean .btn{background:#fff;color:#111;border-color:#111}
 body.tight .tb-s{font-size:clamp(9.5px,.9vw,13px);gap:1px}
@@ -852,6 +869,8 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
           <span class="cl-n"><span>Schüler:innen</span><button class="btn" id="clMinus" aria-label="Eine Person weniger">−</button><b id="clN">16</b><button class="btn" id="clPlus" aria-label="Eine Person mehr">+</button></span>
           <button class="btn" id="clAllFree">Alle zurück</button>
           <button class="btn" id="clEditBtn">Plan bearbeiten</button>
+          <button class="btn cl-lockbtn" id="clLock" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Sperren</span></button>
+          <span class="cl-lockhint">Plan gesperrt. Zum Ändern mit PIN entsperren.</span>
           <span class="cl-hint">Jeder Auftrag bekommt seine Nummern (Fegen und Werkzeug zwei), die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.</span>
         </div>
         <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
@@ -962,7 +981,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ (rote Karte oben). Ein Tipp stellt auf „Sicher“ (grüne Karte). „Alarm“ gibt dreimal einen deutlichen Signalton und sagt dann mit der Stimme des Geräts „Achtung! Ein Sicherheitsverstoß liegt vor. Alle setzen sich auf ihren Platz.“ Das wiederholt sich, und der Hintergrund blinkt rot, bis du den Alarm mit einem zweiten Tipp beendest. Die Ansage lässt sich in den Einstellungen abschalten. Am iPad muss der Ton laut gestellt sein.</p>
     <p><strong>Ansagen:</strong> Alarm- und Aufräumansage sind Audiodateien mit KI-Stimmen. Deutsch: erzeugt mit dem KI-Multimedia-Tool von fobizz. Englisch und Französisch: erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Die Dateien werden mit dem Board offline gespeichert. Lässt sich eine Datei nicht abspielen, spricht die Stimme des Geräts.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
-    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen und Werkzeug je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
+    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen und Werkzeug je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Holz, Metall, Elektro oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“. Antippen des großen Bildes schaltet weiter.</p>
     <p><strong>APE, Sicherheitsregeln und Gefährdungen:</strong> APE heißt Arbeitsplatzeinrichtung und ist anfangs ausgeblendet (Einstellungen). Holz und Metall zeigen ein Foto, Antippen vergrößert es. Die Sicherheitsregeln (Fenster auf Kipp, Schutzbrille, Hände waschen, Gehörschutz) haben eine eigene Kachel. Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du bei den Sicherheitsregeln nur die gewählten; sind es 1 bis 3, werden sie größer. Die Gefährdungen bleiben vollständig sichtbar. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
@@ -996,6 +1015,20 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <div class="dlg-foot">
       <button class="btn danger" id="planClear">Alles leeren</button>
       <button class="btn primary" id="planDone">Fertig</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="pinDlg" aria-labelledby="pinTitle">
+  <div class="dlg pin-dlg">
+    <h2 id="pinTitle">Aufräumplan sperren</h2>
+    <p id="pinText">Gib eine 4-stellige PIN ein. Zum Entsperren brauchst du sie wieder.</p>
+    <input id="pinIn" class="pin-in" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="PIN, 4 Ziffern">
+    <input id="pinIn2" class="pin-in" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="PIN wiederholen" placeholder="wiederholen">
+    <div class="pin-msg" id="pinMsg" role="alert"></div>
+    <div class="dlg-foot">
+      <button class="btn" id="pinCancel">Abbrechen</button>
+      <button class="btn primary" id="pinOk">Sperren</button>
     </div>
   </div>
 </dialog>
@@ -1101,7 +1134,7 @@ const DEF = {
     { text: 'Aufräumen', so: '', min: 10 },
     { text: 'Sicherung', so: 'plenum', min: 5 }
   ],
-  planCur: 0, planMin: 0, planAuto: false,
+  planCur: 0, planMin: 0, planAuto: false, clLock: false, clPin: '',
   timer: { duration: 300, remaining: 300, endAt: null },
   sozial: 'einzel', ipad: true, ipadPos: 'open', ki: false, kiLvl: 0,
   reflex: {
@@ -1572,13 +1605,13 @@ function placeArrow() {
 }
 const PLAN_AUTO = () => !!S.planAuto && !!S.show.plan;
 function renderAuto() { const b = $('#planAuto'); if (b) b.setAttribute('aria-pressed', String(!!S.planAuto)); }
-function setPlanCur(i) {
+function setPlanCur(i, manual) {
   if (!S.plan.length) return;
   const prev = S.planCur;
   S.planCur = Math.max(0, Math.min(S.plan.length - 1, i));
   // Minuten der Phase in den Timer laden; im Auto-Modus läuft er gleich los
   const pm = S.plan[S.planCur].min;
-  if (pm > 0 && (S.planCur !== prev || PLAN_AUTO())) { tSet(pm); if (PLAN_AUTO()) tStart(); }
+  if (pm > 0 && (S.planCur !== prev || PLAN_AUTO())) { tSet(pm); if (PLAN_AUTO() && !manual) tStart(); }
   tbSync();
   const so = S.plan[S.planCur].so;
   if (SOZIAL[so] && S.sozial !== so) { S.sozial = so; renderSozial(); }
@@ -2542,12 +2575,12 @@ function cleanCue() {
     setTimeout(async () => { if (await voicePlay('clean')) return; speechSynthesis.speak(u); }, S.cleanTone ? 1100 : 0);
   } catch (e) { }
 }
-let cleanCued = false;
+let cleanCued = false, tbManualOpen = false;
 function tbSetCleaning(v) {
   if (tbCleaning === v) return;
   tbCleaning = v; cleanCued = false; tbRender(); queueLayout();
   // Ansage kommt mit dem Start des Timers; läuft er schon, sofort
-  if (v && S.timer.endAt) { cleanCued = true; cleanCue(); }
+  if (v && S.timer.endAt && !tbManualOpen) { cleanCued = true; cleanCue(); }
 }
 function tbSync() { tbSetCleaning(!!S.show.plan && tbIsClean(S.plan[S.planCur])); }
 function tbRender() {
@@ -2758,7 +2791,7 @@ function clEditable() { if (!Array.isArray(S.clTasks)) S.clTasks = CL_TASKS.map(
 function clEditInit() {
   const dlg = $('#clDlg');
   const close = () => { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); clRender(); };
-  $('#clEditBtn').addEventListener('click', () => { clEditRender(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); });
+  $('#clEditBtn').addEventListener('click', () => { if (S.clLock) return; clEditRender(); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); });
   $('#clEditDone').addEventListener('click', close);
   dlg.addEventListener('click', e => { if (e.target === dlg) close(); });
   dlg.addEventListener('close', clRender);
@@ -2791,10 +2824,53 @@ function clEditInit() {
     S.clTasks = null; save(); clEditRender();
   });
 }
+/* Aufräumplan mit 4-stelliger PIN sperren (gespeichert wird nur ein Prüfwert, nicht die PIN selbst) */
+async function clPinHash(pin) {
+  const txt = 'deinTechniklehrer-aufraeumplan:' + pin;
+  try { const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt)); return [...new Uint8Array(d)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+  catch (e) { let h = 5381; for (const c of txt) h = (h * 33 + c.charCodeAt(0)) >>> 0; return 'h' + h.toString(16); }
+}
+function clLockRender() {
+  document.body.classList.toggle('cl-locked', !!S.clLock);
+  const b = $('#clLock'); if (!b) return;
+  b.setAttribute('aria-pressed', String(!!S.clLock));
+  b.querySelector('span').textContent = S.clLock ? 'Entsperren' : 'Sperren';
+  if (S.clLock) clSel = 0;
+}
+function clPinInit() {
+  const dlg = $('#pinDlg'), in1 = $('#pinIn'), in2 = $('#pinIn2'), msg = $('#pinMsg'), box = dlg.querySelector('.pin-dlg');
+  const close = () => { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); };
+  const fail = t => { msg.textContent = t; box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); in1.value = ''; in2.value = ''; in1.focus(); };
+  const digits = el => el.addEventListener('input', () => { el.value = el.value.replace(/\D/g, '').slice(0, 4); if (el.value.length === 4) { if (el === in1 && !in2.hidden) in2.focus(); else $('#pinOk').click(); } });
+  digits(in1); digits(in2);
+  [in1, in2].forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#pinOk').click(); } }));
+  $('#clLock').addEventListener('click', () => {
+    const locking = !S.clLock;
+    $('#pinTitle').textContent = locking ? 'Aufräumplan sperren' : 'Aufräumplan entsperren';
+    $('#pinText').textContent = locking ? 'Gib eine 4-stellige PIN ein. Zum Entsperren brauchst du sie wieder.' : 'Gib die PIN ein, mit der du den Plan gesperrt hast.';
+    $('#pinOk').textContent = locking ? 'Sperren' : 'Entsperren';
+    in2.hidden = !locking; in1.value = ''; in2.value = ''; msg.textContent = '';
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    setTimeout(() => in1.focus(), 50);
+  });
+  $('#pinCancel').addEventListener('click', close);
+  $('#pinOk').addEventListener('click', async () => {
+    const a = in1.value;
+    if (!/^\d{4}$/.test(a)) return fail('Bitte genau 4 Ziffern eingeben.');
+    if (!S.clLock) {
+      if (in2.value !== a) return fail('Die beiden PINs stimmen nicht überein.');
+      S.clPin = await clPinHash(a); S.clLock = true; save(); clLockRender(); clRender(); close(); toast('Aufräumplan gesperrt.');
+    } else {
+      if (await clPinHash(a) !== S.clPin) return fail('Falsche PIN.');
+      S.clLock = false; save(); clLockRender(); clRender(); close(); toast('Aufräumplan entsperrt.');
+    }
+  });
+  clLockRender();
+}
 function clInit() {
   const box = $('#tCleanMsg');
   box.addEventListener('pointerdown', e => {
-    const p = e.target.closest('.puck'); if (!p || p.classList.contains('ghost')) return;
+    const p = e.target.closest('.puck'); if (!p || p.classList.contains('ghost') || S.clLock) return;
     e.preventDefault();
     clDrag = { n: +p.dataset.n, x: e.clientX, y: e.clientY, el: p, ghost: null, id: e.pointerId };
   });
@@ -2818,14 +2894,15 @@ function clInit() {
   };
   addEventListener('pointerup', end); addEventListener('pointercancel', e => { if (clDrag && clDrag.ghost) clDrag.ghost.remove(); clDrag = null; clRender(); });
   box.addEventListener('click', e => {
-    if (!clSel || e.target.closest('.puck')) return;
+    if (!clSel || S.clLock || e.target.closest('.puck')) return;
     const z = e.target.closest('[data-zone]'); if (z) clMove(clSel, z.dataset.zone);
   });
-  $('#clShuffle').addEventListener('click', clShuffle);
+  $('#clShuffle').addEventListener('click', () => { if (!S.clLock) clShuffle(); });
+  clPinInit();
   clEditInit();
-  $('#clAllFree').addEventListener('click', () => { const st = clState(); st.a = st.a.map(v => v === 'out' ? 'out' : ''); clSel = 0; save(); clRender(); });
-  $('#clMinus').addEventListener('click', () => { const st = clState(); if (st.n > 1) { st.n--; st.a.length = st.n; save(); clRender(); } });
-  $('#clPlus').addEventListener('click', () => { const st = clState(); if (st.n < 32) { st.n++; save(); clRender(); } });
+  $('#clAllFree').addEventListener('click', () => { if (S.clLock) return; const st = clState(); st.a = st.a.map(v => v === 'out' ? 'out' : ''); clSel = 0; save(); clRender(); });
+  $('#clMinus').addEventListener('click', () => { if (S.clLock) return; const st = clState(); if (st.n > 1) { st.n--; st.a.length = st.n; save(); clRender(); } });
+  $('#clPlus').addEventListener('click', () => { if (S.clLock) return; const st = clState(); if (st.n < 32) { st.n++; save(); clRender(); } });
   clRender();
 }
 function tbInit() {
@@ -2850,8 +2927,14 @@ function tbInit() {
   $('#cleanEnd').addEventListener('click', tbEndClean);
   $('#tbClean').addEventListener('click', () => {
     if (tbCleaning) return tbEndClean();
-    if (S.show.plan) { for (let i = S.planCur; i < S.plan.length; i++) if (tbIsClean(S.plan[i])) return setPlanCur(i); }
-    tbSetCleaning(true);
+    // von Hand geöffnet: Timer und Ansage starten nie von selbst, auch nicht im Auto-Modus
+    tbManualOpen = true;
+    try {
+      let done = false;
+      if (S.show.plan) { for (let i = S.planCur; i < S.plan.length; i++) if (tbIsClean(S.plan[i])) { setPlanCur(i, true); done = true; break; } }
+      if (!done) tbSetCleaning(true);
+    } finally { tbManualOpen = false; }
+    toast(S.planAuto ? 'Auto-Modus ist an, Aufräumen wurde aber von Hand geöffnet: Starte den Timer selbst. Mit dem Start kommt die Ansage.' : 'Starte den Timer, dann kommt die Ansage.');
   });
   $('#planAddClean').addEventListener('click', () => {
     if (S.plan.length >= 12) return toast('Mehr als 12 Phasen passen nicht in den Fahrplan.');
@@ -2955,6 +3038,24 @@ const D = {
   'Auto aus: Du schaltest die Phasen selbst weiter.': ['Auto off: you move the phases on yourself.', 'Auto désactivé : tu fais avancer les phases toi-même.'],
   'Auto': ['Auto', 'Auto'],
   'Unterweisung': ['Safety briefing', 'Consignes'],
+  'Sperren': ['Lock', 'Verrouiller'],
+  'Entsperren': ['Unlock', 'Déverrouiller'],
+  'Plan gesperrt. Zum Ändern mit PIN entsperren.': ['Plan locked. Unlock with the PIN to change it.', 'Plan verrouillé. Déverrouille avec le code pour le modifier.'],
+  'Aufräumplan sperren': ['Lock clean-up plan', 'Verrouiller le plan de rangement'],
+  'Aufräumplan entsperren': ['Unlock clean-up plan', 'Déverrouiller le plan de rangement'],
+  'Gib eine 4-stellige PIN ein. Zum Entsperren brauchst du sie wieder.': ['Enter a 4-digit PIN. You will need it again to unlock.', 'Saisis un code à 4 chiffres. Il te faudra pour déverrouiller.'],
+  'Gib die PIN ein, mit der du den Plan gesperrt hast.': ['Enter the PIN you used to lock the plan.', 'Saisis le code utilisé pour verrouiller le plan.'],
+  'wiederholen': ['repeat', 'répéter'],
+  'Abbrechen': ['Cancel', 'Annuler'],
+  'Bitte genau 4 Ziffern eingeben.': ['Please enter exactly 4 digits.', 'Saisis exactement 4 chiffres.'],
+  'Die beiden PINs stimmen nicht überein.': ['The two PINs do not match.', 'Les deux codes ne correspondent pas.'],
+  'Falsche PIN.': ['Wrong PIN.', 'Code incorrect.'],
+  'Aufräumplan gesperrt.': ['Clean-up plan locked.', 'Plan de rangement verrouillé.'],
+  'Aufräumplan entsperrt.': ['Clean-up plan unlocked.', 'Plan de rangement déverrouillé.'],
+  'PIN, 4 Ziffern': ['PIN, 4 digits', 'Code, 4 chiffres'],
+  'PIN wiederholen': ['Repeat PIN', 'Répéter le code'],
+  'Auto-Modus ist an, Aufräumen wurde aber von Hand geöffnet: Starte den Timer selbst. Mit dem Start kommt die Ansage.': ['Auto mode is on, but clean-up was opened by hand: start the timer yourself. The announcement comes with the start.', 'Le mode auto est activé, mais le rangement a été ouvert à la main : lance le minuteur toi-même. L’annonce vient au démarrage.'],
+  'Starte den Timer, dann kommt die Ansage.': ['Start the timer, then the announcement plays.', 'Lance le minuteur, puis l’annonce suit.'],
   'Sprachansage beim Alarm': ['Spoken announcement during alarm', 'Annonce vocale pendant l’alarme'],
   'Sicherheits\u00adunterweisung': ['Safety briefing', 'Consignes de sécurité'],
   'Alle hören zu': ['Everyone listens', 'Tout le monde écoute'],
