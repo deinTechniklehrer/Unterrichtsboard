@@ -426,10 +426,11 @@ body.clean .plan-ctrl .btn.plan-auto:not([aria-pressed="true"]){visibility:hidde
 .a-main{container-name:amain}
 .a-inner{width:100%; height:100%; display:flex; align-items:center; justify-content:center; gap:6cqw}
 .housing{
-  height:min(94cqh,105cqw); aspect-ratio:.42; flex:none; background:var(--housing); border-radius:22% / 9.5%;
-  display:flex; flex-direction:column; justify-content:space-around; align-items:center; padding:4% 0; cursor:pointer;
+  height:min(94cqh,105cqw); aspect-ratio:.38; flex:none; background:var(--housing); border-radius:24% / 9%;
+  display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; padding:0; cursor:pointer;
 }
-.lamp{width:72%; aspect-ratio:1; border-radius:50%; background:var(--lamp-off); transition:background .2s, box-shadow .2s}
+/* Leuchten mittig: Abstand zum Rand und zwischen den Leuchten gleich groß */
+.lamp{width:63%; flex:none; aspect-ratio:1; border-radius:50%; background:var(--lamp-off); transition:background .2s, box-shadow .2s}
 .lamp.on.red{background:#ff3b30; box-shadow:0 0 18px #ff3b30aa}
 .lamp.on.yellow{background:#ffcc00; box-shadow:0 0 18px #ffcc00aa}
 .lamp.on.green{background:#30d158; box-shadow:0 0 18px #30d158aa}
@@ -1026,7 +1027,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Dobot, 3D-Druck, Arduino oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“, dann suchen sich alle selbst etwas aus. Antippen des großen Bildes schaltet weiter.</p>
     <p><strong>APE:</strong> Wähle Robotik oder Arduino. Robotik zeigt ein Foto des Arbeitsplatzes (Laptop, Not-Aus, Roboterarm), Antippen vergrößert es.</p>
     <p><strong>Gefährdungen:</strong> Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
-    <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu. Jede Phase kann eine Dauer in Minuten haben (Vorlage: Einstieg 5, Arbeitsphase 70, Aufräumen 10, Sicherung 5). Beim Wechsel der Phase lädt der Timer diese Zeit. Mit dem Auto-Knopf (Pfeilkreis mit Play-Zeichen) springt der Fahrplan nach Ablauf der Zeit selbst zur nächsten Phase und startet den Timer neu.</p>
+    <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu. Jede Phase kann eine Dauer in Minuten haben (Vorlage: Einstieg 5, Arbeitsphase 70, Aufräumen 10, Sicherung 5). Beim Wechsel der Phase lädt der Timer diese Zeit. Mit dem Auto-Knopf (Pfeilkreis mit Play-Zeichen) springt der Fahrplan nach Ablauf der Zeit selbst zur nächsten Phase und startet den Timer neu. Bei einer Phase mit „Sicherung“ im Namen wechselt die Sozialform auf Plenum (wenn die Phase keine eigene hat) und der Arbeitsort auf „Nur im Raum“.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
     <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
@@ -1647,6 +1648,11 @@ function setPlanCur(i, manual) {
   tbSync();
   const so = S.plan[S.planCur].so;
   if (SOZIAL[so] && S.sozial !== so) { S.sozial = so; renderSozial(); }
+  // Sicherung: alle ins Plenum (wenn die Phase keine eigene Sozialform hat) und zurück in den Klassenraum
+  if (S.planCur !== prev && /sicherung/i.test(S.plan[S.planCur].text || '')) {
+    if (!SOZIAL[S.plan[S.planCur].so] && S.sozial !== 'plenum') { S.sozial = 'plenum'; renderSozial(); }
+    if (S.raus) { S.raus = false; renderRaus(); }
+  }
   save();
   // nur Klassen und Pfeil aktualisieren, damit der Pfeil sichtbar „rutscht“
   $$('#planList .prow').forEach(r => { const k = +r.dataset.i; r.classList.toggle('past', k < S.planCur); r.classList.toggle('cur', k === S.planCur); });

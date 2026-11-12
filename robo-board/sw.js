@@ -1,5 +1,5 @@
 /* Robo-Board – Offline-Speicher. Mit Internet wird zuerst die neueste Fassung geladen. */
-const CACHE='roboboard-v27';
+const CACHE='roboboard-v28';
 const FILES=["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png", "./audio/alarm-de.mp3", "./audio/clean-de.mp3", "./audio/alarm-en.mp3", "./audio/alarm-fr.mp3", "./audio/clean-en.mp3", "./audio/clean-fr.mp3", "./audio/alarm-es.mp3", "./audio/clean-es.mp3", "./audio/ipad-closed-de.mp3", "./audio/ipad-bag-de.mp3", "./audio/ipad-rules-de.mp3", "./audio/ipad-closed-en.mp3", "./audio/ipad-closed-fr.mp3", "./audio/ipad-closed-es.mp3", "./audio/ipad-bag-en.mp3", "./audio/ipad-bag-fr.mp3", "./audio/ipad-bag-es.mp3", "./audio/ipad-rules-en.mp3", "./audio/ipad-rules-fr.mp3", "./audio/ipad-rules-es.mp3", "./ape-robotik.jpg"];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n.startsWith('roboboard-')&&n!==CACHE).map(n=>caches.delete(n)))).then(()=>self.clients.claim())));
