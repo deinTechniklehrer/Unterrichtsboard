@@ -73,9 +73,11 @@ body.standalone #btnFS{display:none}
 body.basic #btnMeet, body.basic #btnReflex{display:none!important}
 /* Passt die Kopfleiste nicht (lange Sprachen, schmale Geräte), blendet fitHeader() Beschriftungen stufenweise aus */
 body.hdr1 #btnBasic .lbl, body.hdr1 #btnMeet .lbl, body.hdr1 #btnTheme .lbl, body.hdr1 #btnFS .lbl, body.hdr1 #btnClean .lbl{display:none}
-body.hdr1 #btnBasic, body.hdr1 #btnMeet, body.hdr1 #btnTheme, body.hdr1 #btnFS, body.hdr1 #btnClean{width:clamp(38px,5.4vh,50px); padding:0}
+@media (min-width:721px){ body.hdr1 #btnBasic, body.hdr1 #btnMeet, body.hdr1 #btnTheme, body.hdr1 #btnFS, body.hdr1 #btnClean{width:clamp(38px,5.4vh,50px); padding:0} }
 body.hdr2 .hbtn .lbl{display:none}
-body.hdr2 .hbtn:not(#btnLang){width:clamp(38px,5.4vh,50px); padding:0}
+@media (min-width:721px){ body.hdr2 .hbtn:not(#btnLang){width:clamp(38px,5.4vh,50px); padding:0} }
+/* Schmal mit iPad-Verstoß-Knopf: Hell/Dunkel gibt es dann nur in den Einstellungen, kein Vollbild-Knopf */
+@media (max-width:720px){ body.ipvOn #btnTheme, body.ipvOn #btnFS{display:none!important} }
 #basicNote{margin:0 0 10px; padding:10px 12px; border-radius:12px; background:var(--accent); color:var(--accent-ink); font-weight:600; line-height:1.35}
 #basicNote[hidden]{display:none}
 .hbtn .i-sun{display:none}
@@ -85,7 +87,7 @@ body.hdr2 .hbtn:not(#btnLang){width:clamp(38px,5.4vh,50px); padding:0}
 @media (max-width:900px){ #btnReflex .lbl, #btnPlan .lbl, #btnInput .lbl, #btnBasic .lbl{display:none} #btnReflex, #btnPlan, #btnInput, #btnBasic{width:clamp(38px,5.4vh,50px); padding:0} }
 @media (max-width:480px){ #btnFS{display:none} .logo{max-width:24vw} #btnReflex, #btnPlan, #btnInput, #btnTheme, #btnMeet, #btnBasic{width:36px; height:36px} }
 @media (max-width:360px){ .logo{display:none!important} }
-@media (max-width:380px){ header{gap:3px!important} .hbtn, #btnLang, #btnMeet, #btnBasic, #btnReflex, #btnPlan, #btnInput, #btnTheme{width:34px!important; height:34px!important} }
+@media (max-width:380px){ header{gap:3px!important} .hbtn, #btnLang, #btnMeet, #btnIpv, #btnBasic, #btnReflex, #btnPlan, #btnInput, #btnTheme{width:34px!important; height:34px!important} }
 @media (max-width:400px){ .clock{display:none} }
 @media (max-width:720px){
   .hbtn .lbl{display:none}
@@ -492,6 +494,14 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 /* Treffpunkt */
 .meetv{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;background:#0d4f8b;color:#fff;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
 .meetv[hidden]{display:none}
+.ipvv{background:#9a3412}
+.ipvv .mv-t{text-transform:none;letter-spacing:.01em}
+.ipvv .mv-h{color:#fff}
+.ipvv .mv-bar .btn.primary{color:#9a3412}
+#btnIpv{background:#c2410c;color:#fff;border-color:#c2410c}
+#btnIpv[hidden]{display:none}
+@media (max-width:1180px){ #btnIpv .lbl{display:none} #btnIpv{width:clamp(38px,5.4vh,50px); padding:0} }
+@media (max-width:480px){ #btnIpv{width:36px; height:36px} }
 .mv-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;text-align:center;animation:mvIn .35s ease-out}
 .mv-main>svg{width:min(20vh,18vw);height:auto;animation:mvPulse 1.6s ease-in-out 3}
 .mv-t{font-size:clamp(44px,min(11vw,17vh),170px);font-weight:900;letter-spacing:.04em;text-transform:uppercase;line-height:1}
@@ -550,6 +560,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
       <span class="lbl">Fahrplan</span>
     </button>
     <button class="hbtn" id="btnMeet" title="Treffpunkt: alle kommen zusammen" aria-label="Treffpunkt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3.2"/><path d="M6 21v-2.2a6 6 0 0 1 12 0V21"/><circle cx="4.6" cy="10.2" r="2.3"/><path d="M1.2 19.5v-1.3a3.7 3.7 0 0 1 4.6-3.6"/><circle cx="19.4" cy="10.2" r="2.3"/><path d="M22.8 19.5v-1.3a3.7 3.7 0 0 0-4.6-3.6"/></svg><span class="lbl">Treffpunkt</span></button>
+    <button class="hbtn" id="btnIpv" hidden title="iPad-Verstoß: Ansage und iPad-Nutzung eine Stufe herunter" aria-label="iPad-Verstoß"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M12 7.5v6M12 17v.01"/></svg><span class="lbl">iPad-Verstoß</span></button>
     <button class="hbtn" id="btnReflex" title="Reflexion öffnen" aria-label="Reflexion">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5A8.5 8.5 0 1 1 21 12z"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.2 2.4c-.6.2-.8.6-.8 1.2v.4M12 16.6v.1"/></svg>
       <span class="lbl">Reflexion</span>
@@ -757,6 +768,10 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <button class="btn primary" id="meetClose">Weiterarbeiten</button>
   </div>
 </div>
+<div id="ipvView" class="meetv ipvv" hidden role="dialog" aria-modal="true" aria-label="iPad-Verstoß">
+  <div class="mv-main" id="ipvMain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M12 7.5v6M12 17v.01"/></svg><div class="mv-t">iPad-Verstoß</div><div class="mv-h" id="ipvHead">iPads zuklappen</div><div class="mv-s">Gegen die iPad-Regeln wurde verstoßen.</div></div>
+  <div class="mv-bar"><button class="btn" id="ipvTone">Ton nochmal</button><button class="btn primary" id="ipvClose">Weiterarbeiten</button></div>
+</div>
 <div id="qrView" hidden role="dialog" aria-label="QR-Code groß"><div class="qrv-box"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" aria-hidden="true"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#000" d="M2 2.5h7m2 0h5m2 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m3 0h6m1 0h2m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h3m3 0h2m4 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h1m1 0h1m2 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m4 0h1m3 0h5m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h2m2 0h1m2 0h1m2 0h1m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m3 0h1m5 0h5m-23 1h1m1 0h5m2 0h1m3 0h5m1 0h1m2 0h1m3 0h5m-29 1h3m2 0h1m3 0h2m1 0h1m1 0h1m2 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h2m5 0h4m3 0h1m1 0h1m3 0h1m1 0h2m-31 1h1m1 0h2m2 0h3m1 0h2m2 0h1m4 0h2m1 0h1m2 0h1m1 0h3m1 0h1m-30 1h2m1 0h2m1 0h3m4 0h2m1 0h1m2 0h2m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h2m4 0h2m1 0h3m2 0h1m1 0h2m1 0h1m1 0h1m2 0h1m4 0h2m-33 1h1m1 0h1m2 0h3m1 0h3m2 0h5m6 0h2m2 0h3m-29 1h3m1 0h2m1 0h1m2 0h1m1 0h2m1 0h5m1 0h3m2 0h2m-30 1h1m2 0h1m1 0h2m1 0h7m1 0h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h1m-33 1h3m5 0h1m1 0h2m1 0h2m1 0h5m2 0h1m2 0h2m1 0h2m1 0h1m-30 1h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m-29 1h2m3 0h1m2 0h1m5 0h1m1 0h2m1 0h2m1 0h1m1 0h5m1 0h1m-30 1h6m2 0h5m1 0h1m1 0h1m2 0h4m1 0h3m-30 1h2m1 0h1m3 0h2m2 0h1m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m2 0h1m2 0h1m-33 1h1m3 0h3m2 0h2m2 0h1m1 0h1m4 0h2m2 0h2m1 0h1m1 0h1m1 0h1m-32 1h1m1 0h1m2 0h1m4 0h3m1 0h3m3 0h2m6 0h1m1 0h2m-32 1h1m2 0h1m1 0h3m1 0h6m2 0h1m4 0h7m2 0h2m-25 1h2m3 0h1m2 0h1m2 0h3m2 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h1m2 0h1m1 0h2m4 0h1m2 0h2m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h3m1 0h1m3 0h1m4 0h1m1 0h2m3 0h4m-32 1h1m1 0h3m1 0h1m1 0h7m2 0h1m1 0h1m2 0h1m1 0h6m1 0h1m-32 1h1m1 0h3m1 0h1m1 0h4m4 0h1m1 0h3m2 0h3m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h5m1 0h1m1 0h3m1 0h2m1 0h1m-30 1h1m5 0h1m2 0h3m3 0h2m1 0h1m1 0h2m6 0h3m-31 1h7m1 0h1m1 0h1m2 0h1m1 0h1m1 0h3m2 0h3m2 0h1m2 0h2"/></svg></div><b>Lernplattformen AWT</b><span>deintechniklehrer.github.io/Lernplattformen/schueler</span><span class="qrv-close">Antippen zum Schließen</span></div>
 <dialog id="dlg">
   <div class="dlg">
@@ -777,6 +792,12 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <label class="row">Arbeiten außerhalb des Klassenraums <input type="checkbox" class="sw" data-show="raus"></label>
     <label class="row">QR-Code Lernplattformen AWT <input type="checkbox" class="sw" data-show="qr"></label>
     <label class="row">Treffpunkt-Knopf oben <input type="checkbox" class="sw" id="optMeet"></label>
+
+    <h3>iPad-Verstoß</h3>
+    <label class="row">Knopf „iPad-Verstoß“ anzeigen <input type="checkbox" class="sw" id="optIpvBtn"></label>
+    <label class="row">iPad-Nutzung eine Stufe herunterschalten <input type="checkbox" class="sw" id="optIpvStep"></label>
+    <label class="row">Ton und Ansage <input type="checkbox" class="sw" id="optIpvSound"></label>
+    <p>Ein Tipp auf den Knopf zeigt groß „iPad-Verstoß“, spielt einen Ton und sagt an, was die Klasse tun soll. Die Stufen: erlaubt → zugeklappt → Schultasche.</p>
 
     <h3>Darstellung &amp; Ton</h3>
     <div class="row">Farben
@@ -812,6 +833,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
     <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
     <p><strong>Basic:</strong> Der Knopf mit den vier Kästchen oben schaltet auf die Grundausstattung: Timer, Aufgabe, Sozialform und iPad. Fahrplan und Input holst du dir über ihre Knöpfe oben dazu, Treffpunkt und Reflexion sind in Basic ausgeblendet. Basic blendet nur aus, alles Eingestellte bleibt erhalten. Ein zweiter Tipp auf „Basic“ bringt das Board zurück, wie du es eingestellt hast.</p>
+    <p><strong>iPad-Verstoß:</strong> Den Knopf schaltest du in den Einstellungen ein (anfangs aus). Ein Tipp zeigt groß „iPad-Verstoß“, spielt einen Warnton und sagt an, was die Klasse tun soll. Gleichzeitig geht die iPad-Nutzung eine Stufe herunter: erlaubt → zugeklappt auf dem Tisch → Schultasche. Die Ansage passt dazu („Alle klappen jetzt ihr iPad zu“ oder „Alle packen jetzt ihr iPad in die Schultasche“). In den Einstellungen kannst du das Herunterschalten und den Ton einzeln ausschalten. Ohne Herunterschalten heißt die Ansage, je nach Stand, „Bitte haltet euch an die iPad-Regeln“. Das Fenster schließt sich nach 15 Sekunden von selbst.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Präsentation“, „Reflexion“, „Zwischenstand“ oder „Hinweis“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster. Den Knopf kannst du in den Einstellungen ausblenden.</p>
     <p><strong>QR-Code:</strong> Die Kachel (anfangs aus, Einstellungen) führt zur Übersicht „Deine Lernplattformen AWT“ für Schüler:innen. Antippen zeigt den Code bildschirmfüllend.</p>
     <p><strong>Timer und Fahrplan:</strong> −10 und +10 stellen die Zeit in Zehn-Minuten-Schritten. Jede Phase im Fahrplan kann eine Dauer in Minuten haben (Vorlage: Einstieg 10, Arbeitsphase 70, Sicherung 10). Beim Wechsel der Phase lädt der Timer diese Zeit.</p>
@@ -920,6 +942,7 @@ const DEF = {
   show: { timer: true, plan: false, aufgabe: true, sozial: true, ampel: true, ipad: true, ki: true, raus: true, qr: false },
   meetT: '', meetBtn: true,
   basic: false, basicPlan: false,
+  ipvBtn: false, ipvStep: true, ipvSound: true,
   raus: false,
   aufgabe: '',
   plan: [
@@ -1013,6 +1036,53 @@ function meetRender() {
 }
 function openMeet() { meetRender(); $('#meetView').hidden = false; meetChime(); $('#meetClose').focus(); }
 function closeMeet() { $('#meetView').hidden = true; }
+/* iPad-Verstoß: iPad-Nutzung eine Stufe herunter (erlaubt → zugeklappt → Schultasche), Warnton und Ansage */
+const IPV_HEAD = { closed: 'iPads zuklappen', bag: 'iPads in die Schultasche', rules: 'iPad-Regeln beachten' };
+const IPV_SAY = {"closed": {"de": "Achtung! Gegen die iPad-Regeln wurde verstoßen. Alle klappen jetzt ihr iPad zu.", "en": "Attention! The iPad rules have been broken. Everyone close your iPad now.", "fr": "Attention ! Les règles de l’iPad n’ont pas été respectées. Tout le monde ferme son iPad maintenant.", "es": "¡Atención! Se han incumplido las normas del iPad. Todos a cerrar el iPad ahora."}, "bag": {"de": "Achtung! Gegen die iPad-Regeln wurde verstoßen. Alle packen jetzt ihr iPad in die Schultasche.", "en": "Attention! The iPad rules have been broken. Everyone put your iPad in your school bag now.", "fr": "Attention ! Les règles de l’iPad n’ont pas été respectées. Tout le monde range son iPad dans son cartable maintenant.", "es": "¡Atención! Se han incumplido las normas del iPad. Todos a guardar el iPad en la mochila ahora."}, "rules": {"de": "Achtung! Gegen die iPad-Regeln wurde verstoßen. Bitte haltet euch an die iPad-Regeln.", "en": "Attention! The iPad rules have been broken. Please stick to the iPad rules.", "fr": "Attention ! Les règles de l’iPad n’ont pas été respectées. Respectez les règles de l’iPad, s’il vous plaît.", "es": "¡Atención! Se han incumplido las normas del iPad. Por favor, respetad las normas del iPad."}};
+let ipvKey = 'rules', ipvTm = 0, ipvSayTm = 0;
+function ipvQuiet() {
+  clearTimeout(ipvSayTm);
+  if (tbVoiceSrc) { const s = tbVoiceSrc; tbVoiceSrc = null; s.onended = null; try { s.stop(); } catch (e) { } }
+  try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) { }
+}
+function ipvSound() {
+  ipvQuiet(); if (!S.ipvSound) return;
+  unlockAudio(); const c = ac();
+  if (c) [[880, 0], [622, 0.32], [880, 0.64], [622, 0.96]].forEach(([f, t0]) => {
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+    o.type = 'triangle'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.45, t + 0.02); g.gain.setValueAtTime(0.45, t + 0.22); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + 0.32);
+  });
+  ipvSayTm = setTimeout(async () => {
+    if ($('#ipvView').hidden) return;
+    if (await voicePlay('ipad-' + ipvKey, null, () => !$('#ipvView').hidden)) return;
+    if (!('speechSynthesis' in window) || $('#ipvView').hidden) return;
+    try {
+      const l = IPV_SAY[ipvKey][window.tbLang] ? window.tbLang : 'de';
+      const u = new SpeechSynthesisUtterance(IPV_SAY[ipvKey][l]);
+      u.lang = { de: 'de-DE', en: 'en-GB', fr: 'fr-FR', es: 'es-ES' }[l]; u.rate = 0.95;
+      const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(l)); if (v) u.voice = v;
+      speechSynthesis.cancel(); speechSynthesis.speak(u);
+    } catch (e) { }
+  }, 1400);
+}
+function ipadViolation() {
+  const lvl = S.ipadPos === 'bag' ? 2 : S.ipadPos === 'closed' ? 1 : 0;
+  let n = lvl;
+  if (S.ipvStep) { n = Math.min(2, lvl + 1); S.ipad = false; S.ipadPos = ['open', 'closed', 'bag'][n]; save(); renderIpad(); }
+  ipvKey = n === 2 ? 'bag' : n === 1 ? 'closed' : 'rules';
+  $('#ipvHead').textContent = IPV_HEAD[ipvKey];
+  $('#ipvView').hidden = false; $('#ipvClose').focus();
+  ipvSound();
+  clearTimeout(ipvTm); ipvTm = setTimeout(closeIpv, 15000);
+}
+function closeIpv() { clearTimeout(ipvTm); ipvQuiet(); $('#ipvView').hidden = true; }
+function renderIpvBtn() {
+  $('#btnIpv').hidden = !S.ipvBtn; document.body.classList.toggle('ipvOn', !!S.ipvBtn);
+  $('#optIpvBtn').checked = !!S.ipvBtn; $('#optIpvStep').checked = !!S.ipvStep; $('#optIpvSound').checked = !!S.ipvSound;
+  fitHeader();
+}
 function renderMeetBtn() { $('#btnMeet').hidden = !S.meetBtn; $('#optMeet').checked = !!S.meetBtn; fitHeader(); }
 function toast(msg, ms = 5000) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
@@ -1033,6 +1103,25 @@ function unlockAudio() {
   if (!mic.on) setSession('playback');
   const c = ac(); if (!c) return;
   try { const b = c.createBuffer(1, 1, 22050), s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0); } catch (e) {}
+}
+/* Ansagen als Audiodatei (KI-Stimme, offline gespeichert); fehlt eine Datei, spricht die Stimme des Geräts */
+const VOICE_FILES = {"ipad-closed": {"en": "audio/ipad-closed-en.mp3", "fr": "audio/ipad-closed-fr.mp3", "es": "audio/ipad-closed-es.mp3"}, "ipad-bag": {"en": "audio/ipad-bag-en.mp3", "fr": "audio/ipad-bag-fr.mp3", "es": "audio/ipad-bag-es.mp3"}, "ipad-rules": {"en": "audio/ipad-rules-en.mp3", "fr": "audio/ipad-rules-fr.mp3", "es": "audio/ipad-rules-es.mp3"}};
+const voiceBuf = {}; let tbVoiceSrc = null;
+function voiceLoad(key, l) {
+  const url = VOICE_FILES[key] && VOICE_FILES[key][l]; const c = ac();
+  if (!url || !c) return Promise.resolve(null);
+  if (!voiceBuf[url]) voiceBuf[url] = fetch(url).then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error('fehlt')))
+    .then(b => new Promise((res, rej) => c.decodeAudioData(b, res, rej)))
+    .catch(() => { delete voiceBuf[url]; return null; });
+  return voiceBuf[url];
+}
+async function voicePlay(key, onEnd, alive) {
+  const buf = await voiceLoad(key, window.tbLang || 'de'), c = ac();
+  if (!buf || !c) return false;
+  if (alive && !alive()) return true;
+  const src = c.createBufferSource(); src.buffer = buf; src.connect(c.destination);
+  src.onended = () => { if (tbVoiceSrc === src) tbVoiceSrc = null; if (onEnd) onEnd(); };
+  tbVoiceSrc = src; src.start(); return true;
 }
 function gong() {
   if (!S.sound) return;
@@ -1978,6 +2067,13 @@ function bind() {
   $('#btnReflex').addEventListener('click', openReflex);
   $('#btnMeet').addEventListener('click', openMeet);
   $('#meetClose').addEventListener('click', closeMeet);
+  $('#btnIpv').addEventListener('click', ipadViolation);
+  $('#ipvClose').addEventListener('click', closeIpv);
+  $('#ipvMain').addEventListener('click', closeIpv);
+  $('#ipvTone').addEventListener('click', () => { clearTimeout(ipvTm); ipvTm = setTimeout(closeIpv, 15000); ipvSound(); });
+  $('#optIpvBtn').addEventListener('change', e => { S.ipvBtn = e.target.checked; save(); renderIpvBtn(); });
+  $('#optIpvStep').addEventListener('change', e => { S.ipvStep = e.target.checked; save(); });
+  $('#optIpvSound').addEventListener('change', e => { S.ipvSound = e.target.checked; save(); });
   $('#meetTone').addEventListener('click', meetChime);
   $$('[data-meet]').forEach(b => b.addEventListener('click', () => { S.meetT = b.dataset.meet; save(); $('#meetIn').value = ''; meetRender(); }));
   $('#meetIn').addEventListener('input', e => { S.meetT = e.target.value; save(); meetRender(); });
@@ -2199,7 +2295,7 @@ function importBoard(file) {
   rd.readAsText(file);
 }
 function renderAll() {
-  renderTheme(); renderClean(); renderTimer(); renderSozial();
+  renderTheme(); renderClean(); renderIpvBtn(); renderTimer(); renderSozial();
   renderIpad(); renderRaus(); renderStatus('ki'); renderAmpelCtrl(); renderTask(); renderPlan(); layout();
 }
 
@@ -2269,6 +2365,16 @@ const D = {
   'Eigene Überschrift': ['Own heading', 'Titre personnalisé'],
   'Ton nochmal': ['Play sound again', 'Rejouer le son'],
   'Weiterarbeiten': ['Back to work', 'Reprendre le travail'],
+  'iPad-Verstoß': ['iPad violation', 'Infraction iPad'],
+  'iPad-Verstoß: Ansage und iPad-Nutzung eine Stufe herunter': ['iPad violation: announcement and iPad use one level down', 'Infraction iPad : annonce et usage de l’iPad abaissé d’un niveau'],
+  'iPads zuklappen': ['Close your iPads', 'Fermez les iPad'],
+  'iPads in die Schultasche': ['iPads into school bags', 'iPad dans le cartable'],
+  'iPad-Regeln beachten': ['Stick to the iPad rules', 'Respectez les règles de l’iPad'],
+  'Gegen die iPad-Regeln wurde verstoßen.': ['The iPad rules have been broken.', 'Les règles de l’iPad n’ont pas été respectées.'],
+  'Knopf „iPad-Verstoß“ anzeigen': ['Show “iPad violation” button', 'Afficher le bouton « Infraction iPad »'],
+  'iPad-Nutzung eine Stufe herunterschalten': ['Lower iPad use by one level', 'Abaisser l’usage de l’iPad d’un niveau'],
+  'Ton und Ansage': ['Sound and announcement', 'Son et annonce'],
+  'Ein Tipp auf den Knopf zeigt groß „iPad-Verstoß“, spielt einen Ton und sagt an, was die Klasse tun soll. Die Stufen: erlaubt → zugeklappt → Schultasche.': ['Tapping the button shows “iPad violation” in large letters, plays a sound and announces what the class should do. The levels: allowed → closed → school bag.', 'Un appui sur le bouton affiche « Infraction iPad » en grand, joue un son et annonce ce que la classe doit faire. Les niveaux : autorisé → fermé → cartable.'],
   'Treffpunkt-Knopf oben': ['Meeting point button at the top', 'Bouton point de rencontre en haut'],
   'Basic': ['Basic', 'Basique'],
   'Basic: nur Timer, Aufgabe, Sozialform und iPad': ['Basic: only timer, task, grouping and iPad', 'Basique : seulement minuteur, consigne, forme sociale et iPad'],
@@ -2499,6 +2605,16 @@ const ES = {
   "Eigene Überschrift": "Título propio",
   "Ton nochmal": "Repetir sonido",
   "Weiterarbeiten": "Seguir trabajando",
+  "iPad-Verstoß": "Infracción iPad",
+  "iPad-Verstoß: Ansage und iPad-Nutzung eine Stufe herunter": "Infracción iPad: aviso y uso del iPad un nivel más bajo",
+  "iPads zuklappen": "Cerrad los iPad",
+  "iPads in die Schultasche": "iPad a la mochila",
+  "iPad-Regeln beachten": "Respetad las normas del iPad",
+  "Gegen die iPad-Regeln wurde verstoßen.": "Se han incumplido las normas del iPad.",
+  "Knopf „iPad-Verstoß“ anzeigen": "Mostrar el botón «Infracción iPad»",
+  "iPad-Nutzung eine Stufe herunterschalten": "Bajar un nivel el uso del iPad",
+  "Ton und Ansage": "Sonido y aviso",
+  "Ein Tipp auf den Knopf zeigt groß „iPad-Verstoß“, spielt einen Ton und sagt an, was die Klasse tun soll. Die Stufen: erlaubt → zugeklappt → Schultasche.": "Al tocar el botón aparece en grande «Infracción iPad», suena un tono y se anuncia qué debe hacer la clase. Los niveles: permitido → cerrado → mochila.",
   "Treffpunkt-Knopf oben": "Botón de punto de encuentro arriba",
   "Basic": "Básico",
   "Basic: nur Timer, Aufgabe, Sozialform und iPad": "Básico: solo temporizador, tarea, forma social e iPad",
@@ -2773,7 +2889,7 @@ const oConfirm = window.confirm.bind(window);
 window.confirm = m => oConfirm(tr(String(m)) || m);
 
 function setLang(l, announce) {
-  lang = LANGS.includes(l) ? l : 'de';
+  lang = LANGS.includes(l) ? l : 'de'; window.tbLang = lang;
   try { localStorage.setItem(LKEY, lang); } catch (e) { }
   document.documentElement.lang = lang;
   walk(document.body);

@@ -1,9 +1,9 @@
 /* Unterrichtsboard – Offline-Speicher (Service Worker)
    Die Seite wird beim ersten Öffnen gespeichert und funktioniert danach auch ohne Internet.
    Mit Internet wird immer zuerst die neueste Version geladen. */
-const CACHE = 'unterrichtsboard-v10';
+const CACHE = 'unterrichtsboard-v11';
 const ROOT = new URL('./', self.location).pathname;
-const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
+const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './audio/ipad-closed-en.mp3', './audio/ipad-closed-fr.mp3', './audio/ipad-closed-es.mp3', './audio/ipad-bag-en.mp3', './audio/ipad-bag-fr.mp3', './audio/ipad-bag-es.mp3', './audio/ipad-rules-en.mp3', './audio/ipad-rules-fr.mp3', './audio/ipad-rules-es.mp3'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
@@ -21,7 +21,7 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   // Tech-Board und Klassenrat Dashboard liegen in Unterordnern und haben eigene Offline-Speicher.
   const path = new URL(req.url).pathname;
-  if (path.startsWith(ROOT) && path !== ROOT && path !== ROOT + 'index.html' && path.slice(ROOT.length).includes('/')) return;
+  if (path.startsWith(ROOT) && path !== ROOT && path !== ROOT + 'index.html' && path.slice(ROOT.length).includes('/') && !path.slice(ROOT.length).startsWith('audio/')) return;
   if (req.mode === 'navigate') {
     e.respondWith((async () => {
       const cache = await caches.open(CACHE);

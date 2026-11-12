@@ -551,6 +551,16 @@ body.alarm #btnAlarm{background:#fff;color:#a80000}
 #btnMeet{background:#1b6fb0;color:#fff;box-shadow:inset 0 0 0 4px rgba(255,255,255,.75);font-size:clamp(15px,min(2.1vw,4.2vh),30px)!important}
 .meetv{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;background:#0d4f8b;color:#fff;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
 .meetv[hidden]{display:none}
+.ipvv{background:#9a3412}
+.ipvv .mv-t{text-transform:none;letter-spacing:.01em}
+.ipvv .mv-h{color:#fff}
+.ipvv .mv-bar .btn.primary{color:#9a3412}
+#btnIpv{background:#c2410c;color:#fff;box-shadow:inset 0 0 0 4px rgba(255,255,255,.6);font-size:clamp(13px,min(1.7vw,3.4vh),24px)!important}
+#btnIpv[hidden]{display:none}
+body.ipvOn #safeBand{grid-template-columns:1.6fr .9fr .9fr .9fr minmax(0,auto)}
+body.ipvOn #btnAlarm{font-size:clamp(14px,min(2.2vw,4.2vh),30px)}
+body.ipvOn #btnMeet{font-size:clamp(13px,min(1.7vw,3.4vh),24px)!important}
+@media (max-width:560px){body.ipvOn #safeBand{grid-template-columns:1fr 1fr 1fr}body.ipvOn #btnSafe{grid-column:1/3}body.ipvOn #tbClean{grid-column:3;grid-row:1;padding:0 6px!important}#btnIpv{gap:5px!important}}
 .mv-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;text-align:center;animation:mvIn .35s ease-out}
 .mv-main>svg{width:min(20vh,18vw);height:auto;animation:mvPulse 1.6s ease-in-out 3}
 .mv-t{font-size:clamp(44px,min(11vw,17vh),170px);font-weight:900;letter-spacing:.04em;text-transform:uppercase;line-height:1}
@@ -710,6 +720,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <button id="btnSafe" aria-pressed="false"></button>
     <button id="btnAlarm" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17v-6a6 6 0 0 1 12 0v6"/><path d="M4 17h16v3H4z"/><path d="M12 2v1.500M3.500 6 5 7M20.500 6 19 7"/></svg><span id="alarmTxt">ALARM</span></button>
     <button id="btnMeet" title="Treffpunkt: alle kommen zusammen" aria-label="Treffpunkt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3.2"/><path d="M6 21v-2.2a6 6 0 0 1 12 0V21"/><circle cx="4.6" cy="10.2" r="2.3"/><path d="M1.2 19.5v-1.3a3.7 3.7 0 0 1 4.6-3.6"/><circle cx="19.4" cy="10.2" r="2.3"/><path d="M22.8 19.5v-1.3a3.7 3.7 0 0 0-4.6-3.6"/></svg><span>Treffpunkt</span></button>
+    <button id="btnIpv" hidden title="iPad-Verstoß: Ansage und iPad-Nutzung eine Stufe herunter" aria-label="iPad-Verstoß"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M12 7.5v6M12 17v.01"/></svg><span>iPad-Verstoß</span></button>
     <button id="tbClean" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#tbTri"/></svg><span id="tbCleanTxt">Aufräumen</span></button>
   </div>
 
@@ -940,6 +951,10 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <button class="btn primary" id="meetClose">Weiterarbeiten</button>
   </div>
 </div>
+<div id="ipvView" class="meetv ipvv" hidden role="dialog" aria-modal="true" aria-label="iPad-Verstoß">
+  <div class="mv-main" id="ipvMain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M12 7.5v6M12 17v.01"/></svg><div class="mv-t">iPad-Verstoß</div><div class="mv-h" id="ipvHead">iPads zuklappen</div><div class="mv-s">Gegen die iPad-Regeln wurde verstoßen.</div></div>
+  <div class="mv-bar"><button class="btn" id="ipvTone">Ton nochmal</button><button class="btn primary" id="ipvClose">Weiterarbeiten</button></div>
+</div>
 <div id="qrView" hidden role="dialog" aria-label="QR-Code groß"><div class="qrv-box"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" aria-hidden="true"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#000" d="M2 2.5h7m2 0h5m2 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m3 0h6m1 0h2m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h3m3 0h2m4 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h1m1 0h1m2 0h1m1 0h1m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m4 0h1m3 0h5m1 0h1m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h2m2 0h1m2 0h1m2 0h1m1 0h3m1 0h1m1 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m3 0h1m5 0h5m-23 1h1m1 0h5m2 0h1m3 0h5m1 0h1m2 0h1m3 0h5m-29 1h3m2 0h1m3 0h2m1 0h1m1 0h1m2 0h3m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m1 0h1m1 0h1m1 0h1m1 0h2m5 0h4m3 0h1m1 0h1m3 0h1m1 0h2m-31 1h1m1 0h2m2 0h3m1 0h2m2 0h1m4 0h2m1 0h1m2 0h1m1 0h3m1 0h1m-30 1h2m1 0h2m1 0h3m4 0h2m1 0h1m2 0h2m1 0h1m2 0h2m1 0h2m-33 1h1m1 0h2m4 0h2m1 0h3m2 0h1m1 0h2m1 0h1m1 0h1m2 0h1m4 0h2m-33 1h1m1 0h1m2 0h3m1 0h3m2 0h5m6 0h2m2 0h3m-29 1h3m1 0h2m1 0h1m2 0h1m1 0h2m1 0h5m1 0h3m2 0h2m-30 1h1m2 0h1m1 0h2m1 0h7m1 0h1m1 0h1m2 0h1m1 0h2m1 0h2m3 0h1m-33 1h3m5 0h1m1 0h2m1 0h2m1 0h5m2 0h1m2 0h2m1 0h2m1 0h1m-30 1h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m-29 1h2m3 0h1m2 0h1m5 0h1m1 0h2m1 0h2m1 0h1m1 0h5m1 0h1m-30 1h6m2 0h5m1 0h1m1 0h1m2 0h4m1 0h3m-30 1h2m1 0h1m3 0h2m2 0h1m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m2 0h1m2 0h1m-33 1h1m3 0h3m2 0h2m2 0h1m1 0h1m4 0h2m2 0h2m1 0h1m1 0h1m1 0h1m-32 1h1m1 0h1m2 0h1m4 0h3m1 0h3m3 0h2m6 0h1m1 0h2m-32 1h1m2 0h1m1 0h3m1 0h6m2 0h1m4 0h7m2 0h2m-25 1h2m3 0h1m2 0h1m2 0h3m2 0h1m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h1m2 0h1m1 0h2m4 0h1m2 0h2m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h3m1 0h1m3 0h1m4 0h1m1 0h2m3 0h4m-32 1h1m1 0h3m1 0h1m1 0h7m2 0h1m1 0h1m2 0h1m1 0h6m1 0h1m-32 1h1m1 0h3m1 0h1m1 0h4m4 0h1m1 0h3m2 0h3m2 0h2m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h5m1 0h1m1 0h3m1 0h2m1 0h1m-30 1h1m5 0h1m2 0h3m3 0h2m1 0h1m1 0h2m6 0h3m-31 1h7m1 0h1m1 0h1m2 0h1m1 0h1m1 0h3m2 0h3m2 0h1m2 0h2"/></svg></div><b>Lernplattformen AWT</b><span>deintechniklehrer.github.io/Lernplattformen/schueler</span><span class="qrv-close">Antippen zum Schließen</span></div>
 <div id="apeView" hidden role="dialog" aria-label="APE groß"><img id="apeViewImg" alt="Arbeitsplatzeinrichtung"><span>Antippen zum Schließen</span></div>
 <dialog id="dlg">
@@ -963,6 +978,12 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <label class="row">KI-Nutzung <input type="checkbox" class="sw" data-show="ki"></label>
     <label class="row">Arbeiten außerhalb des Klassenraums <input type="checkbox" class="sw" data-show="raus"></label>
     <label class="row">QR-Code Lernplattformen AWT <input type="checkbox" class="sw" data-show="qr"></label>
+
+    <h3>iPad-Verstoß</h3>
+    <label class="row">Knopf „iPad-Verstoß“ anzeigen <input type="checkbox" class="sw" id="optIpvBtn"></label>
+    <label class="row">iPad-Nutzung eine Stufe herunterschalten <input type="checkbox" class="sw" id="optIpvStep"></label>
+    <label class="row">Ton und Ansage <input type="checkbox" class="sw" id="optIpvSound"></label>
+    <p>Ein Tipp auf den Knopf zeigt groß „iPad-Verstoß“, spielt einen Ton und sagt an, was die Klasse tun soll. Die Stufen: erlaubt → zugeklappt → Schultasche.</p>
 
     <h3>Darstellung &amp; Ton</h3>
     <div class="row">Farben
@@ -998,6 +1019,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ (rote Karte oben). Ein Tipp stellt auf „Sicher“ (grüne Karte). „Alarm“ gibt dreimal einen deutlichen Signalton und sagt dann mit der Stimme des Geräts „Achtung! Ein Sicherheitsverstoß liegt vor. Alle setzen sich auf ihren Platz.“ Das wiederholt sich, und der Hintergrund blinkt rot, bis du den Alarm mit einem zweiten Tipp beendest. Beim Alarm springt die Karte automatisch auf „Unsicher“; nach dem Alarm stellst du sie selbst wieder auf „Sicher“. Die Ansage lässt sich in den Einstellungen abschalten. Am iPad muss der Ton laut gestellt sein.</p>
     <p><strong>Ansagen:</strong> Alarm- und Aufräumansage sind Audiodateien mit KI-Stimmen. Deutsch: erzeugt mit dem KI-Multimedia-Tool von fobizz. Englisch und Französisch: erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Auf Spanisch spricht die Stimme des Geräts. Die Dateien werden mit dem Board offline gespeichert. Lässt sich eine Datei nicht abspielen, spricht die Stimme des Geräts.</p>
+    <p><strong>iPad-Verstoß:</strong> Den Knopf schaltest du in den Einstellungen ein (anfangs aus). Ein Tipp zeigt groß „iPad-Verstoß“, spielt einen Warnton und sagt an, was die Klasse tun soll. Gleichzeitig geht die iPad-Nutzung eine Stufe herunter: erlaubt → zugeklappt auf dem Tisch → Schultasche. Die Ansage passt dazu („Alle klappen jetzt ihr iPad zu“ oder „Alle packen jetzt ihr iPad in die Schultasche“). In den Einstellungen kannst du das Herunterschalten und den Ton einzeln ausschalten. Ohne Herunterschalten heißt die Ansage, je nach Stand, „Bitte haltet euch an die iPad-Regeln“. Das Fenster schließt sich nach 15 Sekunden von selbst.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. So kannst du den Plan vorbereiten: Nummern verteilen, dann „Speichern“ (oben oder unten neben „Aufräumen beenden“). Das Board geht zurück in die Phase, aus der du gekommen bist, der Timer läuft dort weiter, und später nutzt das Aufräumen genau diese Verteilung. Startest du im Aufräumen den Timer, gilt es als echtes Aufräumen, oben steht dann wieder „Beenden“. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
@@ -1141,7 +1163,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const KEY = 'roboboard.v1';
 const BOARD_VERSION = '05.11.2026 Sprachen';
 const DEF = {
-  theme: 'light', tsize: '2x2', meetT: '', cleanTone: true, cleanVoice: true, alarmVoice: true, fokus: 'frei', apeRobo: 0, clean: false, sound: true, wake: true,
+  theme: 'light', tsize: '2x2', meetT: '', cleanTone: true, cleanVoice: true, alarmVoice: true, ipvBtn: false, ipvStep: true, ipvSound: true, fokus: 'frei', apeRobo: 0, clean: false, sound: true, wake: true,
   show: { timer: true, plan: true, aufgabe: false, sozial: false, ampel: true, ipad: true, ki: false, raus: false, ape: false, fokus: true, gefahr: true, qr: false, tinker: false },
   tinker: '',
   raus: false,
@@ -2546,7 +2568,7 @@ function importBoard(file) {
   rd.readAsText(file);
 }
 function renderAll() {
-  renderTheme(); renderClean(); renderTimer(); renderSozial(); renderFokus();
+  renderTheme(); renderClean(); renderIpvBtn(); renderTimer(); renderSozial(); renderFokus();
   renderIpad(); renderRaus(); renderStatus('ki'); renderAmpelCtrl(); renderTask(); renderPlan(); tbRender(); layout();
 }
 
@@ -2653,8 +2675,11 @@ const ALARM_SAY = {
 let tbAlarmTok = 0, tbAlarmTm = 0, tbVoiceSrc = null;
 /* Ansagen als Audiodatei (KI-Stimme, offline gespeichert); fehlt eine Datei, spricht die Stimme des Geräts */
 const VOICE_FILES = {
-  alarm: { de: 'audio/alarm-de.mp3', en: 'audio/alarm-en.mp3', fr: 'audio/alarm-fr.mp3' },
-  clean: { de: 'audio/clean-de.mp3', en: 'audio/clean-en.mp3', fr: 'audio/clean-fr.mp3' }
+  alarm: { de: 'audio/alarm-de.mp3', en: 'audio/alarm-en.mp3', fr: 'audio/alarm-fr.mp3', es: 'audio/alarm-es.mp3' },
+  clean: { de: 'audio/clean-de.mp3', en: 'audio/clean-en.mp3', fr: 'audio/clean-fr.mp3', es: 'audio/clean-es.mp3' },
+  'ipad-closed': {"en": "audio/ipad-closed-en.mp3", "fr": "audio/ipad-closed-fr.mp3", "es": "audio/ipad-closed-es.mp3"},
+  'ipad-bag': {"en": "audio/ipad-bag-en.mp3", "fr": "audio/ipad-bag-fr.mp3", "es": "audio/ipad-bag-es.mp3"},
+  'ipad-rules': {"en": "audio/ipad-rules-en.mp3", "fr": "audio/ipad-rules-fr.mp3", "es": "audio/ipad-rules-es.mp3"}
 };
 const voiceBuf = {};
 function voiceLoad(key, l) {
@@ -2740,6 +2765,53 @@ function meetRender() {
 }
 function openMeet() { meetRender(); $('#meetView').hidden = false; meetChime(); $('#meetClose').focus(); }
 function closeMeet() { $('#meetView').hidden = true; }
+/* iPad-Verstoß: iPad-Nutzung eine Stufe herunter (erlaubt → zugeklappt → Schultasche), Warnton und Ansage */
+const IPV_HEAD = { closed: 'iPads zuklappen', bag: 'iPads in die Schultasche', rules: 'iPad-Regeln beachten' };
+const IPV_SAY = {"closed": {"de": "Achtung! Gegen die iPad-Regeln wurde verstoßen. Alle klappen jetzt ihr iPad zu.", "en": "Attention! The iPad rules have been broken. Everyone close your iPad now.", "fr": "Attention ! Les règles de l’iPad n’ont pas été respectées. Tout le monde ferme son iPad maintenant.", "es": "¡Atención! Se han incumplido las normas del iPad. Todos a cerrar el iPad ahora."}, "bag": {"de": "Achtung! Gegen die iPad-Regeln wurde verstoßen. Alle packen jetzt ihr iPad in die Schultasche.", "en": "Attention! The iPad rules have been broken. Everyone put your iPad in your school bag now.", "fr": "Attention ! Les règles de l’iPad n’ont pas été respectées. Tout le monde range son iPad dans son cartable maintenant.", "es": "¡Atención! Se han incumplido las normas del iPad. Todos a guardar el iPad en la mochila ahora."}, "rules": {"de": "Achtung! Gegen die iPad-Regeln wurde verstoßen. Bitte haltet euch an die iPad-Regeln.", "en": "Attention! The iPad rules have been broken. Please stick to the iPad rules.", "fr": "Attention ! Les règles de l’iPad n’ont pas été respectées. Respectez les règles de l’iPad, s’il vous plaît.", "es": "¡Atención! Se han incumplido las normas del iPad. Por favor, respetad las normas del iPad."}};
+let ipvKey = 'rules', ipvTm = 0, ipvSayTm = 0;
+function ipvQuiet() {
+  clearTimeout(ipvSayTm);
+  if (tbVoiceSrc) { const s = tbVoiceSrc; tbVoiceSrc = null; s.onended = null; try { s.stop(); } catch (e) { } }
+  try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) { }
+}
+function ipvSound() {
+  ipvQuiet(); if (!S.ipvSound) return;
+  unlockAudio(); const c = ac();
+  if (c) [[880, 0], [622, 0.32], [880, 0.64], [622, 0.96]].forEach(([f, t0]) => {
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+    o.type = 'triangle'; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.45, t + 0.02); g.gain.setValueAtTime(0.45, t + 0.22); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + 0.32);
+  });
+  ipvSayTm = setTimeout(async () => {
+    if ($('#ipvView').hidden) return;
+    if (await voicePlay('ipad-' + ipvKey, null, () => !$('#ipvView').hidden)) return;
+    if (!('speechSynthesis' in window) || $('#ipvView').hidden) return;
+    try {
+      const l = IPV_SAY[ipvKey][window.tbLang] ? window.tbLang : 'de';
+      const u = new SpeechSynthesisUtterance(IPV_SAY[ipvKey][l]);
+      u.lang = { de: 'de-DE', en: 'en-GB', fr: 'fr-FR', es: 'es-ES' }[l]; u.rate = 0.95;
+      const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(l)); if (v) u.voice = v;
+      speechSynthesis.cancel(); speechSynthesis.speak(u);
+    } catch (e) { }
+  }, 1400);
+}
+function ipadViolation() {
+  const lvl = S.ipadPos === 'bag' ? 2 : S.ipadPos === 'closed' ? 1 : 0;
+  let n = lvl;
+  if (S.ipvStep) { n = Math.min(2, lvl + 1); S.ipad = false; S.ipadPos = ['open', 'closed', 'bag'][n]; save(); renderIpad(); }
+  ipvKey = n === 2 ? 'bag' : n === 1 ? 'closed' : 'rules';
+  $('#ipvHead').textContent = IPV_HEAD[ipvKey];
+  $('#ipvView').hidden = false; $('#ipvClose').focus();
+  ipvSound();
+  clearTimeout(ipvTm); ipvTm = setTimeout(closeIpv, 15000);
+}
+function closeIpv() { clearTimeout(ipvTm); ipvQuiet(); $('#ipvView').hidden = true; }
+function renderIpvBtn() {
+  $('#btnIpv').hidden = !S.ipvBtn; document.body.classList.toggle('ipvOn', !!S.ipvBtn);
+  $('#optIpvBtn').checked = !!S.ipvBtn; $('#optIpvStep').checked = !!S.ipvStep; $('#optIpvSound').checked = !!S.ipvSound;
+  if (typeof queueLayout === 'function') queueLayout();
+}
 const SYM_SHORT = { elektro: 'Elektrisch', mech: 'Mechanisch', stoffe: 'Gefahrstoffe', thermo: 'Heiß', brand: 'Brand', laerm: 'Lärm', kipp: 'Fenster', brille: 'Brille', haende: 'Hände', gehoer: 'Gehör' };
 function tbToggleBtn(cls, id, label, svg, arr) {
   const e = document.createElement('button'); e.type = 'button'; e.className = cls; e.dataset.id = id; e.innerHTML = svg;
@@ -2964,6 +3036,13 @@ function tbInit() {
   $('#btnAlarm').addEventListener('click', () => tbAlarm(!tbAlarmOn));
   $('#btnMeet').addEventListener('click', openMeet);
   $('#meetClose').addEventListener('click', closeMeet);
+  $('#btnIpv').addEventListener('click', ipadViolation);
+  $('#ipvClose').addEventListener('click', closeIpv);
+  $('#ipvMain').addEventListener('click', closeIpv);
+  $('#ipvTone').addEventListener('click', () => { clearTimeout(ipvTm); ipvTm = setTimeout(closeIpv, 15000); ipvSound(); });
+  $('#optIpvBtn').addEventListener('change', e => { S.ipvBtn = e.target.checked; save(); renderIpvBtn(); });
+  $('#optIpvStep').addEventListener('change', e => { S.ipvStep = e.target.checked; save(); });
+  $('#optIpvSound').addEventListener('change', e => { S.ipvSound = e.target.checked; save(); });
   $('#meetTone').addEventListener('click', meetChime);
   $$('[data-meet]').forEach(b => b.addEventListener('click', () => { S.meetT = b.dataset.meet; save(); $('#meetIn').value = ''; meetRender(); }));
   $('#meetIn').addEventListener('input', e => { S.meetT = e.target.value; save(); meetRender(); });
@@ -3142,6 +3221,16 @@ const D = {
   'Eigene Überschrift': ['Own heading', 'Titre personnalisé'],
   'Ton nochmal': ['Play sound again', 'Rejouer le son'],
   'Weiterarbeiten': ['Back to work', 'Reprendre le travail'],
+  'iPad-Verstoß': ['iPad violation', 'Infraction iPad'],
+  'iPad-Verstoß: Ansage und iPad-Nutzung eine Stufe herunter': ['iPad violation: announcement and iPad use one level down', 'Infraction iPad : annonce et usage de l’iPad abaissé d’un niveau'],
+  'iPads zuklappen': ['Close your iPads', 'Fermez les iPad'],
+  'iPads in die Schultasche': ['iPads into school bags', 'iPad dans le cartable'],
+  'iPad-Regeln beachten': ['Stick to the iPad rules', 'Respectez les règles de l’iPad'],
+  'Gegen die iPad-Regeln wurde verstoßen.': ['The iPad rules have been broken.', 'Les règles de l’iPad n’ont pas été respectées.'],
+  'Knopf „iPad-Verstoß“ anzeigen': ['Show “iPad violation” button', 'Afficher le bouton « Infraction iPad »'],
+  'iPad-Nutzung eine Stufe herunterschalten': ['Lower iPad use by one level', 'Abaisser l’usage de l’iPad d’un niveau'],
+  'Ton und Ansage': ['Sound and announcement', 'Son et annonce'],
+  'Ein Tipp auf den Knopf zeigt groß „iPad-Verstoß“, spielt einen Ton und sagt an, was die Klasse tun soll. Die Stufen: erlaubt → zugeklappt → Schultasche.': ['Tapping the button shows “iPad violation” in large letters, plays a sound and announces what the class should do. The levels: allowed → closed → school bag.', 'Un appui sur le bouton affiche « Infraction iPad » en grand, joue un son et annonce ce que la classe doit faire. Les niveaux : autorisé → fermé → cartable.'],
   'Aufräumen': ['Tidy up', 'Rangement'],
   'Beenden': ['Finish', 'Terminer'],
   'Aufräumen beenden': ['End tidy-up', 'Terminer le rangement'],
@@ -3526,6 +3615,16 @@ const ES = {
   "Eigene Überschrift": "Título propio",
   "Ton nochmal": "Repetir sonido",
   "Weiterarbeiten": "Seguir trabajando",
+  "iPad-Verstoß": "Infracción iPad",
+  "iPad-Verstoß: Ansage und iPad-Nutzung eine Stufe herunter": "Infracción iPad: aviso y uso del iPad un nivel más bajo",
+  "iPads zuklappen": "Cerrad los iPad",
+  "iPads in die Schultasche": "iPad a la mochila",
+  "iPad-Regeln beachten": "Respetad las normas del iPad",
+  "Gegen die iPad-Regeln wurde verstoßen.": "Se han incumplido las normas del iPad.",
+  "Knopf „iPad-Verstoß“ anzeigen": "Mostrar el botón «Infracción iPad»",
+  "iPad-Nutzung eine Stufe herunterschalten": "Bajar un nivel el uso del iPad",
+  "Ton und Ansage": "Sonido y aviso",
+  "Ein Tipp auf den Knopf zeigt groß „iPad-Verstoß“, spielt einen Ton und sagt an, was die Klasse tun soll. Die Stufen: erlaubt → zugeklappt → Schultasche.": "Al tocar el botón aparece en grande «Infracción iPad», suena un tono y se anuncia qué debe hacer la clase. Los niveles: permitido → cerrado → mochila.",
   "Aufräumen": "Recoger",
   "Beenden": "Terminar",
   "Aufräumen beenden": "Terminar la limpieza",
