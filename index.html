@@ -769,7 +769,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
       <div class="seg"><button class="btn" data-theme-set="light">Hell</button><button class="btn" data-theme-set="dark">Dunkel</button></div>
     </div>
     <div class="row">Sprache
-      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button></div>
+      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button><button class="btn" data-lang-set="es">Español</button></div>
     </div>
     <label class="row">Signalton, wenn der Timer abläuft <input type="checkbox" class="sw" id="optSound"></label>
     <label class="row">Bildschirm nicht ausschalten <input type="checkbox" class="sw" id="optWake"></label>
@@ -2190,7 +2190,7 @@ setInterval(clock, 1000);
 (() => {
 'use strict';
 const LKEY = 'unterrichtsboard.lang';
-const LANGS = ['de', 'en', 'fr'];
+const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
   // Kopfzeile
   'Nur Anzeige': ['Display only', 'Affichage seul'],
@@ -2418,6 +2418,242 @@ const D = {
   'Alle Einstellungen auf Anfang zurücksetzen?': ['Reset all settings?', 'Réinitialiser tous les réglages ?'],
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
+const ES = {
+  "Nur Anzeige": "Solo visualización",
+  "Größe des Timers (Querformat)": "Tamaño del temporizador (horizontal)",
+  "Fahrplan": "Plan",
+  "Fahrplan bearbeiten": "Editar plan",
+  "Reflexion": "Reflexión",
+  "Input": "Input",
+  "Dunkel": "Oscuro",
+  "Hell": "Claro",
+  "Vollbild": "Pantalla completa",
+  "Einstellungen": "Ajustes",
+  "Bedienelemente aus- oder einblenden": "Mostrar u ocultar los controles",
+  "Stundenfahrplan ein- oder ausblenden": "Mostrar u ocultar el plan de la clase",
+  "Reflexion öffnen": "Abrir reflexión",
+  "Bild vom Gerät groß zeigen": "Mostrar en grande una imagen del dispositivo",
+  "Input: Bild zeigen": "Input: mostrar imagen",
+  "Hell / Dunkel umschalten": "Cambiar claro / oscuro",
+  "Hell oder dunkel": "Claro u oscuro",
+  "Auf hell umschalten": "Cambiar a claro",
+  "Auf dunkel umschalten": "Cambiar a oscuro",
+  "Timer": "Temporizador",
+  "bereit": "listo",
+  "läuft": "en marcha",
+  "pausiert": "en pausa",
+  "Zeit ist um!": "¡Se acabó el tiempo!",
+  "Start": "Iniciar",
+  "Pause": "Pausa",
+  "Weiter": "Siguiente",
+  "Zurücksetzen": "Reiniciar",
+  "Timer starten oder pausieren": "Iniciar o pausar el temporizador",
+  "min": "min",
+  "Treffpunkt": "Punto de encuentro",
+  "Treffpunkt: alle kommen zusammen": "Punto de encuentro: nos reunimos todos",
+  "Alle kommen zusammen und hören zu.": "Todos se reúnen y escuchan.",
+  "Hinweis": "Aviso",
+  "Zwischenstand": "Puesta en común",
+  "Ohne Überschrift": "Sin título",
+  "Eigene Überschrift …": "Título propio …",
+  "Eigene Überschrift": "Título propio",
+  "Ton nochmal": "Repetir sonido",
+  "Weiterarbeiten": "Seguir trabajando",
+  "Treffpunkt-Knopf oben": "Botón de punto de encuentro arriba",
+  "QR-Code": "Código QR",
+  "Lernplattformen AWT": "Plataformas de aprendizaje AWT",
+  "QR-Code groß anzeigen": "Mostrar el código QR en grande",
+  "QR-Code Lernplattformen AWT": "Código QR plataformas AWT",
+  "QR-Code groß": "Código QR en grande",
+  "Antippen zum Schließen": "Toca para cerrar",
+  "Zehn Minuten weniger": "Diez minutos menos",
+  "Zehn Minuten mehr": "Diez minutos más",
+  "Eine Minute weniger": "Un minuto menos",
+  "Eine Minute mehr": "Un minuto más",
+  "Stundenfahrplan": "Plan de la clase",
+  "Bearbeiten": "Editar",
+  "Zurück": "Atrás",
+  "Eine Phase zurück": "Fase anterior",
+  "Nächste Phase": "Fase siguiente",
+  "Phase hinzufügen": "Añadir fase",
+  "Noch keine Phasen.": "Todavía no hay fases.",
+  "Tippe auf „Bearbeiten“.": "Toca «Editar».",
+  "Einstieg": "Inicio",
+  "Arbeitsphase": "Fase de trabajo",
+  "Präsentation": "Presentación",
+  "Sicherung": "Cierre",
+  "Schreib die Phasen deiner Stunde hinein, wähle zu jeder Phase die Sozialform und trag bei Bedarf die Aufgabe ein. Mit „Weiter“ schiebst du den Pfeil später zur nächsten Phase, Sozialform und Aufgabe wechseln mit.": "Escribe las fases de tu clase, elige para cada fase la forma social y añade la tarea si hace falta. Con «Siguiente» mueves después la flecha a la siguiente fase; la forma social y la tarea cambian con ella.",
+  "+ Phase hinzufügen": "+ Añadir fase",
+  "Alles leeren": "Vaciar todo",
+  "z. B. Einstieg": "p. ej. Inicio",
+  "Aufgabe in dieser Phase (optional)": "Tarea en esta fase (opcional)",
+  "Keine Sozialform": "Sin forma social",
+  "Nach oben": "Subir",
+  "Nach unten": "Bajar",
+  "Phase löschen": "Borrar fase",
+  "Aufgabe": "Tarea",
+  "Leeren": "Vaciar",
+  "Tippe hier die Aufgabe ein …": "Escribe aquí la tarea …",
+  "Sozialform": "Forma social",
+  "Sozialform wechseln": "Cambiar forma social",
+  "Einzelarbeit": "Trabajo individual",
+  "Partnerarbeit": "Trabajo en parejas",
+  "Gruppenarbeit": "Trabajo en grupo",
+  "Plenum": "Todo el grupo",
+  "max. 2 SuS": "máx. 2 alumnos",
+  "max. 3 SuS": "máx. 3 alumnos",
+  "Einzel": "Individual",
+  "Partner": "Parejas",
+  "Gruppe": "Grupo",
+  "allein oder zu zweit": "solo o en parejas",
+  "allein, zu zweit oder zu dritt": "solo, en parejas o en tríos",
+  "Lautstärke": "Volumen",
+  "Lautstärkeampel": "Semáforo de ruido",
+  "Ampel umschalten": "Cambiar semáforo",
+  "Alles gut": "Todo bien",
+  "Etwas leiser": "Un poco más bajo",
+  "Zu laut!": "¡Demasiado alto!",
+  "leise": "bajo",
+  "laut": "alto",
+  "Ab wann die Ampel rot wird": "Cuándo se pone rojo el semáforo",
+  "Mikrofon starten": "Iniciar micrófono",
+  "Mikrofon stoppen": "Detener micrófono",
+  "Stopp": "Parar",
+  "Tippe auf die Ampel oder starte das Mikrofon.": "Toca el semáforo o inicia el micrófono.",
+  "Schieberegler: ab wann die Ampel rot wird.": "Control deslizante: cuándo se pone rojo el semáforo.",
+  "Die Ampel wird gerade vom Mikrofon gesteuert.": "El micrófono controla ahora el semáforo.",
+  "iPad-Nutzung": "Uso del iPad",
+  "iPad-Stufe umschalten": "Cambiar estado del iPad",
+  "iPad erlaubt": "iPad permitido",
+  "Kein iPad": "Sin iPad",
+  "geöffnet auf dem Tisch": "abierto sobre la mesa",
+  "zugeklappt auf dem Tisch": "cerrado sobre la mesa",
+  "in der Schultasche": "en la mochila",
+  "Nutzung": "Uso",
+  "Erlaubt": "Permitido",
+  "Verboten": "Prohibido",
+  "Liegt": "Dónde",
+  "Bereit": "Listo",
+  "Zu": "Cerrado",
+  "Tasche": "Mochila",
+  "iPad-Nutzung erlaubt": "Uso del iPad permitido",
+  "iPad-Nutzung nicht erlaubt": "Uso del iPad no permitido",
+  "Wo liegt das iPad?": "¿Dónde está el iPad?",
+  "Bereit: geöffnet auf dem Tisch": "Listo: abierto sobre la mesa",
+  "Zugeklappt auf dem Tisch": "Cerrado sobre la mesa",
+  "Kein iPad: in der Schultasche": "Sin iPad: en la mochila",
+  "Arbeitsort": "Lugar de trabajo",
+  "Nur im Raum": "Solo en el aula",
+  "im Klassenraum bleiben": "quedarse en el aula",
+  "Auch draußen": "También fuera",
+  "Arbeiten außerhalb möglich": "se puede trabajar fuera",
+  "Möglich": "Posible",
+  "Nicht möglich": "No posible",
+  "Nur im Klassenraum": "Solo en el aula",
+  "Arbeiten außerhalb des Klassenraums umschalten": "Cambiar trabajo fuera del aula",
+  "Arbeiten außerhalb des Klassenraums": "Trabajar fuera del aula",
+  "KI-Nutzung": "Uso de IA",
+  "KI-Nutzung umschalten": "Cambiar uso de IA",
+  "KI-Nutzung wählen": "Elegir uso de IA",
+  "Keine KI": "Sin IA",
+  "KI erlaubt": "IA permitida",
+  "KI": "IA",
+  "Alle Kacheln sind ausgeblendet.": "Todos los recuadros están ocultos.",
+  "Öffne die Einstellungen (Zahnrad oben rechts).": "Abre los ajustes (rueda dentada arriba a la derecha).",
+  "Impressum": "Aviso legal",
+  "Datenschutz": "Privacidad",
+  "Kacheln anzeigen": "Mostrar recuadros",
+  "Darstellung & Ton": "Pantalla y sonido",
+  "Farben": "Colores",
+  "Sprache": "Idioma",
+  "Signalton, wenn der Timer abläuft": "Señal cuando termina el temporizador",
+  "Bildschirm nicht ausschalten": "No apagar la pantalla",
+  "Vorbereiten & Teilen": "Preparar y compartir",
+  "Speichere den kompletten Stand (Stundenfahrplan mit Aufgaben, Texte, Reflexionen, Einstellungen) als Datei und lade ihn später oder auf einem anderen Gerät wieder. So kannst du Stunden vorbereiten oder mit Kolleg:innen teilen. Ein Bild unter „Input“ wird nicht mitgespeichert.": "Guarda todo (plan de la clase con tareas, textos, reflexiones, ajustes) como archivo y cárgalo después o en otro dispositivo. Así puedes preparar clases o compartirlas con compañeros. La imagen de «Input» no se guarda.",
+  "Exportieren": "Exportar",
+  "Importieren": "Importar",
+  "Technik-Check": "Prueba técnica",
+  "Mikrofon jetzt testen": "Probar el micrófono ahora",
+  "Gut zu wissen": "Bueno saber (en alemán)",
+  "Alles zurücksetzen": "Restablecer todo",
+  "Fertig": "Listo",
+  "Anderes Bild": "Otra imagen",
+  "Bild entfernen": "Quitar imagen",
+  "Bild schließen": "Cerrar imagen",
+  "Das Bild bleibt nur in diesem Browser-Tab, bis du ihn schließt. Beim Exportieren wird es nicht mitgespeichert.": "La imagen se queda solo en esta pestaña del navegador hasta que la cierres. No se guarda al exportar.",
+  "iPad-Arbeit": "Trabajo con iPad",
+  "Offenes Arbeiten": "Trabajo abierto",
+  "Offen": "Abierto",
+  "Text anpassen": "Editar texto",
+  "Schließen": "Cerrar",
+  "Wie lief die Arbeit mit dem iPad heute?": "¿Cómo ha ido hoy el trabajo con el iPad?",
+  "Lief gut": "Fue bien",
+  "Teils, teils": "Más o menos",
+  "Lief nicht gut": "No fue bien",
+  "Ich war bei der Aufgabe und habe das iPad nur dafür genutzt.": "Me centré en la tarea y usé el iPad solo para eso.",
+  "Ich war ab und zu abgelenkt, habe aber zurückgefunden.": "De vez en cuando me distraje, pero volví a la tarea.",
+  "Ich war oft abgelenkt oder habe anderes am iPad gemacht.": "Me distraje a menudo o hice otras cosas en el iPad.",
+  "Was mache ich nächstes Mal anders?": "¿Qué haré diferente la próxima vez?",
+  "Wie lief das offene Arbeiten heute?": "¿Cómo ha ido hoy el trabajo abierto?",
+  "Ich habe konzentriert an meinen Aufgaben gearbeitet.": "Trabajé concentrado en mis tareas.",
+  "Ich habe meine Zeit gut eingeteilt.": "Organicé bien mi tiempo.",
+  "Bei Problemen habe ich mir selbst Hilfe geholt.": "Cuando tuve problemas, busqué ayuda yo mismo.",
+  "Ich habe meine Ergebnisse ordentlich gesichert.": "Guardé bien mis resultados.",
+  "Ich war manchmal abgelenkt.": "A veces me distraje.",
+  "Ich hatte Probleme, meine Aufgaben zu finden.": "Me costó encontrar mis tareas.",
+  "Ich hatte Probleme, meine Ergebnisse zu sortieren.": "Me costó ordenar mis resultados.",
+  "Ich war stark abgelenkt und habe anderes gemacht.": "Me distraje mucho e hice otras cosas.",
+  "Auswerten": "Evaluar",
+  "Unsortiert": "Sin ordenar",
+  "Eins weniger": "Uno menos",
+  "Wie ging es dir beim Arbeiten? Setz deinen Punkt.": "¿Cómo te sentiste al trabajar? Pon tu punto.",
+  "hoch": "alta",
+  "niedrig": "baja",
+  "Anforderung": "Exigencia",
+  "Mein Können": "Mis capacidades",
+  "Überforderung": "Sobrecarga",
+  "Langeweile": "Aburrimiento",
+  "Letzten entfernen": "Quitar el último",
+  "Tippen, um einen Punkt zu setzen": "Toca para poner un punto",
+  "Tippt in das Feld, um einen Punkt zu setzen.": "Toca el campo para poner un punto.",
+  "Punkt · Flow": "punto · Flow",
+  "Punkte · Flow": "puntos · Flow",
+  "· Überforderung": "· Sobrecarga",
+  "· Langeweile": "· Aburrimiento",
+  "Alle Punkte löschen?": "¿Borrar todos los puntos?",
+  "Alle Zählungen auf 0 setzen?": "¿Poner todos los recuentos a 0?",
+  "Alle Phasen löschen?": "¿Borrar todas las fases?",
+  "Alle Einstellungen auf Anfang zurücksetzen?": "¿Restablecer todos los ajustes?",
+  "Den aktuellen Stand durch die Datei ersetzen?": "¿Sustituir el estado actual por el archivo?"
+};
+/* Spanisch: eigenes Wörterbuch (Schlüssel = deutscher Text); fehlt ein Eintrag, kommt Englisch */
+const oneEs = s => (ES[s] != null ? ES[s] : s);
+const CTX_ES = { 'Weiter': { tStart: 'Reanudar' } };
+const PES = [
+  [/^Aufgabe · (.+)$/, m => 'Tarea · ' + oneEs(m[1])],
+  [/^Aufgabe für „(.+)“ eintippen …$/, m => `Escribe la tarea para «${oneEs(m[1])}» …`],
+  [/^Ende (\d{1,2}:\d{2}) Uhr$/, m => 'Termina a las ' + m[1]],
+  [/^KI · Level (\d)$/, m => 'IA · nivel ' + m[1]],
+  [/^(\d+) Minuten$/, m => m[1] + ' minutos'],
+  [/^(\d+) Stimmen?$/, m => m[1] + (+m[1] === 1 ? ' voto' : ' votos')],
+  [/^(\d+) Punkte?$/, m => m[1] + (+m[1] === 1 ? ' punto' : ' puntos')],
+  [/^Phase (\d+): (.*)$/, m => 'Fase ' + m[1] + ': ' + oneEs(m[2])],
+  [/^Text für Phase (\d+)$/, m => 'Texto de la fase ' + m[1]],
+  [/^Aufräumplan gespeichert\. Weiter mit „(.+)“\.$/, m => 'Plan de limpieza guardado. Vuelta a «' + oneEs(m[1]) + '».'],
+  [/^Aufgabe für Phase (\d+)$/, m => 'Tarea de la fase ' + m[1]],
+  [/^Minuten für Phase (\d+)$/, m => 'Minutos de la fase ' + m[1]],
+  [/^Gespeichert als „(.+)“\.$/, m => `Guardado como «${m[1]}».`],
+  [/^Sitzung (\d+) gestartet$/, m => 'Sesión ' + m[1] + ' iniciada'],
+  [/^(\d)\. Verwarnung$/, m => m[1] === '1' ? '1.er aviso' : '2.º aviso'],
+  [/^(Eröffnung|Rückblick|Themen|Abschluss) · (\d+) min$/, m => oneEs(m[1]) + ' · ' + m[2] + ' min']
+];
+function trEs(s, el) {
+  if (CTX_ES[s] && el) { for (const id in CTX_ES[s]) if (el.closest('#' + id)) return CTX_ES[s][id]; }
+  if (ES[s] != null) return ES[s];
+  for (const [re, f] of PES) { const m = s.match(re); if (m) return f(m); }
+  return null;
+}
+
 /* gleiche Wörter, andere Bedeutung je nach Ort */
 const CTX = { 'Weiter': { tStart: ['Resume', 'Reprendre'] } };
 const one = (i, s) => (D[s] ? D[s][i] : s);
@@ -2441,7 +2677,8 @@ if (!LANGS.includes(lang)) lang = 'de';
 
 function tr(s, el) {
   if (lang === 'de') return null;
-  const i = lang === 'en' ? 0 : 1;
+  if (lang === 'es') { const r = trEs(s, el); if (r != null) return r; }
+  const i = lang === 'fr' ? 1 : 0;
   if (CTX[s] && el) { for (const id in CTX[s]) if (el.closest('#' + id)) return CTX[s][id][i]; }
   if (D[s]) return D[s][i];
   for (const [re, f] of P) { const m = s.match(re); if (m) return f(i, m); }
@@ -2497,11 +2734,11 @@ function setLang(l, announce) {
   walk(document.body);
   const c = document.getElementById('langCode'); if (c) c.textContent = lang.toUpperCase();
   const b = document.getElementById('btnLang');
-  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Deutsch)' }[lang];
+  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Español)', es: 'Idioma: español (toca para Deutsch)' }[lang];
   document.querySelectorAll('[data-lang-set]').forEach(x => x.classList.toggle('sel', x.dataset.langSet === lang));
   if (announce) {
     const t = document.getElementById('toast');
-    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français' }[lang]; t.classList.add('show'); clearTimeout(setLang.tm); setLang.tm = setTimeout(() => t.classList.remove('show'), 1800); }
+    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français', es: 'Idioma: español' }[lang]; t.classList.add('show'); clearTimeout(setLang.tm); setLang.tm = setTimeout(() => t.classList.remove('show'), 1800); }
   }
 }
 document.getElementById('btnLang').addEventListener('click', () => setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length], true));

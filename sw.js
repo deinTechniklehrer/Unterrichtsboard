@@ -1,7 +1,7 @@
 /* Unterrichtsboard – Offline-Speicher (Service Worker)
    Die Seite wird beim ersten Öffnen gespeichert und funktioniert danach auch ohne Internet.
    Mit Internet wird immer zuerst die neueste Version geladen. */
-const CACHE = 'unterrichtsboard-v6';
+const CACHE = 'unterrichtsboard-v7';
 const ROOT = new URL('./', self.location).pathname;
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 

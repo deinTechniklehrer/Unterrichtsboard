@@ -952,7 +952,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
       <div class="seg"><button class="btn" data-theme-set="light">Hell</button><button class="btn" data-theme-set="dark">Dunkel</button></div>
     </div>
     <div class="row">Sprache
-      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button></div>
+      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button><button class="btn" data-lang-set="es">Español</button></div>
     </div>
     <label class="row">Signalton, wenn der Timer abläuft <input type="checkbox" class="sw" id="optSound"></label>
     <label class="row">Ton zum Start der Aufräumphase <input type="checkbox" class="sw" id="optCleanTone"></label>
@@ -980,7 +980,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
     <p><strong>Aufgabe:</strong> Tippe in die Aufgaben-Kachel. Die Schrift passt sich automatisch an, damit der Text so groß wie möglich erscheint. In „Nur Anzeige“ ist das Feld gesperrt, damit niemand aus Versehen etwas ändert.</p>
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ (rote Karte oben). Ein Tipp stellt auf „Sicher“ (grüne Karte). „Alarm“ gibt dreimal einen deutlichen Signalton und sagt dann mit der Stimme des Geräts „Achtung! Ein Sicherheitsverstoß liegt vor. Alle setzen sich auf ihren Platz.“ Das wiederholt sich, und der Hintergrund blinkt rot, bis du den Alarm mit einem zweiten Tipp beendest. Beim Alarm springt die Karte automatisch auf „Unsicher“; nach dem Alarm stellst du sie selbst wieder auf „Sicher“. Die Ansage lässt sich in den Einstellungen abschalten. Am iPad muss der Ton laut gestellt sein.</p>
-    <p><strong>Ansagen:</strong> Alarm- und Aufräumansage sind Audiodateien mit KI-Stimmen. Deutsch: erzeugt mit dem KI-Multimedia-Tool von fobizz. Englisch und Französisch: erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Die Dateien werden mit dem Board offline gespeichert. Lässt sich eine Datei nicht abspielen, spricht die Stimme des Geräts.</p>
+    <p><strong>Ansagen:</strong> Alarm- und Aufräumansage sind Audiodateien mit KI-Stimmen. Deutsch: erzeugt mit dem KI-Multimedia-Tool von fobizz. Englisch und Französisch: erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Auf Spanisch spricht die Stimme des Geräts. Die Dateien werden mit dem Board offline gespeichert. Lässt sich eine Datei nicht abspielen, spricht die Stimme des Geräts.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen und Werkzeug je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. So kannst du den Plan vorbereiten: Nummern verteilen, dann „Speichern“ (oben oder unten neben „Aufräumen beenden“). Das Board geht zurück in die Phase, aus der du gekommen bist, der Timer läuft dort weiter, und später nutzt das Aufräumen genau diese Verteilung. Startest du im Aufräumen den Timer, gilt es als echtes Aufräumen, oben steht dann wieder „Beenden“. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
@@ -1477,7 +1477,9 @@ function fitSym() {
       } else box.style.gridTemplateColumns = '';
     }
     const sps = $$('.tb-s span', box).filter(s => s.offsetWidth); if (!sps.length) continue;
-    const setTxt = k => sps.forEach(s => { const t = s.dataset[k]; if (t && s.dataset.cur !== k) { s.textContent = t; s.dataset.cur = k; } });
+    // gleich übersetzt eintragen, damit die Messung mit dem Text der eingestellten Sprache rechnet
+    const L = window.tbLang || 'de';
+    const setTxt = k => sps.forEach(s => { const t = s.dataset[k], tag = k + ':' + L; if (t && s.dataset.cur !== tag) { s.textContent = (window.tbTr && window.tbTr(t)) || t; s.dataset.cur = tag; } });
     box.style.removeProperty('--symf');
     const base = parseFloat(getComputedStyle(sps[0]).fontSize) || 14;
     const rg = document.createRange();
@@ -2562,7 +2564,8 @@ const tbIsClean = p => !!p && /aufr[äa]um/i.test(p.text || '');
 const CLEAN_SAY = {
   de: 'Achtung! Aufräumzeit. Erledigt jetzt eure Aufgabe nach dem Aufräumplan.',
   en: 'Attention! Time to tidy up. Please do your job on the clean-up plan now.',
-  fr: 'Attention ! C’est l’heure de ranger. Faites maintenant votre tâche du plan de rangement.'
+  fr: 'Attention ! C’est l’heure de ranger. Faites maintenant votre tâche du plan de rangement.',
+  es: '¡Atención! Hora de recoger. Haced ahora vuestra tarea según el plan de limpieza.'
 };
 function cleanCue() {
   if (S.cleanTone) { unlockAudio(); tbTone(988, 0.22, 0); tbTone(784, 0.22, 0.26); tbTone(659, 0.45, 0.52); }
@@ -2570,7 +2573,7 @@ function cleanCue() {
   try {
     const l = CLEAN_SAY[window.tbLang] ? window.tbLang : 'de';
     const u = new SpeechSynthesisUtterance(CLEAN_SAY[l]);
-    u.lang = { de: 'de-DE', en: 'en-GB', fr: 'fr-FR' }[l]; u.rate = 0.95;
+    u.lang = { de: 'de-DE', en: 'en-GB', fr: 'fr-FR', es: 'es-ES' }[l]; u.rate = 0.95;
     const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(l));
     if (v) u.voice = v;
     speechSynthesis.cancel();
@@ -2619,7 +2622,8 @@ function tbTone(f, d, t0) {
 const ALARM_SAY = {
   de: 'Achtung! Ein Sicherheitsverstoß liegt vor. Alle setzen sich auf ihren Platz.',
   en: 'Attention! There is a safety violation. Everyone sit down in your place.',
-  fr: 'Attention ! Il y a une infraction à la sécurité. Tout le monde s’assoit à sa place.'
+  fr: 'Attention ! Il y a une infraction à la sécurité. Tout le monde s’assoit à sa place.',
+  es: '¡Atención! Hay una infracción de seguridad. Todos a sentarse en su sitio.'
 };
 let tbAlarmTok = 0, tbAlarmTm = 0, tbVoiceSrc = null;
 /* Ansagen als Audiodatei (KI-Stimme, offline gespeichert); fehlt eine Datei, spricht die Stimme des Geräts */
@@ -2671,7 +2675,7 @@ function tbSirenStart() {
       try {
         const l = ALARM_SAY[window.tbLang] ? window.tbLang : 'de';
         const u = new SpeechSynthesisUtterance(ALARM_SAY[l]);
-        u.lang = { de: 'de-DE', en: 'en-GB', fr: 'fr-FR' }[l]; u.rate = 1;
+        u.lang = { de: 'de-DE', en: 'en-GB', fr: 'fr-FR', es: 'es-ES' }[l]; u.rate = 1;
         const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(l)); if (v) u.voice = v;
         let done = false; const fin = () => { if (done) return; done = true; if (tok === tbAlarmTok) next(700); };
         u.onend = fin; u.onerror = fin;
@@ -2980,7 +2984,7 @@ setInterval(clock, 1000);
 (() => {
 'use strict';
 const LKEY = 'techboard.lang';
-const LANGS = ['de', 'en', 'fr'];
+const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
 
   // Aufräumplan
@@ -3343,6 +3347,374 @@ const D = {
   'Alle Einstellungen auf Anfang zurücksetzen?': ['Reset all settings?', 'Réinitialiser tous les réglages ?'],
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
+const ES = {
+  "Springer": "Comodines",
+  "Material": "Material",
+  "Nicht dabei": "Ausentes",
+  "Zufällig verteilen": "Repartir al azar",
+  "Schüler:innen": "Alumnos",
+  "Alle zurück": "Todos de vuelta",
+  "Plan bearbeiten": "Editar plan",
+  "Aufräumplan bearbeiten": "Editar plan de limpieza",
+  "Jeder Auftrag bekommt seine Nummern (Fegen und Werkzeug zwei), die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.": "Cada tarea recibe sus números (barrer y herramientas, dos); los demás son comodines. Toca un número y luego una tarea, o arrastra el número.",
+  "Jeder Auftrag bekommt eine Nummer, die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.": "Cada tarea recibe un número; los demás son comodines. Toca un número y luego una tarea, o arrastra el número.",
+  "Trag die Aufträge für deinen Raum ein und stell ein, wie viele Nummern jeder Auftrag bekommt. Beim zufälligen Verteilen bekommt zuerst jeder Auftrag eine Nummer, dann die Aufträge mit zwei oder drei Nummern die nächsten. Alle übrigen Nummern sind Springer und lassen sich danach noch zuordnen.": "Escribe las tareas de tu aula y elige cuántos números recibe cada una. Al repartir al azar, primero cada tarea recibe un número y luego las tareas con dos o tres números reciben los siguientes. Los demás números son comodines y se pueden asignar después.",
+  "Nummern": "Números",
+  "Trag die Aufträge für deinen Raum ein. Beim zufälligen Verteilen bekommt jeder Auftrag eine Nummer, alle übrigen Nummern sind Springer. Springer kannst du danach noch einem Auftrag zuordnen.": "Escribe las tareas de tu aula. Al repartir al azar, cada tarea recibe un número y los demás son comodines. Después puedes asignar los comodines a una tarea.",
+  "+ Auftrag hinzufügen": "+ Añadir tarea",
+  "Vorlage wiederherstellen": "Restaurar plantilla",
+  "Auftrag löschen": "Borrar tarea",
+  "Auftrag, z. B. Gang 1 fegen": "Tarea, p. ej. barrer el pasillo 1",
+  "Was genau ist zu tun?": "¿Qué hay que hacer exactamente?",
+  "Noch keine Aufträge. Füge unten einen hinzu.": "Todavía no hay tareas. Añade una abajo.",
+  "Mehr als 20 Aufträge passen nicht in den Plan.": "En el plan no caben más de 20 tareas.",
+  "Eine Person weniger": "Una persona menos",
+  "Eine Person mehr": "Una persona más",
+  "Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.": "Toca un número y luego una tarea, o arrastra el número.",
+  "Werkzeug": "Herramientas",
+  "Werkzeug auf Vollständigkeit prüfen und in die Schränke einsortieren.": "Comprobar que están todas las herramientas y guardarlas en los armarios.",
+  "Material sortieren und in den Lagerraum bringen.": "Ordenar el material y llevarlo al almacén.",
+  "Taschenablage Seite": "Estante de mochilas (lateral)",
+  "Ablage bei Bedarf aufräumen und abfegen. Auch die Fensterbank abfegen.": "Ordenar y barrer el estante si hace falta. Barrer también el alféizar.",
+  "Werkbank Tischbohrmaschinen": "Banco de taladros de columna",
+  "Werkbank/Bohrmaschinen säubern und Werkzeuge in den Schränken auf Vollständigkeit prüfen. Schlüssel nach vorne bringen.": "Limpiar el banco y los taladros y comprobar las herramientas de los armarios. Llevar las llaves adelante.",
+  "Gang 1 fegen": "Barrer el pasillo 1",
+  "Gang an den Schränken fegen, auch unter den Schülerwerkbänken.": "Barrer el pasillo junto a los armarios, también debajo de los bancos de trabajo.",
+  "Gang 2 fegen": "Barrer el pasillo 2",
+  "Mittelgang fegen, auch unter den Schülerwerkbänken. Vor der Tafel und der Lehrgangsstation fegen.": "Barrer el pasillo central, también debajo de los bancos de trabajo. Barrer delante de la pizarra y de la estación de demostración.",
+  "Gang 3 fegen": "Barrer el pasillo 3",
+  "Gang am Fenster fegen, auch unter den Schülerwerkbänken und der Taschenablage.": "Barrer el pasillo junto a la ventana, también debajo de los bancos de trabajo y del estante de mochilas.",
+  "Schraubstockwagen/​Schraubzwingenwagen": "Carro de tornillos/​carro de sargentos",
+  "Kontrollieren, ob die Wagen ordentlich sind (Schraubzwingen sortiert, Schraubstöcke zeigen nach außen).": "Comprobar que los carros están ordenados (sargentos ordenados, tornillos de banco hacia fuera).",
+  "Waschbecken": "Lavabo",
+  "Das Waschbecken säubern, in der Umgebung des Waschbeckens kontrollieren, ob der Fußboden trocken ist. Die Handwaschpaste schließen.": "Limpiar el lavabo y comprobar que el suelo alrededor está seco. Cerrar la pasta lavamanos.",
+  "Schülerwerkbänke": "Bancos de trabajo",
+  "Abfegen, Schraubbacken lose zudrehen und auf Verunreinigungen prüfen (auch die Löcher für die Spannelemente).": "Barrerlos, cerrar un poco las mordazas y comprobar que no haya suciedad (también en los agujeros para las piezas de sujeción).",
+  "SICHER": "SEGURO",
+  "UNSICHER": "INSEGURO",
+  "ALARM": "ALARMA",
+  "STOPP": "PARAR",
+  "Treffpunkt": "Punto de encuentro",
+  "Ton zum Start der Aufräumphase": "Sonido al empezar la limpieza",
+  "Sprachansage zum Aufräumen": "Aviso hablado para la limpieza",
+  "Stationenarbeit": "Trabajo por estaciones",
+  "Stationen": "Estaciones",
+  "Freie Form": "Forma libre",
+  "Sozialform frei wählbar": "forma social a elegir",
+  "Lernplattformen AWT": "Plataformas de aprendizaje AWT",
+  "AWT · scannen und loslegen": "AWT · escanea y empieza",
+  "Lernplattformen": "Plataformas",
+  "QR-Code groß anzeigen": "Mostrar el código QR en grande",
+  "QR-Code Lernplattformen AWT": "Código QR plataformas AWT",
+  "Elektrisch": "Eléctrico",
+  "Mechanisch": "Mecánico",
+  "Heiß": "Calor",
+  "Brand": "Incendio",
+  "Fenster": "Ventana",
+  "Brille": "Gafas",
+  "Hände": "Manos",
+  "Gehör": "Oídos",
+  "Automatisch weiter": "Avance automático",
+  "Automatisch weiter: Phasen springen nach Ablauf der Zeit": "Avance automático: las fases cambian al acabar el tiempo",
+  "Auto: Nach Ablauf der Zeit springt der Fahrplan zur nächsten Phase. Starte den Timer.": "Auto: al acabar el tiempo, el plan pasa a la siguiente fase. Inicia el temporizador.",
+  "Auto aus: Du schaltest die Phasen selbst weiter.": "Auto desactivado: tú pasas las fases.",
+  "Auto": "Auto",
+  "Unterweisung": "Instrucción",
+  "Sperren": "Bloquear",
+  "Entsperren": "Desbloquear",
+  "Plan gesperrt. Zum Ändern mit PIN entsperren.": "Plan bloqueado. Desbloquéalo con el PIN para cambiarlo.",
+  "Aufräumplan sperren": "Bloquear plan de limpieza",
+  "Aufräumplan entsperren": "Desbloquear plan de limpieza",
+  "Gib eine 4-stellige PIN ein. Zum Entsperren brauchst du sie wieder.": "Introduce un PIN de 4 cifras. Lo necesitarás para desbloquear.",
+  "Gib die PIN ein, mit der du den Plan gesperrt hast.": "Introduce el PIN con el que bloqueaste el plan.",
+  "wiederholen": "repetir",
+  "Abbrechen": "Cancelar",
+  "Bitte genau 4 Ziffern eingeben.": "Introduce exactamente 4 cifras.",
+  "Die beiden PINs stimmen nicht überein.": "Los dos PIN no coinciden.",
+  "Falsche PIN.": "PIN incorrecto.",
+  "Aufräumplan gesperrt.": "Plan de limpieza bloqueado.",
+  "Aufräumplan entsperrt.": "Plan de limpieza desbloqueado.",
+  "PIN, 4 Ziffern": "PIN, 4 cifras",
+  "PIN wiederholen": "Repetir PIN",
+  "Auto-Modus ist an, Aufräumen wurde aber von Hand geöffnet: Starte den Timer selbst. Mit dem Start kommt die Ansage.": "El modo automático está activado, pero la limpieza se abrió a mano: inicia tú el temporizador. Con el inicio suena el aviso.",
+  "Starte den Timer, dann kommt die Ansage.": "Inicia el temporizador y sonará el aviso.",
+  "Speichern": "Guardar",
+  "Aufräumplan gespeichert.": "Plan de limpieza guardado.",
+  "Sprachansage beim Alarm": "Aviso hablado durante la alarma",
+  "Sicherheits­unterweisung": "Instrucción de seguridad",
+  "Alle hören zu": "Todos escuchan",
+  "Sicherheitsregeln": "Normas de seguridad",
+  "Fokus": "Enfoque",
+  "Fokus wechseln": "Cambiar enfoque",
+  "Freie Wahl": "Elección libre",
+  "Kein Fokus": "Sin enfoque",
+  "Sicherheit": "Seguridad",
+  "Wähle die APE für die heutige Arbeit.": "Elige el puesto de trabajo para hoy.",
+  "Treffpunkt: alle kommen zusammen": "Punto de encuentro: nos reunimos todos",
+  "Alle kommen zusammen und hören zu.": "Todos se reúnen y escuchan.",
+  "Hinweis": "Aviso",
+  "Sicherheitsunterweisung": "Instrucción de seguridad",
+  "Zwischenstand": "Puesta en común",
+  "Ohne Überschrift": "Sin título",
+  "Eigene Überschrift …": "Título propio …",
+  "Eigene Überschrift": "Título propio",
+  "Ton nochmal": "Repetir sonido",
+  "Weiterarbeiten": "Seguir trabajando",
+  "Aufräumen": "Recoger",
+  "Beenden": "Terminar",
+  "Aufräumen beenden": "Terminar la limpieza",
+  "Aufr.": "Limp.",
+  "+ Aufräumen hinzufügen": "+ Añadir limpieza",
+  "Achtung: Arbeitsplatz aufräumen!": "Atención: ¡recoge tu puesto de trabajo!",
+  "Erledige deine Aufgabe nach dem Aufräumplan.": "Haz tu tarea según el plan de limpieza.",
+  "APE": "APE",
+  "Arbeitsplatzeinrichtung": "Puesto de trabajo",
+  "Holz": "Madera",
+  "Metall": "Metal",
+  "Elektro": "Electrónica",
+  "Gefährdungen": "Peligros",
+  "Fenster auf Kipp": "Ventana entreabierta",
+  "Schutzbrille": "Gafas de protección",
+  "Hände waschen": "Lavarse las manos",
+  "Gehörschutz": "Protección auditiva",
+  "Elektrische Gefährdung": "Riesgo eléctrico",
+  "Mechanische Verletzung": "Lesión mecánica",
+  "Gefahrstoffe": "Sustancias peligrosas",
+  "Thermische Gefährdung": "Riesgo térmico",
+  "Brand- und Explosionsgefährdung": "Riesgo de incendio y explosión",
+  "Lärm": "Ruido",
+  "Wähle eine APE, dann erscheinen die Sicherheitsregeln.": "Elige un puesto de trabajo y aparecerán las normas de seguridad.",
+  "Antippen zum Schließen": "Toca para cerrar",
+  "APE groß": "Puesto de trabajo en grande",
+  "Wie lief das Aufräumen heute?": "¿Cómo ha ido hoy la limpieza?",
+  "Ich habe meinen Arbeitsplatz sauber hinterlassen.": "Dejé mi puesto de trabajo limpio.",
+  "Mein Werkzeug liegt vollständig an seinem Platz.": "Todas mis herramientas están en su sitio.",
+  "Ich habe meine Aufgabe nach dem Aufräumplan erledigt.": "Hice mi tarea según el plan de limpieza.",
+  "Ich habe anderen beim Aufräumen geholfen.": "Ayudé a otros a recoger.",
+  "Ich musste ans Aufräumen erinnert werden.": "Tuvieron que recordarme que recogiera.",
+  "Ich bin nicht rechtzeitig fertig geworden.": "No terminé a tiempo.",
+  "Ich wusste nicht, was meine Aufgabe ist.": "No sabía cuál era mi tarea.",
+  "Ich habe zwischendurch etwas anderes gemacht.": "Mientras tanto hice otras cosas.",
+  "Mehr als 12 Phasen passen nicht in den Fahrplan.": "En el plan no caben más de 12 fases.",
+  "Nur Anzeige": "Solo visualización",
+  "Größe des Timers (Querformat)": "Tamaño del temporizador (horizontal)",
+  "Fahrplan": "Plan",
+  "Fahrplan bearbeiten": "Editar plan",
+  "Reflexion": "Reflexión",
+  "Input": "Input",
+  "Dunkel": "Oscuro",
+  "Hell": "Claro",
+  "Vollbild": "Pantalla completa",
+  "Einstellungen": "Ajustes",
+  "Bedienelemente aus- oder einblenden": "Mostrar u ocultar los controles",
+  "Stundenfahrplan ein- oder ausblenden": "Mostrar u ocultar el plan de la clase",
+  "Reflexion öffnen": "Abrir reflexión",
+  "Bild vom Gerät groß zeigen": "Mostrar en grande una imagen del dispositivo",
+  "Input: Bild zeigen": "Input: mostrar imagen",
+  "Hell / Dunkel umschalten": "Cambiar claro / oscuro",
+  "Hell oder dunkel": "Claro u oscuro",
+  "Auf hell umschalten": "Cambiar a claro",
+  "Auf dunkel umschalten": "Cambiar a oscuro",
+  "Timer": "Temporizador",
+  "bereit": "listo",
+  "läuft": "en marcha",
+  "pausiert": "en pausa",
+  "Zeit ist um!": "¡Se acabó el tiempo!",
+  "Start": "Iniciar",
+  "Pause": "Pausa",
+  "Weiter": "Siguiente",
+  "Zurücksetzen": "Reiniciar",
+  "Timer starten oder pausieren": "Iniciar o pausar el temporizador",
+  "QR-Code": "Código QR",
+  "QR-Code groß": "Código QR en grande",
+  "Zehn Minuten weniger": "Diez minutos menos",
+  "Zehn Minuten mehr": "Diez minutos más",
+  "Eine Minute weniger": "Un minuto menos",
+  "Eine Minute mehr": "Un minuto más",
+  "Stundenfahrplan": "Plan de la clase",
+  "Bearbeiten": "Editar",
+  "Zurück": "Atrás",
+  "Eine Phase zurück": "Fase anterior",
+  "Nächste Phase": "Fase siguiente",
+  "Phase hinzufügen": "Añadir fase",
+  "Noch keine Phasen.": "Todavía no hay fases.",
+  "Tippe auf „Bearbeiten“.": "Toca «Editar».",
+  "Einstieg": "Inicio",
+  "Arbeitsphase": "Fase de trabajo",
+  "Präsentation": "Presentación",
+  "Sicherung": "Cierre",
+  "Schreib die Phasen deiner Stunde hinein, wähle zu jeder Phase die Sozialform und trag bei Bedarf die Aufgabe ein. Mit „Weiter“ schiebst du den Pfeil später zur nächsten Phase, Sozialform und Aufgabe wechseln mit.": "Escribe las fases de tu clase, elige para cada fase la forma social y añade la tarea si hace falta. Con «Siguiente» mueves después la flecha a la siguiente fase; la forma social y la tarea cambian con ella.",
+  "+ Phase hinzufügen": "+ Añadir fase",
+  "Alles leeren": "Vaciar todo",
+  "z. B. Einstieg": "p. ej. Inicio",
+  "Aufgabe in dieser Phase (optional)": "Tarea en esta fase (opcional)",
+  "Keine Sozialform": "Sin forma social",
+  "Nach oben": "Subir",
+  "Nach unten": "Bajar",
+  "Phase löschen": "Borrar fase",
+  "Aufgabe": "Tarea",
+  "Leeren": "Vaciar",
+  "Tippe hier die Aufgabe ein …": "Escribe aquí la tarea …",
+  "Sozialform": "Forma social",
+  "Sozialform wechseln": "Cambiar forma social",
+  "Einzelarbeit": "Trabajo individual",
+  "Partnerarbeit": "Trabajo en parejas",
+  "Gruppenarbeit": "Trabajo en grupo",
+  "Plenum": "Todo el grupo",
+  "max. 2 SuS": "máx. 2 alumnos",
+  "max. 3 SuS": "máx. 3 alumnos",
+  "Einzel": "Individual",
+  "Partner": "Parejas",
+  "Gruppe": "Grupo",
+  "allein oder zu zweit": "solo o en parejas",
+  "allein, zu zweit oder zu dritt": "solo, en parejas o en tríos",
+  "Lautstärke": "Volumen",
+  "Lautstärkeampel": "Semáforo de ruido",
+  "Ampel umschalten": "Cambiar semáforo",
+  "Alles gut": "Todo bien",
+  "Etwas leiser": "Un poco más bajo",
+  "Zu laut!": "¡Demasiado alto!",
+  "leise": "bajo",
+  "laut": "alto",
+  "Ab wann die Ampel rot wird": "Cuándo se pone rojo el semáforo",
+  "Mikrofon starten": "Iniciar micrófono",
+  "Mikrofon stoppen": "Detener micrófono",
+  "Stopp": "Parar",
+  "Tippe auf die Ampel oder starte das Mikrofon.": "Toca el semáforo o inicia el micrófono.",
+  "Schieberegler: ab wann die Ampel rot wird.": "Control deslizante: cuándo se pone rojo el semáforo.",
+  "Die Ampel wird gerade vom Mikrofon gesteuert.": "El micrófono controla ahora el semáforo.",
+  "iPad-Nutzung": "Uso del iPad",
+  "iPad-Stufe umschalten": "Cambiar estado del iPad",
+  "iPad erlaubt": "iPad permitido",
+  "Kein iPad": "Sin iPad",
+  "geöffnet auf dem Tisch": "abierto sobre la mesa",
+  "zugeklappt auf dem Tisch": "cerrado sobre la mesa",
+  "in der Schultasche": "en la mochila",
+  "Nutzung": "Uso",
+  "Erlaubt": "Permitido",
+  "Verboten": "Prohibido",
+  "Liegt": "Dónde",
+  "Bereit": "Listo",
+  "Zu": "Cerrado",
+  "Tasche": "Mochila",
+  "iPad-Nutzung erlaubt": "Uso del iPad permitido",
+  "iPad-Nutzung nicht erlaubt": "Uso del iPad no permitido",
+  "Wo liegt das iPad?": "¿Dónde está el iPad?",
+  "Bereit: geöffnet auf dem Tisch": "Listo: abierto sobre la mesa",
+  "Zugeklappt auf dem Tisch": "Cerrado sobre la mesa",
+  "Kein iPad: in der Schultasche": "Sin iPad: en la mochila",
+  "Arbeitsort": "Lugar de trabajo",
+  "Nur im Raum": "Solo en el aula",
+  "im Klassenraum bleiben": "quedarse en el aula",
+  "Auch draußen": "También fuera",
+  "Arbeiten außerhalb möglich": "se puede trabajar fuera",
+  "Möglich": "Posible",
+  "Nicht möglich": "No posible",
+  "Nur im Klassenraum": "Solo en el aula",
+  "Arbeiten außerhalb des Klassenraums umschalten": "Cambiar trabajo fuera del aula",
+  "Arbeiten außerhalb des Klassenraums": "Trabajar fuera del aula",
+  "KI-Nutzung": "Uso de IA",
+  "KI-Nutzung umschalten": "Cambiar uso de IA",
+  "KI-Nutzung wählen": "Elegir uso de IA",
+  "Keine KI": "Sin IA",
+  "KI erlaubt": "IA permitida",
+  "KI": "IA",
+  "Alle Kacheln sind ausgeblendet.": "Todos los recuadros están ocultos.",
+  "Öffne die Einstellungen (Zahnrad oben rechts).": "Abre los ajustes (rueda dentada arriba a la derecha).",
+  "Impressum": "Aviso legal",
+  "Datenschutz": "Privacidad",
+  "Kacheln anzeigen": "Mostrar recuadros",
+  "Darstellung & Ton": "Pantalla y sonido",
+  "Farben": "Colores",
+  "Sprache": "Idioma",
+  "Signalton, wenn der Timer abläuft": "Señal cuando termina el temporizador",
+  "Bildschirm nicht ausschalten": "No apagar la pantalla",
+  "Vorbereiten & Teilen": "Preparar y compartir",
+  "Speichere den kompletten Stand (Stundenfahrplan mit Aufgaben, Texte, Reflexionen, Einstellungen) als Datei und lade ihn später oder auf einem anderen Gerät wieder. So kannst du Stunden vorbereiten oder mit Kolleg:innen teilen. Ein Bild unter „Input“ wird nicht mitgespeichert.": "Guarda todo (plan de la clase con tareas, textos, reflexiones, ajustes) como archivo y cárgalo después o en otro dispositivo. Así puedes preparar clases o compartirlas con compañeros. La imagen de «Input» no se guarda.",
+  "Exportieren": "Exportar",
+  "Importieren": "Importar",
+  "Technik-Check": "Prueba técnica",
+  "Mikrofon jetzt testen": "Probar el micrófono ahora",
+  "Gut zu wissen": "Bueno saber (en alemán)",
+  "Alles zurücksetzen": "Restablecer todo",
+  "Fertig": "Listo",
+  "Anderes Bild": "Otra imagen",
+  "Bild entfernen": "Quitar imagen",
+  "Bild schließen": "Cerrar imagen",
+  "Das Bild bleibt nur in diesem Browser-Tab, bis du ihn schließt. Beim Exportieren wird es nicht mitgespeichert.": "La imagen se queda solo en esta pestaña del navegador hasta que la cierres. No se guarda al exportar.",
+  "iPad-Arbeit": "Trabajo con iPad",
+  "Offenes Arbeiten": "Trabajo abierto",
+  "Offen": "Abierto",
+  "Text anpassen": "Editar texto",
+  "Schließen": "Cerrar",
+  "Wie lief die Arbeit mit dem iPad heute?": "¿Cómo ha ido hoy el trabajo con el iPad?",
+  "Lief gut": "Fue bien",
+  "Teils, teils": "Más o menos",
+  "Lief nicht gut": "No fue bien",
+  "Ich war bei der Aufgabe und habe das iPad nur dafür genutzt.": "Me centré en la tarea y usé el iPad solo para eso.",
+  "Ich war ab und zu abgelenkt, habe aber zurückgefunden.": "De vez en cuando me distraje, pero volví a la tarea.",
+  "Ich war oft abgelenkt oder habe anderes am iPad gemacht.": "Me distraje a menudo o hice otras cosas en el iPad.",
+  "Was mache ich nächstes Mal anders?": "¿Qué haré diferente la próxima vez?",
+  "Wie lief das offene Arbeiten heute?": "¿Cómo ha ido hoy el trabajo abierto?",
+  "Ich habe konzentriert an meinen Aufgaben gearbeitet.": "Trabajé concentrado en mis tareas.",
+  "Ich habe meine Zeit gut eingeteilt.": "Organicé bien mi tiempo.",
+  "Bei Problemen habe ich mir selbst Hilfe geholt.": "Cuando tuve problemas, busqué ayuda yo mismo.",
+  "Ich habe meine Ergebnisse ordentlich gesichert.": "Guardé bien mis resultados.",
+  "Ich war manchmal abgelenkt.": "A veces me distraje.",
+  "Ich hatte Probleme, meine Aufgaben zu finden.": "Me costó encontrar mis tareas.",
+  "Ich hatte Probleme, meine Ergebnisse zu sortieren.": "Me costó ordenar mis resultados.",
+  "Ich war stark abgelenkt und habe anderes gemacht.": "Me distraje mucho e hice otras cosas.",
+  "Auswerten": "Evaluar",
+  "Unsortiert": "Sin ordenar",
+  "Eins weniger": "Uno menos",
+  "Wie ging es dir beim Arbeiten? Setz deinen Punkt.": "¿Cómo te sentiste al trabajar? Pon tu punto.",
+  "hoch": "alta",
+  "niedrig": "baja",
+  "Anforderung": "Exigencia",
+  "Mein Können": "Mis capacidades",
+  "Überforderung": "Sobrecarga",
+  "Langeweile": "Aburrimiento",
+  "Letzten entfernen": "Quitar el último",
+  "Tippen, um einen Punkt zu setzen": "Toca para poner un punto",
+  "Tippt in das Feld, um einen Punkt zu setzen.": "Toca el campo para poner un punto.",
+  "Punkt · Flow": "punto · Flow",
+  "Punkte · Flow": "puntos · Flow",
+  "· Überforderung": "· Sobrecarga",
+  "· Langeweile": "· Aburrimiento",
+  "Alle Punkte löschen?": "¿Borrar todos los puntos?",
+  "Alle Zählungen auf 0 setzen?": "¿Poner todos los recuentos a 0?",
+  "Alle Phasen löschen?": "¿Borrar todas las fases?",
+  "Alle Einstellungen auf Anfang zurücksetzen?": "¿Restablecer todos los ajustes?",
+  "Den aktuellen Stand durch die Datei ersetzen?": "¿Sustituir el estado actual por el archivo?"
+};
+/* Spanisch: eigenes Wörterbuch (Schlüssel = deutscher Text); fehlt ein Eintrag, kommt Englisch */
+const oneEs = s => (ES[s] != null ? ES[s] : s);
+const CTX_ES = { 'Weiter': { tStart: 'Reanudar' } };
+const PES = [
+  [/^Aufgabe · (.+)$/, m => 'Tarea · ' + oneEs(m[1])],
+  [/^Aufgabe für „(.+)“ eintippen …$/, m => `Escribe la tarea para «${oneEs(m[1])}» …`],
+  [/^Ende (\d{1,2}:\d{2}) Uhr$/, m => 'Termina a las ' + m[1]],
+  [/^KI · Level (\d)$/, m => 'IA · nivel ' + m[1]],
+  [/^(\d+) Minuten$/, m => m[1] + ' minutos'],
+  [/^(\d+) Stimmen?$/, m => m[1] + (+m[1] === 1 ? ' voto' : ' votos')],
+  [/^(\d+) Punkte?$/, m => m[1] + (+m[1] === 1 ? ' punto' : ' puntos')],
+  [/^Phase (\d+): (.*)$/, m => 'Fase ' + m[1] + ': ' + oneEs(m[2])],
+  [/^Text für Phase (\d+)$/, m => 'Texto de la fase ' + m[1]],
+  [/^Aufräumplan gespeichert\. Weiter mit „(.+)“\.$/, m => 'Plan de limpieza guardado. Vuelta a «' + oneEs(m[1]) + '».'],
+  [/^Aufgabe für Phase (\d+)$/, m => 'Tarea de la fase ' + m[1]],
+  [/^Minuten für Phase (\d+)$/, m => 'Minutos de la fase ' + m[1]],
+  [/^Gespeichert als „(.+)“\.$/, m => `Guardado como «${m[1]}».`],
+  [/^Sitzung (\d+) gestartet$/, m => 'Sesión ' + m[1] + ' iniciada'],
+  [/^(\d)\. Verwarnung$/, m => m[1] === '1' ? '1.er aviso' : '2.º aviso'],
+  [/^(Eröffnung|Rückblick|Themen|Abschluss) · (\d+) min$/, m => oneEs(m[1]) + ' · ' + m[2] + ' min']
+];
+function trEs(s, el) {
+  if (CTX_ES[s] && el) { for (const id in CTX_ES[s]) if (el.closest('#' + id)) return CTX_ES[s][id]; }
+  if (ES[s] != null) return ES[s];
+  for (const [re, f] of PES) { const m = s.match(re); if (m) return f(m); }
+  return null;
+}
+
 /* gleiche Wörter, andere Bedeutung je nach Ort */
 const CTX = { 'Weiter': { tStart: ['Resume', 'Reprendre'] } };
 const one = (i, s) => (D[s] ? D[s][i] : s);
@@ -3367,7 +3739,8 @@ if (!LANGS.includes(lang)) lang = 'de';
 
 function tr(s, el) {
   if (lang === 'de') return null;
-  const i = lang === 'en' ? 0 : 1;
+  if (lang === 'es') { const r = trEs(s, el); if (r != null) return r; }
+  const i = lang === 'fr' ? 1 : 0;
   if (CTX[s] && el) { for (const id in CTX[s]) if (el.closest('#' + id)) return CTX[s][id][i]; }
   if (D[s]) return D[s][i];
   for (const [re, f] of P) { const m = s.match(re); if (m) return f(i, m); }
@@ -3413,6 +3786,7 @@ new MutationObserver(list => {
   }
 }).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
 
+window.tbTr = s => tr(s);
 const oConfirm = window.confirm.bind(window);
 window.confirm = m => oConfirm(tr(String(m)) || m);
 
@@ -3424,11 +3798,11 @@ function setLang(l, announce) {
   walk(document.body);
   const c = document.getElementById('langCode'); if (c) c.textContent = lang.toUpperCase();
   const b = document.getElementById('btnLang');
-  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Deutsch)' }[lang];
+  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Español)', es: 'Idioma: español (toca para Deutsch)' }[lang];
   document.querySelectorAll('[data-lang-set]').forEach(x => x.classList.toggle('sel', x.dataset.langSet === lang));
   if (announce) {
     const t = document.getElementById('toast');
-    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français' }[lang]; t.classList.add('show'); clearTimeout(setLang.tm); setLang.tm = setTimeout(() => t.classList.remove('show'), 1800); }
+    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français', es: 'Idioma: español' }[lang]; t.classList.add('show'); clearTimeout(setLang.tm); setLang.tm = setTimeout(() => t.classList.remove('show'), 1800); }
   }
 }
 document.getElementById('btnLang').addEventListener('click', () => setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length], true));

@@ -280,7 +280,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
       <div class="seg"><button class="btn" data-theme-set="light">Hell</button><button class="btn" data-theme-set="dark">Dunkel</button></div>
     </div>
     <div class="srow">Sprache
-      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button></div>
+      <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button><button class="btn" data-lang-set="es">Español</button></div>
     </div>
     <h3 class="sh">Gut zu wissen</h3>
     <p><strong>Nur Anzeige:</strong> Das Auge oben blendet alle Knöpfe aus, damit über den Beamer nichts versehentlich geändert wird. Ort und Größe der Kacheln bleiben gleich.</p>
@@ -629,7 +629,7 @@ if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWo
 (() => {
 'use strict';
 const LKEY = 'klassenrat.lang';
-const LANGS = ['de', 'en', 'fr'];
+const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
   'Klassenrat Dashboard': ['Class Council Dashboard', 'Tableau de bord du conseil de classe'],
   'Protokoll als PDF': ['Minutes as PDF', 'Procès-verbal en PDF'],
@@ -816,6 +816,212 @@ const D = {
   'Die Ampel wird gerade vom Mikrofon gesteuert.': ['The traffic light is currently controlled by the microphone.', 'Le feu est actuellement commandé par le micro.'],
   'Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.': ['The rule keeper’s list and the reflection votes will be cleared. Save the PDFs first.', 'La liste du gardien des règles et les voix de la réflexion seront vidées. Enregistre d’abord les PDF.']
 };
+const ES = {
+  "Klassenrat Dashboard": "Panel del consejo de clase",
+  "Protokoll als PDF": "Acta en PDF",
+  "Text kopieren": "Copiar texto",
+  "PDF laden": "Cargar PDF",
+  "Neue Sitzung": "Nueva sesión",
+  "Zeiten": "Tiempos",
+  "Dunkel": "Oscuro",
+  "Hell": "Claro",
+  "Regelwache": "Guardián de normas",
+  "Regelwache: Verwarnungen zeigen und eintragen": "Guardián de normas: mostrar y anotar avisos",
+  "Regelwache öffnen": "Abrir guardián de normas",
+  "Ablauf": "Orden del día",
+  "Zeitwache": "Guardián del tiempo",
+  "Sitzung und Ämter": "Sesión y cargos",
+  "Klasse": "Clase",
+  "Datum": "Fecha",
+  "Vorsitz": "Presidencia",
+  "Protokoll": "Acta",
+  "Name": "Nombre",
+  "Verwarnung": "Aviso",
+  "Start": "Iniciar",
+  "Pause": "Pausa",
+  "Eine Minute weniger": "Un minuto menos",
+  "Eine Minute mehr": "Un minuto más",
+  "Vorsitz begrüßt, Regeln, Ämter": "La presidencia saluda, normas, cargos",
+  "Letztes Protokoll: Was wurde umgesetzt?": "Última acta: ¿qué se ha hecho?",
+  "Besprechen und beschließen": "Debatir y decidir",
+  "Beschlüsse vorlesen, nächste Sitzung": "Leer los acuerdos, próxima sesión",
+  "Was liegt an?": "¿Qué tenemos pendiente?",
+  "Was wurde geklärt?": "¿Qué se ha aclarado?",
+  "Was müssen wir beim nächsten Mal thematisieren?": "¿Qué tenemos que tratar la próxima vez?",
+  "Neues Thema …": "Tema nuevo …",
+  "Neues Thema": "Tema nuevo",
+  "Thema …": "Tema …",
+  "Thema": "Tema",
+  "Geklärtes Thema": "Tema aclarado",
+  "Thema fürs nächste Mal …": "Tema para la próxima vez …",
+  "Thema fürs nächste Mal": "Tema para la próxima vez",
+  "Hinzufügen": "Añadir",
+  "Ergebnis oder Beschluss …": "Resultado o acuerdo …",
+  "Ergebnis oder Beschluss": "Resultado o acuerdo",
+  "Notiz …": "Nota …",
+  "Notiz": "Nota",
+  "← Liegt an": "← Pendiente",
+  "Geklärt": "Aclarado",
+  "Nächstes Mal": "Próxima vez",
+  "Löschen": "Borrar",
+  "vom letzten Mal": "de la última vez",
+  "Noch nichts eingetragen.": "Todavía no hay nada.",
+  "Alles bleibt nur in diesem Browser. Das Board läuft oft über den Beamer: Schreibt Konflikte sachlich und ohne Namen auf.": "Todo se queda solo en este navegador. El panel suele verse en el proyector: escribid los conflictos con objetividad y sin nombres.",
+  "Über mich": "Sobre mí",
+  "Impressum": "Aviso legal",
+  "Datenschutz": "Privacidad",
+  "Zeiten im Ablauf (Minuten)": "Tiempos del orden del día (minutos)",
+  "Eröffnung": "Apertura",
+  "Rückblick": "Repaso",
+  "Themen": "Temas",
+  "Abschluss": "Cierre",
+  "Fertig": "Listo",
+  "Ämter auslosen": "Sortear cargos",
+  "Namen der Klasse": "Nombres de la clase",
+  "Ein Name pro Zeile": "Un nombre por línea",
+  "Namen übernehmen": "Guardar nombres",
+  "Namen bearbeiten": "Editar nombres",
+  "4 auslosen": "Sortear 4",
+  "anwesend": "presentes",
+  "Tippe auf einen Namen, wenn jemand heute fehlt.": "Toca un nombre si alguien falta hoy.",
+  "In dieser Reihenfolge wählen die vier ihr Amt. Tippe beim Namen auf das gewählte Amt.": "En este orden, los cuatro eligen su cargo. Toca el cargo elegido junto al nombre.",
+  "ist dran": "le toca",
+  "fehlt heute": "falta hoy",
+  "Die Namen bleiben nur in diesem Browser. In die Protokoll-PDF kommen nur die vier Ämter.": "Los nombres se quedan solo en este navegador. En el acta en PDF solo aparecen los cuatro cargos.",
+  "Mindestens 4 anwesende Namen nötig.": "Hacen falta al menos 4 nombres presentes.",
+  "Ämter ausgelost": "Cargos sorteados",
+  "Neue Sitzung starten?": "¿Empezar una sesión nueva?",
+  "Hast du das Protokoll schon als PDF gespeichert? Nach dem Start ist es hier nicht mehr zu sehen.": "¿Ya has guardado el acta en PDF? Después de empezar ya no se verá aquí.",
+  "Offene Themen und alles aus „Beim nächsten Mal“ wandern nach „Was liegt an?“.": "Los temas abiertos y todo lo de «Próxima vez» pasan a «¿Qué tenemos pendiente?».",
+  "Die Liste der Regelwache wird geleert. Speichere ihre PDF vorher.": "La lista del guardián de normas se vaciará. Guarda antes su PDF.",
+  "Erst PDF speichern": "Primero guardar PDF",
+  "Abbrechen": "Cancelar",
+  "Tippe auf eine Karte, um sie groß für die Klasse zu zeigen.": "Toca una tarjeta para mostrarla en grande a la clase.",
+  "Verwarnung eintragen": "Anotar aviso",
+  "1. Verwarnung": "1.er aviso",
+  "2. Verwarnung": "2.º aviso",
+  "Wer? (Name oder Namen)": "¿Quién? (nombre o nombres)",
+  "Welche Regel? (optional)": "¿Qué norma? (opcional)",
+  "z. B. Wir lassen andere ausreden.": "p. ej. Dejamos que los demás terminen de hablar.",
+  "Eintragen": "Anotar",
+  "Groß zeigen": "Mostrar en grande",
+  "Eingetragen": "Anotado",
+  "Noch keine Verwarnung eingetragen.": "Todavía no hay avisos.",
+  "Namen anzeigen": "Mostrar nombres",
+  "Die Namen bleiben nur in diesem Browser und in der PDF. Zeig die Liste nicht über den Beamer. Lade die PDF in IServ hoch und leere danach die Liste.": "Los nombres se quedan solo en este navegador y en el PDF. No muestres la lista en el proyector. Sube el PDF a IServ y después vacía la lista.",
+  "Als PDF speichern": "Guardar como PDF",
+  "Liste leeren": "Vaciar lista",
+  "Nur Anzeige": "Solo visualización",
+  "Bedienelemente aus- oder einblenden": "Mostrar u ocultar los controles",
+  "Nur Anzeige: Einstellungen ausgeblendet": "Solo visualización: ajustes ocultos",
+  "Bearbeiten: Einstellungen eingeblendet": "Edición: ajustes visibles",
+  "Ausschluss von der Sitzung": "Expulsión de la sesión",
+  "Ausschluss": "Expulsión",
+  "Verwarnung oder Ausschluss eintragen": "Anotar aviso o expulsión",
+  "Ausschluss eingetragen": "Expulsión anotada",
+  "Bei Verstößen: Speichere die PDF und lege sie am vereinbarten Ort ab (IServ, TaskCard oder Lehrkraft zusenden).": "Si hay infracciones: guarda el PDF y déjalo en el lugar acordado (IServ, TaskCard o envíalo al profesor).",
+  "Die Namen bleiben nur in diesem Browser und in der PDF. Zeig die Liste nicht über den Beamer. Leere die Liste, wenn die PDF abgelegt ist.": "Los nombres se quedan solo en este navegador y en el PDF. No muestres la lista en el proyector. Vacía la lista cuando hayas guardado el PDF.",
+  "PDF gespeichert. Lege sie am vereinbarten Ort ab.": "PDF guardado. Déjalo en el lugar acordado.",
+  "Schließen": "Cerrar",
+  "Antippen zum Schließen": "Toca para cerrar",
+  "Eintrag löschen": "Borrar entrada",
+  "Thema gelöscht": "Tema borrado",
+  "Protokoll kopiert": "Acta copiada",
+  "Protokoll geladen": "Acta cargada",
+  "PDF gespeichert. Leg sie in Notability ab.": "PDF guardado. Guárdalo en Notability.",
+  "PDF gespeichert. Lade sie in IServ hoch.": "PDF guardado. Súbelo a IServ.",
+  "Bitte einen Namen eintragen": "Escribe un nombre",
+  "Verwarnung eingetragen": "Aviso anotado",
+  "Diese PDF enthält kein Klassenrat-Protokoll.": "Este PDF no contiene un acta del consejo de clase.",
+  "Alle eingetragenen Verwarnungen löschen? Hast du die PDF gespeichert?": "¿Borrar todos los avisos anotados? ¿Has guardado el PDF?",
+  "Einstellungen": "Ajustes",
+  "Wie lief es?": "¿Cómo ha ido?",
+  "Reflexion groß zeigen": "Mostrar la reflexión en grande",
+  "Reflexion (im Ablauf)": "Reflexión (en el orden del día)",
+  "Kacheln und Vorgaben anpassen": "Ajustar tarjetas y valores",
+  "Kacheln anzeigen": "Mostrar recuadros",
+  "Ablauf anpassen": "Ajustar orden del día",
+  "Name, Beschreibung und Minuten jeder Phase. Die Änderungen gelten für alle weiteren Sitzungen.": "Nombre, descripción y minutos de cada fase. Los cambios valen para todas las sesiones siguientes.",
+  "Phase hinzufügen": "Añadir fase",
+  "Standard": "Estándar",
+  "Reflexionsfragen anpassen": "Ajustar preguntas de reflexión",
+  "Frage hinzufügen": "Añadir pregunta",
+  "+ Phase hinzufügen": "+ Añadir fase",
+  "+ Frage hinzufügen": "+ Añadir pregunta",
+  "Darstellung": "Apariencia",
+  "Farben": "Colores",
+  "Sprache": "Idioma",
+  "Gut zu wissen": "Bueno saber (en alemán)",
+  "Auf hell umschalten": "Cambiar a claro",
+  "Auf dunkel umschalten": "Cambiar a oscuro",
+  "Name der Phase": "Nombre de la fase",
+  "Beschreibung der Phase": "Descripción de la fase",
+  "Beschreibung": "Descripción",
+  "Minuten": "Minutos",
+  "Frage": "Pregunta",
+  "Reflexionsfrage": "Pregunta de reflexión",
+  "Entfernen": "Quitar",
+  "Reflexion": "Reflexión",
+  "Geklärt und beschlossen": "Aclarado y decidido",
+  "Tippe bei jeder Frage auf gut, mittel oder schlecht, sooft Stimmen gezählt werden sollen. Hinter jedem geklärten Thema steht der Beschluss.": "En cada pregunta, toca bien, regular o mal tantas veces como votos haya que contar. Detrás de cada tema aclarado está el acuerdo.",
+  "gut": "bien",
+  "mittel": "regular",
+  "schlecht": "mal",
+  "Stimmen zurücksetzen": "Reiniciar votos",
+  "Beschluss:": "Acuerdo:",
+  "Noch kein Beschluss eingetragen.": "Todavía no hay acuerdo.",
+  "Noch nichts geklärt.": "Todavía no se ha aclarado nada.",
+  "(ohne Titel)": "(sin título)",
+  "Keine Reflexionsfragen. Du kannst sie unter Einstellungen hinzufügen.": "No hay preguntas de reflexión. Puedes añadirlas en Ajustes.",
+  "Wie lief unser Klassenrat insgesamt?": "¿Cómo ha ido nuestro consejo de clase en general?",
+  "Durften alle ausreden und wurden alle gehört?": "¿Todos pudieron terminar de hablar y fueron escuchados?",
+  "Haben wir uns an die Regeln gehalten?": "¿Hemos respetado las normas?",
+  "Lärmampel": "Semáforo de ruido",
+  "Ampel umschalten": "Cambiar semáforo",
+  "Alles gut": "Todo bien",
+  "Etwas leiser": "Un poco más bajo",
+  "Zu laut!": "¡Demasiado alto!",
+  "Tippe auf die Ampel oder starte das Mikrofon.": "Toca el semáforo o inicia el micrófono.",
+  "Schieberegler: ab wann die Ampel rot wird.": "Control deslizante: cuándo se pone rojo el semáforo.",
+  "Ab wann die Ampel rot wird": "Cuándo se pone rojo el semáforo",
+  "leise": "bajo",
+  "laut": "alto",
+  "Mikrofon starten": "Iniciar micrófono",
+  "Mikrofon stoppen": "Detener micrófono",
+  "Alarm, wenn die Ampel rot wird": "Alarma cuando el semáforo se pone rojo",
+  "Der Alarm pulsiert rot und gibt einen Signalton, bis du ihn antippst, spätestens nach 15 Sekunden. Das Mikrofon misst nur die Lautstärke im Browser, nichts wird aufgenommen.": "La alarma parpadea en rojo y suena hasta que la tocas, como mucho 15 segundos. El micrófono solo mide el volumen en el navegador; no se graba nada.",
+  "ALARM · Antippen zum Beenden": "ALARMA · toca para terminar",
+  "Die Ampel wird gerade vom Mikrofon gesteuert.": "El micrófono controla ahora el semáforo.",
+  "Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.": "La lista del guardián de normas y los votos de la reflexión se vaciarán. Guarda antes los PDF."
+};
+/* Spanisch: eigenes Wörterbuch (Schlüssel = deutscher Text); fehlt ein Eintrag, kommt Englisch */
+const oneEs = s => (ES[s] != null ? ES[s] : s);
+const CTX_ES = { 'Weiter': { tStart: 'Reanudar' } };
+const PES = [
+  [/^Aufgabe · (.+)$/, m => 'Tarea · ' + oneEs(m[1])],
+  [/^Aufgabe für „(.+)“ eintippen …$/, m => `Escribe la tarea para «${oneEs(m[1])}» …`],
+  [/^Ende (\d{1,2}:\d{2}) Uhr$/, m => 'Termina a las ' + m[1]],
+  [/^KI · Level (\d)$/, m => 'IA · nivel ' + m[1]],
+  [/^(\d+) Minuten$/, m => m[1] + ' minutos'],
+  [/^(\d+) Stimmen?$/, m => m[1] + (+m[1] === 1 ? ' voto' : ' votos')],
+  [/^(\d+) Punkte?$/, m => m[1] + (+m[1] === 1 ? ' punto' : ' puntos')],
+  [/^Phase (\d+): (.*)$/, m => 'Fase ' + m[1] + ': ' + oneEs(m[2])],
+  [/^Text für Phase (\d+)$/, m => 'Texto de la fase ' + m[1]],
+  [/^Aufräumplan gespeichert\. Weiter mit „(.+)“\.$/, m => 'Plan de limpieza guardado. Vuelta a «' + oneEs(m[1]) + '».'],
+  [/^Aufgabe für Phase (\d+)$/, m => 'Tarea de la fase ' + m[1]],
+  [/^Minuten für Phase (\d+)$/, m => 'Minutos de la fase ' + m[1]],
+  [/^Gespeichert als „(.+)“\.$/, m => `Guardado como «${m[1]}».`],
+  [/^Sitzung (\d+) gestartet$/, m => 'Sesión ' + m[1] + ' iniciada'],
+  [/^(\d)\. Verwarnung$/, m => m[1] === '1' ? '1.er aviso' : '2.º aviso'],
+  [/^(Eröffnung|Rückblick|Themen|Abschluss) · (\d+) min$/, m => oneEs(m[1]) + ' · ' + m[2] + ' min']
+];
+function trEs(s, el) {
+  if (CTX_ES[s] && el) { for (const id in CTX_ES[s]) if (el.closest('#' + id)) return CTX_ES[s][id]; }
+  if (ES[s] != null) return ES[s];
+  for (const [re, f] of PES) { const m = s.match(re); if (m) return f(m); }
+  return null;
+}
+
 /* gleiche Wörter, andere Bedeutung je nach Ort */
 const CTX = {};
 const one = (i, s) => (D[s] ? D[s][i] : s);
@@ -830,7 +1036,8 @@ if (!LANGS.includes(lang)) lang = 'de';
 
 function tr(s, el) {
   if (lang === 'de') return null;
-  const i = lang === 'en' ? 0 : 1;
+  if (lang === 'es') { const r = trEs(s, el); if (r != null) return r; }
+  const i = lang === 'fr' ? 1 : 0;
   if (CTX[s] && el) { for (const id in CTX[s]) if (el.closest('#' + id)) return CTX[s][id][i]; }
   if (D[s]) return D[s][i];
   for (const [re, f] of P) { const m = s.match(re); if (m) return f(i, m); }
@@ -886,11 +1093,11 @@ function setLang(l, announce) {
   walk(document.body);
   const c = document.getElementById('langCode'); if (c) c.textContent = lang.toUpperCase();
   const b = document.getElementById('bLang');
-  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Deutsch)' }[lang];
+  if (b) b.title = { de: 'Sprache: Deutsch (tippen für English)', en: 'Language: English (tap for Français)', fr: 'Langue : français (toucher pour Español)', es: 'Idioma: español (toca para Deutsch)' }[lang];
   document.querySelectorAll('[data-lang-set]').forEach(x => x.classList.toggle('sel', x.dataset.langSet === lang));
   if (announce) {
     const t = document.getElementById('toast');
-    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français' }[lang]; t.hidden = false; clearTimeout(setLang.tm); setLang.tm = setTimeout(() => { t.hidden = true; }, 1800); }
+    if (t) { t.textContent = { de: 'Sprache: Deutsch', en: 'Language: English', fr: 'Langue : français', es: 'Idioma: español' }[lang]; t.hidden = false; clearTimeout(setLang.tm); setLang.tm = setTimeout(() => { t.hidden = true; }, 1800); }
   }
 }
 document.getElementById('bLang').addEventListener('click', () => setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length], true));
