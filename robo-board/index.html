@@ -648,6 +648,7 @@ body.cl-locked #tCleanMsg .puck{cursor:default}
 .pin-dlg.shake{animation:pinShake .3s 2}
 @media (prefers-reduced-motion:reduce){.pin-dlg.shake{animation:none}}
 .tb-clean-btns{flex:none}
+#cleanSave[hidden]{display:none}
 .tb-clean .btn{background:#fff;color:#111;border-color:#111}
 body.tight .tb-s{font-size:clamp(9.5px,.9vw,13px);gap:1px}
 body.tight .tb-s svg{max-height:44px;min-height:20px}
@@ -883,7 +884,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
           <span class="cl-lockhint">Plan gesperrt. Zum Ändern mit PIN entsperren.</span>
           <span class="cl-hint">Jeder Auftrag bekommt seine Nummern (Fegen zwei), die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.</span>
         </div>
-        <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
+        <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanSave" hidden>Speichern</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
     </section>
     <section class="tile" id="tFokus" data-k="fokus">
       <div class="label">Fokus</div>
@@ -998,7 +999,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Sicherheit:</strong> Das Board startet immer auf „Unsicher“ (rote Karte oben). Ein Tipp stellt auf „Sicher“ (grüne Karte). „Alarm“ gibt dreimal einen deutlichen Signalton und sagt dann mit der Stimme des Geräts „Achtung! Ein Sicherheitsverstoß liegt vor. Alle setzen sich auf ihren Platz.“ Das wiederholt sich, und der Hintergrund blinkt rot, bis du den Alarm mit einem zweiten Tipp beendest. Die Ansage lässt sich in den Einstellungen abschalten. Am iPad muss der Ton laut gestellt sein.</p>
     <p><strong>Ansagen:</strong> Alarm- und Aufräumansage sind Audiodateien mit KI-Stimmen. Deutsch: erzeugt mit dem KI-Multimedia-Tool von fobizz. Englisch und Französisch: erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Die Dateien werden mit dem Board offline gespeichert. Lässt sich eine Datei nicht abspielen, spricht die Stimme des Geräts.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
-    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
+    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. So kannst du den Plan vorbereiten: Nummern verteilen, dann „Speichern“ (oben oder unten neben „Aufräumen beenden“). Das Board geht zurück in die Phase, aus der du gekommen bist, der Timer läuft dort weiter, und später nutzt das Aufräumen genau diese Verteilung. Startest du im Aufräumen den Timer, gilt es als echtes Aufräumen, oben steht dann wieder „Beenden“. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Dobot, 3D-Druck, Arduino oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“, dann suchen sich alle selbst etwas aus. Antippen des großen Bildes schaltet weiter.</p>
     <p><strong>APE:</strong> Wähle Robotik oder Arduino. Robotik zeigt ein Foto des Arbeitsplatzes (Laptop, Not-Aus, Roboterarm), Antippen vergrößert es.</p>
@@ -1154,7 +1155,7 @@ const DEF = {
     { text: 'Aufräumen', so: '', min: 10 },
     { text: 'Sicherung', so: 'plenum', min: 5 }
   ],
-  planCur: 0, planMin: 0, planAuto: false, clLock: false, clPin: '',
+  planCur: 0, planMin: 0, planAuto: false, clLock: false, clPin: '', clPrep: null,
   timer: { duration: 300, remaining: 300, endAt: null },
   sozial: 'einzel', ipad: true, ipadPos: 'open', ki: false, kiLvl: 0,
   reflex: {
@@ -1742,6 +1743,7 @@ function tStart() {
   if (t.remaining <= 0) return;
   t.endAt = Date.now() + t.remaining * 1000;
   save(); renderTimer();
+  if (tbCleaning && S.clPrep) { S.clPrep = null; save(); tbRender(); }
   if (tbCleaning && !cleanCued) { cleanCued = true; cleanCue(); }
 }
 function tPause() { const t = S.timer; t.remaining = remaining(); t.endAt = null; save(); renderTimer(); }
@@ -2620,7 +2622,9 @@ function tbRender() {
   $('#btnAlarm').setAttribute('aria-pressed', String(tbAlarmOn));
   $('#alarmTxt').textContent = tbAlarmOn ? 'STOPP' : 'ALARM';
   $('#tbClean').setAttribute('aria-pressed', String(tbCleaning));
-  $('#tbCleanTxt').textContent = tbCleaning ? 'Beenden' : 'Aufräumen';
+  // von Hand zum Vorbereiten geöffnet: oben „Speichern“ (zurück in die vorige Phase), sonst „Beenden“
+  $('#tbCleanTxt').textContent = tbCleaning ? (S.clPrep ? 'Speichern' : 'Beenden') : 'Aufräumen';
+  const cs = $('#cleanSave'); if (cs) cs.hidden = !(tbCleaning && S.clPrep);
   $$('#apes .tb-chip').forEach(e => { const o = S.ape.includes(e.dataset.id); e.classList.toggle('on', o); e.setAttribute('aria-pressed', String(o)); });
   $$('#rules .tb-s').forEach(e => { const o = S.rules.includes(e.dataset.id); e.classList.toggle('on', o); e.setAttribute('aria-pressed', String(o)); });
   $$('#hazards .tb-s').forEach(e => { const o = S.haz.includes(e.dataset.id); e.classList.toggle('on', o); e.setAttribute('aria-pressed', String(o)); });
@@ -2738,6 +2742,18 @@ function tbToggleBtn(cls, id, label, svg, arr) {
   const sp = document.createElement('span'); sp.textContent = label; sp.dataset.long = label; sp.dataset.short = SYM_SHORT[id] || label; e.title = label; e.append(sp);
   e.addEventListener('click', () => { const a = S[arr], i = a.indexOf(id); i < 0 ? a.push(id) : a.splice(i, 1); save(); tbRender(); if (S.clean || arr === 'ape') queueLayout(); });
   return e;
+}
+/* Aufräumplan vorbereitet: speichern und zurück in die Phase, aus der du gekommen bist (Timer läuft dort weiter) */
+function clSaveBack() {
+  const pr = S.clPrep; S.clPrep = null; clSel = 0;
+  tbSetCleaning(false);
+  if (pr) {
+    if (S.show.plan && S.plan.length) S.planCur = Math.max(0, Math.min(S.plan.length - 1, pr.planCur));
+    if (pr.timer) S.timer = Object.assign({}, S.timer, pr.timer);
+  }
+  save(); renderPlan(); renderTimer(); tbRender(); queueLayout();
+  const ph = S.show.plan && S.plan[S.planCur] ? S.plan[S.planCur].text : '';
+  toast(ph ? 'Aufräumplan gespeichert. Weiter mit „' + ph + '“.' : 'Aufräumplan gespeichert.');
 }
 function tbEndClean() {
   const inPhase = !!S.show.plan && tbIsClean(S.plan[S.planCur]);
@@ -2949,10 +2965,13 @@ function tbInit() {
   $('#meetIn').addEventListener('input', e => { S.meetT = e.target.value; save(); meetRender(); });
   $('#meetIn').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#meetView').hidden) closeMeet(); });
-  $('#cleanEnd').addEventListener('click', tbEndClean);
+  $('#cleanEnd').addEventListener('click', () => { S.clPrep = null; tbEndClean(); });
+  $('#cleanSave').addEventListener('click', clSaveBack);
   $('#tbClean').addEventListener('click', () => {
-    if (tbCleaning) return tbEndClean();
-    // von Hand geöffnet: Timer und Ansage starten nie von selbst, auch nicht im Auto-Modus
+    if (tbCleaning) return S.clPrep ? clSaveBack() : tbEndClean();
+    // von Hand geöffnet: Timer und Ansage starten nie von selbst, auch nicht im Auto-Modus.
+    // Phase und Timer merken, damit „Speichern“ genau dorthin zurückführt
+    S.clPrep = { planCur: S.planCur, timer: Object.assign({}, S.timer) };
     tbManualOpen = true;
     try {
       let done = false;
@@ -3104,6 +3123,8 @@ const D = {
   'PIN wiederholen': ['Repeat PIN', 'Répéter le code'],
   'Auto-Modus ist an, Aufräumen wurde aber von Hand geöffnet: Starte den Timer selbst. Mit dem Start kommt die Ansage.': ['Auto mode is on, but clean-up was opened by hand: start the timer yourself. The announcement comes with the start.', 'Le mode auto est activé, mais le rangement a été ouvert à la main : lance le minuteur toi-même. L’annonce vient au démarrage.'],
   'Starte den Timer, dann kommt die Ansage.': ['Start the timer, then the announcement plays.', 'Lance le minuteur, puis l’annonce suit.'],
+  'Speichern': ['Save', 'Enregistrer'],
+  'Aufräumplan gespeichert.': ['Clean-up plan saved.', 'Plan de rangement enregistré.'],
   'Sprachansage beim Alarm': ['Spoken announcement during alarm', 'Annonce vocale pendant l’alarme'],
   'Sicherheits\u00adunterweisung': ['Safety briefing', 'Consignes de sécurité'],
   'Alle hören zu': ['Everyone listens', 'Tout le monde écoute'],
@@ -3385,6 +3406,7 @@ const P = [
   [/^(\d+) Punkte?$/, (i, m) => m[1] + (+m[1] === 1 ? [' dot', ' point'][i] : [' dots', ' points'][i])],
   [/^Phase (\d+): (.*)$/, (i, m) => 'Phase ' + m[1] + ': ' + one(i, m[2])],
   [/^Text für Phase (\d+)$/, (i, m) => ['Text for phase ', 'Texte de la phase '][i] + m[1]],
+  [/^Aufräumplan gespeichert\. Weiter mit „(.+)“\.$/, (i, m) => ['Clean-up plan saved. Back to “' + m[1] + '”.', 'Plan de rangement enregistré. Retour à « ' + m[1] + ' ».'][i]],
   [/^Aufgabe für Phase (\d+)$/, (i, m) => ['Task for phase ', 'Consigne de la phase '][i] + m[1]],
   [/^Minuten für Phase (\d+)$/, (i, m) => ['Minutes for phase ', 'Minutes de la phase '][i] + m[1]],
   [/^Gespeichert als „(.+)“\.$/, (i, m) => [`Saved as “${m[1]}”.`, `Enregistré sous « ${m[1]} ».`][i]]
