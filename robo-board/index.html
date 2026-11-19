@@ -1286,8 +1286,12 @@ function unlockAudio() {
   const c = ac(); if (!c) return;
   try { const b = c.createBuffer(1, 1, 22050), s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0); } catch (e) {}
 }
+/* Timer-Ende. Die Töne merken wir uns, damit die Aufräum-Ansage sie abbrechen kann (sonst klingen beide gleichzeitig). */
+let gongNodes = [];
+function gongStop() { gongNodes.forEach(o => { try { o.stop(); } catch (e) { } }); gongNodes = []; }
 function gong() {
   if (!S.sound) return;
+  gongStop();
   const c = ac(); if (!c) return;
   const t0 = c.currentTime + 0.05;
   [784, 659, 523, 784, 659, 523].forEach((f, i) => {
@@ -1298,7 +1302,7 @@ function gong() {
       g.gain.setValueAtTime(0.0001, t);
       g.gain.exponentialRampToValueAtTime(vol, t + 0.015);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 1.3);
-      o.connect(g).connect(c.destination); o.start(t); o.stop(t + 1.35);
+      o.connect(g).connect(c.destination); o.start(t); o.stop(t + 1.35); gongNodes.push(o);
     });
   });
 }
@@ -1809,7 +1813,10 @@ function renderTimer() {
   const t = S.timer, tile = $('#tTimer');
   const r = remaining();
   if (t.endAt && r <= 0) {
-    t.endAt = null; t.remaining = 0; doneFlag = true; save(); gong();
+    t.endAt = null; t.remaining = 0; doneFlag = true; save();
+    // Springt der Auto-Modus gleich ins Aufräumen, kommt dort der Aufräumton: dann kein Timer-Gong davor
+    const toClean = PLAN_AUTO() && S.planCur < S.plan.length - 1 && !!S.show.plan && /aufr[äa]um/i.test((S.plan[S.planCur + 1] || {}).text || '') && (S.cleanTone || S.cleanVoice);
+    if (!toClean) gong();
     if (PLAN_AUTO() && S.planCur < S.plan.length - 1) { doneFlag = false; setTimeout(() => setPlanCur(S.planCur + 1), 0); }
   }
   const frac = t.duration > 0 ? Math.min(1, r / t.duration) : 0;
@@ -2640,6 +2647,7 @@ const CLEAN_SAY = {
   es: '¡Atención, hora de recoger! Primero recoged vuestro puesto de trabajo. Después haced vuestra tarea según el plan de limpieza.'
 };
 function cleanCue() {
+  gongStop();
   if (S.cleanTone) { unlockAudio(); tbTone(988, 0.22, 0); tbTone(784, 0.22, 0.26); tbTone(659, 0.45, 0.52); }
   if (!S.cleanVoice || !('speechSynthesis' in window)) return;
   try {
