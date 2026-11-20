@@ -227,6 +227,13 @@ body.clean .imgview .imgbar{display:none}
 #btnInput.has::after{content:""; position:absolute; top:6px; right:6px; width:10px; height:10px; border-radius:50%; background:#2fa463; box-shadow:0 0 0 2px var(--tile,#fff)}
 .imgview .imgclose{position:absolute; top:max(12px,env(safe-area-inset-top)); right:max(12px,env(safe-area-inset-right)); width:52px; height:52px; border-radius:50%;
   border:0; background:rgba(255,255,255,.88); color:#111; font-size:32px; line-height:1; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.4)}
+/* Vollbild im Bildfenster: gleiche Funktion wie der Vollbild-Knopf oben, auch in „Nur Anzeige“ */
+.imgview .imgfs{position:absolute; top:max(12px,env(safe-area-inset-top)); right:calc(max(12px,env(safe-area-inset-right)) + 64px); width:52px; height:52px; border-radius:50%;
+  border:0; background:rgba(255,255,255,.88); color:#111; display:flex; align-items:center; justify-content:center; padding:0; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.imgview .imgfs svg{width:26px; height:26px}
+.imgview .imgfs .fs-out, .imgview .imgfs[aria-pressed="true"] .fs-in{display:none}
+.imgview .imgfs[aria-pressed="true"] .fs-out{display:inline}
+body.standalone .imgview .imgfs, body.nofs .imgview .imgfs{display:none}
 /* ---------- Reflexion (Vollbild-Ebene) ---------- */
 .overlay{
   position:fixed; inset:0; z-index:15; display:none; flex-direction:column; gap:clamp(8px,1.6vh,18px); background:var(--bg); color:var(--ink);
@@ -1021,7 +1028,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu. Jede Phase kann eine Dauer in Minuten haben (Vorlage: Einstieg 5, Arbeitsphase 70, Aufräumen 10, Sicherung 5). Beim Wechsel der Phase lädt der Timer diese Zeit. Mit dem Auto-Knopf (Pfeilkreis mit Play-Zeichen) springt der Fahrplan nach Ablauf der Zeit selbst zur nächsten Phase und startet den Timer neu. Bei einer Phase mit „Sicherung“ im Namen wechselt die Sozialform auf Plenum (wenn die Phase keine eigene hat) und der Arbeitsort auf „Nur im Raum“.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
     <p><strong>Datenschutz:</strong> Das Board speichert alles nur in diesem Browser. Das Mikrofon für die Lautstärkeampel wird nur im Browser ausgewertet, nichts wird aufgenommen oder übertragen. Mehr dazu in der <a href="https://deintechniklehrer.github.io/Lernplattformen/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>; Anbieter siehe <a href="https://deintechniklehrer.github.io/Lernplattformen/impressum/" target="_blank" rel="noopener">Impressum</a>.</p>
-    <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. Im Feld „Bildunterschrift“ unten schreibst du einen Satz dazu, er steht groß unter dem Bild. Ein neues Bild beginnt ohne Unterschrift. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
+    <p><strong>Input:</strong> Der Bild-Knopf oben öffnet die Bildauswahl deines Geräts. Das gewählte Bild erscheint bildschirmfüllend, zum Beispiel ein Arbeitsblatt, ein Foto oder ein Tafelbild. Antippen schließt es wieder. Das Bild bleibt für diese Sitzung erhalten, so kannst du die Stunde im Browser vorbereiten: Ein grüner Punkt am Knopf zeigt, dass ein Bild bereitliegt, ein Tippen zeigt es wieder. Über „Anderes Bild“ und „Bild entfernen“ tauschst oder löschst du es. Im Feld „Bildunterschrift“ unten schreibst du einen Satz dazu, er steht groß unter dem Bild. Ein neues Bild beginnt ohne Unterschrift. Der Vollbild-Knopf neben dem Schließen-Kreuz schaltet auch im Bildfenster auf Vollbild, auch in „Nur Anzeige“. <strong>Achtung:</strong> Das Bild geht verloren, wenn du den Browser oder Tab schließt, und es wird beim Exportieren nicht mitgespeichert.</p>
     <p><strong>Reflexion:</strong> Der Sprechblasen-Knopf oben öffnet die Reflexion am Stundenende im Vollbild. Die Klasse schätzt sich ein, du kannst die gewählte Karte antippen. Mit „Text anpassen“ änderst du Frage und Stufen. Im Reiter „Flow“ setzt jede:r einen Punkt ins Flow-Diagramm (Können gegen Anforderung): grün = Flow, rot = Überforderung, blau = Langeweile. In den Reitern „Offenes Arbeiten“ und „Aufräumen“ stehen je sechs Aussagen, klar abgestuft: zwei gute (grün), zwei mittlere (gelb/orange), zwei schlechte (rot). Jedes Antippen zählt eins hoch, „−“ korrigiert, „Auswerten“ sortiert die Aussagen nach Anzahl.</p>
     <p><strong>Sozialform:</strong> Neben Einzel, Partner, Gruppe und Plenum gibt es „max. 2 SuS“ (allein oder zu zweit), „max. 3 SuS“ (allein, zu zweit oder zu dritt), Stationenarbeit und Freie Form (Sozialform frei wählbar). Gestrichelte Figuren heißen: kann dazukommen, muss aber nicht.</p>
     <p><strong>Arbeitsort:</strong> Zeigt, ob die Klasse auch außerhalb des Klassenraums arbeiten darf.</p>
@@ -1082,6 +1089,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 <div class="imgview" id="imgView" role="dialog" aria-modal="true" aria-label="Bild im Vollbild">
   <img id="imgViewImg" alt="Gezeigtes Bild">
   <button class="imgclose" id="imgClose" type="button" aria-label="Bild schließen">×</button>
+  <button class="imgfs" id="imgFS" type="button" title="Vollbild" aria-label="Vollbild" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="fs-in"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></g><g class="fs-out"><path d="M3 8h5V3M21 8h-5V3M3 16h5v5M21 16h-5v5"/></g></svg></button>
   <div class="imgcap" id="imgCap" data-noi18n></div>
   <div class="imgbar" id="imgBar"><input type="text" id="imgCapIn" maxlength="160" placeholder="Bildunterschrift …" aria-label="Bildunterschrift" autocomplete="off" enterkeyhint="done"><button type="button" id="imgNew">Anderes Bild</button><button type="button" id="imgDel">Bild entfernen</button>
     <small>Das Bild bleibt nur in diesem Browser-Tab, bis du ihn schließt. Beim Exportieren wird es nicht mitgespeichert.</small></div>
@@ -2380,7 +2388,12 @@ function bind() {
   });
   $('#imgCapIn').addEventListener('input', e => setCap(e.target.value.trim() ? e.target.value : ''));
   $('#imgCapIn').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); e.stopPropagation(); });
-  $('#imgView').addEventListener('click', e => { if (!e.target.closest('#imgBar')) closeImg(); });
+  $('#imgView').addEventListener('click', e => { if (!e.target.closest('#imgBar, #imgFS')) closeImg(); });
+  // Vollbild-Knopf im Bildfenster: Zustand folgt dem echten Vollbild (auch nach Esc oder dem Knopf oben)
+  const fsSync = () => { const on = !!fsEl(), b = $('#imgFS'); b.setAttribute('aria-pressed', String(on)); const t = on ? 'Vollbild beenden' : 'Vollbild'; b.title = t; b.setAttribute('aria-label', t); };
+  if (!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen)) document.body.classList.add('nofs');
+  $('#imgFS').addEventListener('click', e => { e.stopPropagation(); toggleFS(); });
+  document.addEventListener('fullscreenchange', fsSync); document.addEventListener('webkitfullscreenchange', fsSync); fsSync();
   $('#imgNew').addEventListener('click', () => $('#inputFile').click());
   $('#imgDel').addEventListener('click', () => { try { sessionStorage.removeItem(IMGKEY); } catch (e) { } setCap(''); markImg(); closeImg(); });
   markImg();
@@ -3421,6 +3434,7 @@ const D = {
   'Öffne die Einstellungen (Zahnrad oben rechts).': ['Open the settings (gear icon, top right).', 'Ouvre les réglages (roue dentée en haut à droite).'],
   'Impressum': ['Legal notice', 'Mentions légales'],
   'Datenschutz': ['Privacy', 'Confidentialité'],
+  'Vollbild beenden': ['Exit full screen', 'Quitter le plein écran'],
   'Bildunterschrift …': ['Caption …', 'Légende …'],
   'Bildunterschrift': ['Caption', 'Légende'],
   'Lernplattformen Technik': ['Technology learning platforms', 'Plateformes technologie'],
@@ -3796,6 +3810,7 @@ const ES = {
   "Öffne die Einstellungen (Zahnrad oben rechts).": "Abre los ajustes (rueda dentada arriba a la derecha).",
   "Impressum": "Aviso legal",
   "Datenschutz": "Privacidad",
+  "Vollbild beenden": "Salir de pantalla completa",
   "Bildunterschrift …": "Pie de foto …",
   "Bildunterschrift": "Pie de foto",
   "Lernplattformen Technik": "Plataformas de aprendizaje de Tecnología",
