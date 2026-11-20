@@ -42,6 +42,9 @@ body{
   -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%;
 }
 button{font:inherit;color:inherit;cursor:pointer}
+/* Einmalig am 25.11.2026 (Wunsch Daniel): Hintergrund orange */
+body.orangeday{background:#ff9a3c}
+:root[data-theme="dark"] body.orangeday{background:#c2560c}
 .app{
   height:100vh; height:100dvh; display:flex; flex-direction:column; gap:var(--gap);
   padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
@@ -3050,5 +3053,12 @@ setLang(lang);
 })();
 </script>
 
+<script>
+/* Einmalig am 25.11.2026 (Wunsch Daniel): nur an diesem Tag ist der Hintergrund orange */
+(function () {
+  function od() { const d = new Date(); document.body.classList.toggle('orangeday', d.getFullYear() === 2026 && d.getMonth() === 10 && d.getDate() === 25); }
+  od(); setInterval(od, 60000);
+})();
+</script>
 </body>
 </html>

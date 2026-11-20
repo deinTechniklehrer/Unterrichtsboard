@@ -551,6 +551,9 @@ body.clean .tk-code{border-color:transparent}
 :root{--unsafe:#c62828;--safe:#15803d}
 :root[data-theme="dark"]{--unsafe:#a81f1f;--safe:#116a32}
 body{background:var(--bg)}
+/* Einmalig am 25.11.2026 (Wunsch Daniel): Hintergrund orange */
+body.orangeday{background:#ff9a3c}
+:root[data-theme="dark"] body.orangeday{background:#c2560c}
 body.alarm{animation:tbPulse .5s steps(1,end) infinite;transition:none}
 @keyframes tbPulse{0%{background:#ff1a1a}50%{background:#4a0000}}
 body.alarm #btnAlarm{animation:tbBtnPulse .5s steps(1,end) infinite}
@@ -4147,6 +4150,13 @@ function setLang(l, announce) {
 document.getElementById('btnLang').addEventListener('click', () => setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length], true));
 document.querySelectorAll('[data-lang-set]').forEach(x => x.addEventListener('click', () => setLang(x.dataset.langSet)));
 setLang(lang);
+})();
+</script>
+<script>
+/* Einmalig am 25.11.2026 (Wunsch Daniel): nur an diesem Tag ist der Hintergrund orange */
+(function () {
+  function od() { const d = new Date(); document.body.classList.toggle('orangeday', d.getFullYear() === 2026 && d.getMonth() === 10 && d.getDate() === 25); }
+  od(); setInterval(od, 60000);
 })();
 </script>
 </body>
