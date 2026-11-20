@@ -617,19 +617,20 @@ body.cleaning #btnClean,body.cleaning #btnPlan,body.cleaning #btnReflex,body.cle
 .tb-sym.nolbl .tb-s span{display:none}
 .tb-hint{color:var(--muted);font-size:14px;text-align:center;margin:auto}
 body.clean .tb-chip:not(.on),body.clean .tb-s:not(.on):not(.haz),body.clean .tb-hint{display:none}
-#tCleanMsg{background:#fff4c8;border-color:#f5b700;color:#111}
+#tCleanMsg{background:#fff4c8;border-color:#f5b700;color:#111;padding-top:8px}
 .tb-clean{flex:1;min-height:0;display:flex;flex-direction:column;align-items:stretch;gap:6px;width:100%;overflow:hidden}
 .cl-head{display:flex;align-items:center;justify-content:center;gap:10px;text-align:left;flex:none}
-.cl-head svg{width:clamp(34px,6cqh,64px);height:auto;flex:none}
-.cl-head b{display:block;font-size:clamp(17px,4.2cqh,34px);line-height:1.1}
-.cl-head p{font-size:clamp(13px,2.4cqh,20px);font-weight:600;margin:0}
+.cl-head svg{width:clamp(28px,4.6cqh,52px);height:auto;flex:none}
+.cl-head > div{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.7em;row-gap:0}
+.cl-head b{display:block;font-size:clamp(16px,3.6cqh,30px);line-height:1.1}
+.cl-head p{font-size:clamp(13px,2.2cqh,19px);font-weight:600;margin:0}
 .cl-plan{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:5px}
 @container (max-width:520px){.cl-plan{grid-template-columns:minmax(0,1fr)}}
 .cl-task{display:flex;align-items:center;gap:6px;min-height:0;min-width:0;border:2px solid #d8c27a;border-radius:10px;background:#fffdf3;padding:3px 6px;text-align:left;overflow:hidden;cursor:pointer}
 .cl-task.sel-target{border-color:#1565c0;box-shadow:0 0 0 3px rgba(21,101,192,.25)}
 .cl-tx{flex:1;min-width:0;line-height:1.15}
-.cl-tx b{display:block;font-size:clamp(12px,2.6cqh,19px);overflow-wrap:anywhere}
-.cl-tx small{display:block;font-size:clamp(10px,1.75cqh,14px);color:#4a4a4a;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cl-tx b{display:block;font-size:clamp(13px,3cqh,24px);overflow-wrap:anywhere}
+.cl-tx small{display:block;font-size:clamp(11px,2.1cqh,17px);color:#4a4a4a;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 @container (max-height:430px){.cl-tx small{display:none}}
 .cl-pk{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;flex:none;max-width:60%}
 .cl-task.cl-none .cl-pk:empty::after{content:"";width:calc(var(--pk) - 6px);height:calc(var(--pk) - 6px);border:2px dashed #c9b45d;border-radius:50%}
@@ -646,23 +647,36 @@ body.scroll .cl-plan{flex:none;grid-auto-rows:auto}
 body.scroll .cl-task{min-height:48px}
 @media (max-width:600px){body.scroll .cl-plan{grid-template-columns:1fr}body.scroll .cl-zones{flex-direction:column}}
 body.scroll .tb-clean{--pk:44px}
+body.scroll .cl-tx b{font-size:17px}body.scroll .cl-tx small{font-size:13px}
 body.scroll .cl-head svg{width:40px}body.scroll .cl-head b{font-size:20px}body.scroll .cl-head p{font-size:14px}body.scroll .cl-zl{font-size:14px}
 .cl-zone{flex:1;display:flex;align-items:center;gap:6px;min-height:calc(var(--pk) + 10px);border:2px dashed #b9a24a;border-radius:10px;padding:3px 6px;background:rgba(255,255,255,.5);cursor:pointer}
 .cl-zone .cl-pk{max-width:none;justify-content:flex-start;flex:1}
 .cl-zone.out{border-color:#9a9a9a;background:rgba(0,0,0,.05)}
 .cl-zone.sel-target{border-color:#1565c0;border-style:solid}
 .cl-zl{font-weight:800;font-size:clamp(12px,1.9cqh,16px);flex:none}
-.cl-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;flex:none}
-.cl-bar .btn{background:#fff;color:#111;border-color:#111;min-height:38px}
+/* Leiste und Schlussknöpfe teilen sich eine Zeile, damit die Aufträge mehr Platz haben */
+.cl-foot{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;flex:none}
+.cl-bar{display:contents}
+.cl-foot .btn{background:#fff;color:#111;border-color:#111;min-height:36px;padding:0 12px}
+.cl-foot .tb-clean-btns{display:contents}
+.cl-foot #cleanEnd{background:#111;color:#fff}
+.cl-lockhint,.cl-hint{order:9}
+@container (max-height:700px){.cl-hint{display:none}}
 .cl-n{display:inline-flex;align-items:center;gap:4px;font-weight:700;font-size:14px}
-.cl-n .btn{min-width:38px;padding:0}
+.cl-n .btn{min-width:36px;padding:0}
 .cl-n b{min-width:2ch;text-align:center;font-size:18px}
 .cl-hint{font-size:12.5px;color:#555;flex-basis:100%;text-align:center}
 /* Aufräumplan bleibt auch in „Nur Anzeige“ voll bedienbar; mit PIN sperrbar */
 .cl-lockbtn{display:inline-flex;align-items:center;gap:6px}
 .cl-lockbtn svg{width:18px;height:18px}
 .cl-lockhint{display:none;font-size:12.5px;color:#555;flex-basis:100%;text-align:center;font-weight:700}
-body.cl-locked .cl-lockhint{display:block}
+body.cl-locked .cl-lockhint{display:none}
+/* Gesperrt: nur Aufträge mit Nummern und belegte Felder zeigen */
+body.cl-locked .cl-task.cl-none,body.cl-locked .cl-zone.cl-empty{display:none}
+body.cl-locked:not(.scroll) .tb-clean{--pk:clamp(34px,8cqh,64px)}
+body.cl-locked:not(.scroll) .cl-tx b{font-size:clamp(15px,3.8cqh,30px)}
+body.cl-locked:not(.scroll) .cl-tx small{font-size:clamp(12px,2.6cqh,20px);-webkit-line-clamp:3}
+body.cl-locked .cl-zones:not(:has(.cl-zone:not(.cl-empty))){display:none}
 body.cl-locked .cl-hint,body.cl-locked #clShuffle,body.cl-locked .cl-n,body.cl-locked #clAllFree,body.cl-locked #clEditBtn{display:none}
 body.cl-locked .cl-lockbtn{background:#111;color:#fff}
 body.cl-locked #tCleanMsg .puck{cursor:default}
@@ -907,7 +921,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
         <div class="cl-head"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#tbTri"/></svg><div><b>Achtung: Arbeitsplatz aufräumen!</b><p>Erledige deine Aufgabe nach dem Aufräumplan.</p></div></div>
         <div class="cl-plan" id="clPlan"></div>
         <div class="cl-zones"><div class="cl-zone" data-zone="" id="clFree"><span class="cl-zl">Springer</span><span class="cl-pk"></span></div><div class="cl-zone out" data-zone="out" id="clOut"><span class="cl-zl">Nicht dabei</span><span class="cl-pk"></span></div></div>
-        <div class="cl-bar">
+        <div class="cl-foot"><div class="cl-bar">
           <button class="btn" id="clShuffle">Zufällig verteilen</button>
           <span class="cl-n"><span>Schüler:innen</span><button class="btn" id="clMinus" aria-label="Eine Person weniger">−</button><b id="clN">16</b><button class="btn" id="clPlus" aria-label="Eine Person mehr">+</button></span>
           <button class="btn" id="clAllFree">Alle zurück</button>
@@ -916,7 +930,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
           <span class="cl-lockhint">Plan gesperrt. Zum Ändern mit PIN entsperren.</span>
           <span class="cl-hint">Jeder Auftrag bekommt seine Nummern (Fegen zwei), die übrigen sind Springer. Nummer antippen und dann einen Auftrag antippen, oder Nummer ziehen.</span>
         </div>
-        <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanSave" hidden>Speichern</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div>
+        <div class="tb-clean-btns"><button class="btn" id="cleanRefl">Reflexion</button><button class="btn" id="cleanSave" hidden>Speichern</button><button class="btn" id="cleanEnd">Aufräumen beenden</button></div></div></div>
     </section>
     <section class="tile" id="tFokus" data-k="fokus">
       <div class="label">Fokus</div>
@@ -1043,7 +1057,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Ansagen:</strong> Alarm- und Aufräumansage sind Audiodateien mit KI-Stimmen. Deutsch: erzeugt mit dem KI-Multimedia-Tool von fobizz. Englisch und Französisch: erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Auf Spanisch spricht die Stimme des Geräts. Die Dateien werden mit dem Board offline gespeichert. Lässt sich eine Datei nicht abspielen, spricht die Stimme des Geräts.</p>
     <p><strong>iPad-Verstoß:</strong> Den Knopf schaltest du in den Einstellungen ein (anfangs aus). Ein Tipp zeigt groß „iPad-Verstoß“, spielt einen Gong und sagt an, was die Klasse tun soll. Gleichzeitig geht die iPad-Nutzung eine Stufe herunter: erlaubt → zugeklappt auf dem Tisch → Schultasche. Die Ansage passt dazu („Alle klappen jetzt ihr iPad zu“ oder „Alle packen jetzt ihr iPad in die Schultasche“). In den Einstellungen kannst du das Herunterschalten und den Ton einzeln ausschalten. Ohne Herunterschalten heißt die Ansage, je nach Stand, „Bitte haltet euch an die iPad-Regeln“. Das Fenster schließt sich nach 15 Sekunden von selbst.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
-    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. So kannst du den Plan vorbereiten: Nummern verteilen, dann „Speichern“ (oben oder unten neben „Aufräumen beenden“). Das Board geht zurück in die Phase, aus der du gekommen bist, der Timer läuft dort weiter, und später nutzt das Aufräumen genau diese Verteilung. Startest du im Aufräumen den Timer, gilt es als echtes Aufräumen, oben steht dann wieder „Beenden“. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
+    <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. So kannst du den Plan vorbereiten: Nummern verteilen, dann „Speichern“ (oben oder unten neben „Aufräumen beenden“). Das Board geht zurück in die Phase, aus der du gekommen bist, der Timer läuft dort weiter, und später nutzt das Aufräumen genau diese Verteilung. Startest du im Aufräumen den Timer, gilt es als echtes Aufräumen, oben steht dann wieder „Beenden“. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Gesperrt zeigt der Plan nur noch die Aufträge mit Nummern und blendet leere Felder (Springer, Nicht dabei) und die Einstellknöpfe aus, damit die Aufträge groß zu lesen sind. Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Dobot, 3D-Druck, Arduino oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“, dann suchen sich alle selbst etwas aus. Antippen des großen Bildes schaltet weiter.</p>
     <p><strong>APE:</strong> Wähle Robotik oder Arduino. Robotik zeigt ein Foto des Arbeitsplatzes (Laptop, Not-Aus, Roboterarm), Antippen vergrößert es.</p>
@@ -1600,6 +1614,18 @@ function layout(fromResize) {
   if (G6) {
     MIN_F = 1; document.body.classList.toggle('tight', G6.rh < 210); g.style.gridTemplateColumns = G6.cols; g.style.gridTemplateRows = G6.rows;
     for (const p of G6.place) { tiles[p.k].style.gridColumn = `${p.col} / span ${p.cs}`; tiles[p.k].style.gridRow = `${p.row} / span ${p.rs}`; }
+    fitTask(); sizePlan(); fitSym(); return;
+  }
+  if (tbCleaning && keys.length === 2 && keys.includes('timer') && W >= 700 && W > H * 1.1) {
+    const tw = Math.round(Math.max(260, Math.min(W * 0.3, 400)));
+    MIN_F = 1; document.body.classList.remove('tight'); g.style.gridTemplateColumns = `${tw}px minmax(0,1fr)`; g.style.gridTemplateRows = 'minmax(0,1fr)';
+    tiles.timer.style.gridColumn = '1'; tiles.timer.style.gridRow = '1'; tiles.cleanmsg.style.gridColumn = '2'; tiles.cleanmsg.style.gridRow = '1';
+    fitTask(); sizePlan(); fitSym(); return;
+  }
+  if (tbCleaning && keys.length === 2 && keys.includes('timer') && W >= 600 && H >= 800 && H > W) {
+    const th = Math.round(Math.max(280, Math.min(H * 0.32, 380)));
+    MIN_F = 1; document.body.classList.remove('tight'); g.style.gridTemplateColumns = 'minmax(0,1fr)'; g.style.gridTemplateRows = `${th}px minmax(0,1fr)`;
+    tiles.timer.style.gridColumn = '1'; tiles.timer.style.gridRow = '1'; tiles.cleanmsg.style.gridColumn = '1'; tiles.cleanmsg.style.gridRow = '2';
     fitTask(); sizePlan(); fitSym(); return;
   }
   const others = keys.filter(k => k !== 'timer');
@@ -2971,6 +2997,7 @@ function clRender() {
   $('#clFree .cl-pk').innerHTML = of('').map(clPuck).join('');
   $('#clOut .cl-pk').innerHTML = of('out').map(clPuck).join('');
   $('#clN').textContent = st.n;
+  $('#clFree').classList.toggle('cl-empty', !of('').length); $('#clOut').classList.toggle('cl-empty', !of('out').length);
   $$('#tCleanMsg [data-zone]').forEach(z => z.classList.toggle('sel-target', !!clSel));
 }
 function clMove(n, zone) { const st = clState(); if (n >= 1 && n <= st.n) { st.a[n - 1] = zone; save(); } clSel = 0; clRender(); }
