@@ -151,6 +151,10 @@ body.clean .hint{display:none}
 @container (max-width:560px){ .t-main .u{display:none} }
 .t-main{gap:6px}
 .t-main .btn.t10{flex:.9 1 0;color:var(--accent)}
+/* Timer klein (1 × 1, 1 × 2): ohne ±10, in kleinen Kacheln ohne Schnellwahl */
+@container (max-width:300px){ .t-main .btn.t10{display:none} }
+@container (max-width:300px) and (max-height:300px){ .presets{display:none} }
+.tsnote{margin:-2px 0 6px; font-size:13px; color:var(--muted)}
 @container (max-width:330px){ .t-main .btn{padding:0 2px} }
 /* Schnellwahl: eine Zeile, wischbar, wenn sie nicht passt */
 .presets{justify-content:flex-start; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding:0 2px}
@@ -968,8 +972,9 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <label class="row">Gefährdungen <input type="checkbox" class="sw" data-show="gefahr"></label>
     <label class="row">Timer <input type="checkbox" class="sw" data-show="timer"></label>
     <div class="row">Größe des Timers (Querformat)
-      <div class="seg"><button class="btn" data-tsize-set="2x2">2 × 2</button><button class="btn" data-tsize-set="2x1">2 × 1</button></div>
+      <div class="seg"><button class="btn" data-tsize-set="2x2">2 × 2</button><button class="btn" data-tsize-set="2x1">2 × 1</button><button class="btn" data-tsize-set="1x2">1 × 2</button><button class="btn" data-tsize-set="1x1">1 × 1</button></div>
     </div>
+    <p class="tsnote">Sind viele Kacheln an, wird der Timer automatisch kleiner. <span hidden>Gerade: <b id="tsNow"></b></span></p>
     <label class="row">Stundenfahrplan <input type="checkbox" class="sw" data-show="plan"></label>
     <label class="row">Aufgabe <input type="checkbox" class="sw" data-show="aufgabe"></label>
     <label class="row">Sozialform <input type="checkbox" class="sw" data-show="sozial"></label>
@@ -1012,7 +1017,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 
     <h3>Gut zu wissen</h3>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
-    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen, QR-Code) sind 1 Spalte breit, der Stundenfahrplan 1 × 1 (ab 5 Phasen 1 Spalte und 2 Zeilen hoch), Timer und Aufgabe 2 Spalten. Die APE ist immer quadratisch: 2 × 2, wenn Platz ist, sonst 1 × 1. Den Timer kannst du oben in den Einstellungen auf 2 × 2 oder 2 × 1 stellen.</p>
+    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen, QR-Code) sind 1 Spalte breit, der Stundenfahrplan 1 × 1 (ab 5 Phasen 1 Spalte und 2 Zeilen hoch), Timer und Aufgabe 2 Spalten. Die APE ist immer quadratisch: 2 × 2, wenn Platz ist, sonst 1 × 1. Den Timer kannst du oben in den Einstellungen auf 2 × 2, 2 × 1, 1 × 2 oder 1 × 1 stellen. Ist das Board so voll, dass die Zeilen niedriger als 200 px würden, wird er automatisch kleiner (2 × 2 → 2 × 1 → 1 × 1, 1 × 2 → 1 × 1).</p>
     <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. „Nur Anzeige“ (Auge oben) blendet nur die Knöpfe aus, Ort und Größe der Kacheln bleiben gleich.</p>
     <p><strong>Mikrofon:</strong> Die Lautstärkeampel hört nur mit, wenn das Board über eine sichere Adresse (https://) läuft, z. B. über GitHub Pages, und direkt im Browser bzw. als installierte App geöffnet ist (nicht in einer App-Vorschau). Klappt es nicht, zeigt das Board einen passenden Hinweis für dein Gerät. Es wird nichts aufgenommen oder gespeichert, nur der Pegel wird gemessen. Ohne Mikrofon schaltest du die Ampel per Tippen.</p>
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
@@ -1439,7 +1444,7 @@ function scrollLayout(keys, W, H, gap) {
 const G6_W = { aufgabe: 2, ape: 2 };
 const G6_MAX = { aufgabe: 3, timer: 3, tinker: 2 };
 const G6_FIX = ['qr']; // immer genau 1 × 1
-function grid6Try(keys, W, H, gap, mode) {
+function grid6Try(keys, W, H, gap, mode, ts) {
   const apeBig = mode === 'big';
   const C = 6;
   const ord = k => ORDER.indexOf(k);
@@ -1450,7 +1455,7 @@ function grid6Try(keys, W, H, gap, mode) {
   const fix = k => G6_FIX.includes(k) || k === 'plan' || (k === 'ape' && mode === 'small');
   for (let extra = 0; extra < 3; extra++) for (const tgOn of [true, false]) {
     // Blöcke links: Fahrplan ab 5 Phasen (1 × 2), Timer (2 × 2 oder 2 × 1), APE groß (2 × 2)
-    const blk = tall.map(k => k === 'timer' ? { k, cs: 2, rs: S.tsize === '2x1' ? 1 : 2 } : k === 'ape' ? { k, cs: 2, rs: 2 } : { k, cs: 1, rs: 2 });
+    const blk = tall.map(k => k === 'timer' ? { k, cs: ts[0], rs: ts[1] } : k === 'ape' ? { k, cs: 2, rs: 2 } : { k, cs: 1, rs: 2 });
     const span = {}; rest.forEach(k => span[k] = fix(k) ? 1 : (G6_W[k] || 1));
     const cells = () => blk.reduce((a, b) => a + b.cs * b.rs, 0) + rest.reduce((a, k) => a + span[k], 0);
     const maxRs = blk.reduce((a, b) => Math.max(a, b.rs), 0);
@@ -1461,7 +1466,7 @@ function grid6Try(keys, W, H, gap, mode) {
     const grow = (k, mx) => { while (free > 0 && span[k] < mx) { span[k]++; free--; } };
     ['aufgabe', 'tinker'].concat(mode === 'loose' ? ['ape'] : []).forEach(k => { if (k in span) grow(k, G6_MAX[k] || 3); });
     const tb = blk.find(b => b.k === 'timer');
-    if (tb && tgOn && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / tb.rs), G6_MAX.timer - tb.cs)); tb.cs += t; free -= t * tb.rs; }
+    if (tb && tgOn && ts[0] === 2 && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / tb.rs), G6_MAX.timer - tb.cs)); tb.cs += t; free -= t * tb.rs; }
     const growable = rest.filter(k => !fix(k));
     const small = growable.filter(k => !(k in G6_W));
     for (let i = 0; free > 0 && small.length && i < small.length * 2; i++) { const k = small[i % small.length]; if (span[k] < 2 + Math.floor(i / small.length)) { span[k]++; free--; } }
@@ -1492,13 +1497,35 @@ function grid6Try(keys, W, H, gap, mode) {
   }
   return null;
 }
-function grid6Layout(keys, W, H, gap) {
+function grid6One(keys, W, H, gap, ts) {
   if (W < 700 || W < H * 1.05 || !keys.length) return null;
-  if (!keys.includes('ape')) return grid6Try(keys, W, H, gap, 'small');
+  if (!keys.includes('ape')) return grid6Try(keys, W, H, gap, 'small', ts);
   // APE quadratisch: 2 × 2, wenn Platz ist, sonst 1 × 1; nur wenn beides schlecht aussieht, breiter
-  const big = grid6Try(keys, W, H, gap, 'big'), small = grid6Try(keys, W, H, gap, 'small');
+  const big = grid6Try(keys, W, H, gap, 'big', ts), small = grid6Try(keys, W, H, gap, 'small', ts);
   let best = big && small ? (big.sq <= small.sq + 0.08 ? big : small) : (big || small);
-  if (!best || best.sq > 0.45) { const loose = grid6Try(keys, W, H, gap, 'loose'); if (loose && (!best || loose.sq < best.sq)) best = loose; }
+  if (!best || best.sq > 0.45) { const loose = grid6Try(keys, W, H, gap, 'loose', ts); if (loose && (!best || loose.sq < best.sq)) best = loose; }
+  return best;
+}
+// Timergröße: die gewählte Größe; ist das Board zu voll, wird der Timer automatisch kleiner
+// (2 × 2 → 2 × 1 → 1 × 1, 1 × 2 → 1 × 1), damit die anderen Kacheln mehr Höhe bekommen
+const TSIZES = { '2x2': [2, 2], '2x1': [2, 1], '1x2': [1, 2], '1x1': [1, 1] };
+const TS_CHAIN = { '2x2': ['2x2', '2x1', '1x1'], '2x1': ['2x1', '1x1'], '1x2': ['1x2', '1x1'], '1x1': ['1x1'] };
+const TS_RH = 200; // Zeilenhöhe in px, unter der das Board als zu voll gilt
+let tsAuto = '';
+function grid6Layout(keys, W, H, gap) {
+  const want = TSIZES[S.tsize] ? S.tsize : '2x2';
+  const first = grid6One(keys, W, H, gap, TSIZES[want]); if (first) first.ts = want;
+  let best = first;
+  if (keys.includes('timer') && !(first && first.rh >= TS_RH)) {
+    for (const ts of TS_CHAIN[want].slice(1)) {
+      const L = grid6One(keys, W, H, gap, TSIZES[ts]); if (!L) continue; L.ts = ts;
+      if (!first && L.n < 3) continue; // nur wenige Kacheln: bisherige Anordnung behalten
+      if (!best || L.rh > best.rh + 1) best = L;
+      if (L.rh >= TS_RH) break;
+    }
+  }
+  tsAuto = best && keys.includes('timer') && best.ts !== want ? best.ts : '';
+  const n = document.getElementById('tsNow'); if (n) { n.textContent = tsAuto ? tsAuto.replace('x', ' × ') : ''; n.parentElement.hidden = !tsAuto; }
   return best;
 }
 let layoutRaf = 0;
@@ -2532,7 +2559,7 @@ function bind() {
     queueLayout();
   }));
   $$('[data-theme-set]').forEach(b => b.addEventListener('click', () => { S.theme = b.dataset.themeSet; save(); renderTheme(); }));
-  const renderTsize = () => $$('[data-tsize-set]').forEach(x => x.classList.toggle('sel', x.dataset.tsizeSet === (S.tsize === '2x1' ? '2x1' : '2x2')));
+  const renderTsize = () => $$('[data-tsize-set]').forEach(x => x.classList.toggle('sel', x.dataset.tsizeSet === (TSIZES[S.tsize] ? S.tsize : '2x2')));
   $$('[data-tsize-set]').forEach(b => b.addEventListener('click', () => { S.tsize = b.dataset.tsizeSet; save(); renderTsize(); queueLayout(); }));
   renderTsize();
   $('#optSound').addEventListener('change', e => { S.sound = e.target.checked; save(); if (S.sound) unlockAudio(); });
@@ -3434,6 +3461,8 @@ const D = {
   'Öffne die Einstellungen (Zahnrad oben rechts).': ['Open the settings (gear icon, top right).', 'Ouvre les réglages (roue dentée en haut à droite).'],
   'Impressum': ['Legal notice', 'Mentions légales'],
   'Datenschutz': ['Privacy', 'Confidentialité'],
+  'Sind viele Kacheln an, wird der Timer automatisch kleiner.': ['If many tiles are on, the timer gets smaller automatically.', 'Si beaucoup de tuiles sont affichées, le minuteur devient automatiquement plus petit.'],
+  'Gerade:': ['Right now:', 'En ce moment :'],
   'Vollbild beenden': ['Exit full screen', 'Quitter le plein écran'],
   'Bildunterschrift …': ['Caption …', 'Légende …'],
   'Bildunterschrift': ['Caption', 'Légende'],
@@ -3810,6 +3839,8 @@ const ES = {
   "Öffne die Einstellungen (Zahnrad oben rechts).": "Abre los ajustes (rueda dentada arriba a la derecha).",
   "Impressum": "Aviso legal",
   "Datenschutz": "Privacidad",
+  "Sind viele Kacheln an, wird der Timer automatisch kleiner.": "Si hay muchos recuadros, el temporizador se hace más pequeño automáticamente.",
+  "Gerade:": "Ahora:",
   "Vollbild beenden": "Salir de pantalla completa",
   "Bildunterschrift …": "Pie de foto …",
   "Bildunterschrift": "Pie de foto",
