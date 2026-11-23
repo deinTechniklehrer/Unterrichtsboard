@@ -1479,6 +1479,8 @@ function scrollLayout(keys, W, H, gap) {
 const G6_W = { aufgabe: 2, ape: 2 };
 const G6_MAX = { aufgabe: 3, timer: 3, tinker: 2 };
 const G6_FIX = ['qr']; // immer genau 1 × 1
+// Mindestgrößen (Daniel, 23.11.2026, Testseite „Kachelgrößen-Test“): alle 1 × 1, Aufgabe und APE 2 × 1
+const G6_FIXW = { ape: 2 }; // APE „klein“ = 2 × 1 (zwei Fotos nebeneinander)
 function grid6Try(keys, W, H, gap, mode, ts) {
   const apeBig = mode === 'big';
   const C = 6;
@@ -1491,7 +1493,7 @@ function grid6Try(keys, W, H, gap, mode, ts) {
   for (let extra = 0; extra < 3; extra++) for (const tgOn of [true, false]) {
     // Blöcke links: Fahrplan ab 5 Phasen (1 × 2), Timer (2 × 2 oder 2 × 1), APE groß (2 × 2)
     const blk = tall.map(k => k === 'timer' ? { k, cs: ts[0], rs: ts[1] } : k === 'ape' ? { k, cs: 2, rs: 2 } : { k, cs: 1, rs: 2 });
-    const span = {}; rest.forEach(k => span[k] = fix(k) ? 1 : (G6_W[k] || 1));
+    const span = {}; rest.forEach(k => span[k] = fix(k) ? (k === 'ape' ? G6_FIXW.ape : 1) : (G6_W[k] || 1));
     const cells = () => blk.reduce((a, b) => a + b.cs * b.rs, 0) + rest.reduce((a, k) => a + span[k], 0);
     const maxRs = blk.reduce((a, b) => Math.max(a, b.rs), 0);
     const n = rest.length ? Math.max(maxRs, Math.ceil(cells() / C)) + extra : Math.max(1, maxRs);
@@ -1535,7 +1537,7 @@ function grid6Try(keys, W, H, gap, mode, ts) {
 function grid6One(keys, W, H, gap, ts) {
   if (W < 700 || W < H * 1.05 || !keys.length) return null;
   if (!keys.includes('ape')) return grid6Try(keys, W, H, gap, 'small', ts);
-  // APE quadratisch: 2 × 2, wenn Platz ist, sonst 1 × 1; nur wenn beides schlecht aussieht, breiter
+  // APE: 2 × 2, wenn Platz ist, sonst 2 × 1 (Mindestgröße); nur wenn beides schlecht aussieht, breiter
   const big = grid6Try(keys, W, H, gap, 'big', ts), small = grid6Try(keys, W, H, gap, 'small', ts);
   let best = big && small ? (big.sq <= small.sq + 0.08 ? big : small) : (big || small);
   if (!best || best.sq > 0.45) { const loose = grid6Try(keys, W, H, gap, 'loose', ts); if (loose && (!best || loose.sq < best.sq)) best = loose; }
