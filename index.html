@@ -120,6 +120,8 @@ main{flex:1; min-height:0; display:grid; gap:var(--gap)}
   pointer-events:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2;
 }
 @media (min-width:900px) and (min-height:640px){ .label{font-size:15px; left:18px} }
+/* schmale Kacheln (z. B. 1 × 1 auf dem iPad 9. Gen.): Überschrift enger, damit „Gefährdungen“ ganz zu lesen ist */
+@container (max-width:185px){ .label{font-size:13px; letter-spacing:.02em; left:12px; right:8px} }
 .empty[hidden]{display:none}
 .empty{grid-column:1/-1; display:grid; place-items:center; color:var(--muted); font-size:clamp(18px,3vh,28px); text-align:center; min-height:200px}
 
@@ -856,7 +858,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 
     <h3>Gut zu wissen</h3>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
-    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort) sind 1 Spalte breit, der Stundenfahrplan 1 Spalte und 2 Zeilen hoch, Timer und Aufgabe 2 Spalten. Den Timer kannst du oben in den Einstellungen auf 2 × 2, 2 × 1, 1 × 2 oder 1 × 1 stellen. Ist das Board so voll, dass die Zeilen niedriger als 200 px würden, wird er automatisch kleiner (2 × 2 → 2 × 1 → 1 × 1, 1 × 2 → 1 × 1). Blendest du Kacheln aus, wird die Aufgabe 3 Spalten breit.</p>
+    <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort) sind 1 Spalte breit, der Stundenfahrplan 1 × 1 (ab 5 Phasen 1 × 2), Timer und Aufgabe 2 Spalten. Den Timer kannst du oben in den Einstellungen auf 2 × 2, 2 × 1, 1 × 2 oder 1 × 1 stellen. Ist das Board so voll, dass die Zeilen niedriger als 200 px würden, wird er automatisch kleiner (2 × 2 → 2 × 1 → 1 × 1, 1 × 2 → 1 × 1). Blendest du Kacheln aus, wird die Aufgabe 3 Spalten breit.</p>
     <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. „Nur Anzeige“ (Auge oben) blendet nur die Knöpfe aus, Ort und Größe der Kacheln bleiben gleich.</p>
     <p><strong>Mikrofon:</strong> Die Lautstärkeampel hört nur mit, wenn das Board über eine sichere Adresse (https://) läuft, z. B. über GitHub Pages, und direkt im Browser bzw. als installierte App geöffnet ist (nicht in einer App-Vorschau). Klappt es nicht, zeigt das Board einen passenden Hinweis für dein Gerät. Es wird nichts aufgenommen oder gespeichert, nur der Pegel wird gemessen. Ohne Mikrofon schaltest du die Ampel per Tippen.</p>
     <p><strong>Speichern:</strong> Deine Einstellungen bleiben nur auf diesem Gerät im Browser. Es werden keine Daten verschickt.</p>
@@ -1321,7 +1323,7 @@ function scrollLayout(keys, W, H, gap) {
 /* ================= Raster mit 6 Spalten (Querformat) =================
    Standard für alle Boards: Im Querformat liegen die Kacheln in einem Raster mit 6 Spalten.
    Klein (1 Spalte): Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen.
-   Stundenfahrplan immer 1 Spalte breit und 2 Zeilen hoch. Timer 2 Spalten, 2 oder 1 Zeile hoch (Einstellungen).
+   Stundenfahrplan 1 × 1 (Mindestgröße, Daniel 23.11.2026), ab 5 Phasen 1 × 2. Timer 2 Spalten, 2 oder 1 Zeile hoch (Einstellungen).
    Aufgabe und APE 2 Spalten. Bleibt Platz frei, wird zuerst die Aufgabe 3 breit, dann APE und Timer,
    erst danach kleine Kacheln. Mit und ohne „Nur Anzeige“ bleiben Ort und Größe gleich.
    Hochkant und auf kleinen Bildschirmen ordnet das Board die Kacheln weiter automatisch an. */
@@ -1331,11 +1333,12 @@ function grid6One(keys, W, H, gap, ts) {
   const C = 6;
   if (W < 700 || W < H * 1.05 || !keys.length) return null;
   const ord = k => ORDER.indexOf(k);
-  const tall = keys.filter(k => k === 'timer' || k === 'plan'), rest = keys.filter(k => !tall.includes(k));
+  const planTall = S.plan.length >= 5; // Fahrplan 1 × 1, ab 5 Phasen 1 × 2
+  const tall = keys.filter(k => k === 'timer' || (k === 'plan' && planTall)), rest = keys.filter(k => !tall.includes(k));
   for (let extra = 0; extra < 3; extra++) {
-    // Blöcke links: Fahrplan (1 Spalte, 2 Zeilen) und Timer (2 Spalten, 2 oder 1 Zeile)
+    // Blöcke links: Fahrplan ab 5 Phasen (1 × 2) und Timer
     const blk = tall.map(k => k === 'timer' ? { k, cs: ts[0], rs: ts[1] } : { k, cs: 1, rs: 2 });
-    const span = {}; rest.forEach(k => span[k] = k === 'qr' ? 1 : (G6_W[k] || 1));
+    const span = {}; rest.forEach(k => span[k] = k === 'qr' || k === 'plan' ? 1 : (G6_W[k] || 1));
     const cells = () => blk.reduce((a, b) => a + b.cs * b.rs, 0) + rest.reduce((a, k) => a + span[k], 0);
     const maxRs = blk.reduce((a, b) => Math.max(a, b.rs), 0);
     const n = rest.length ? Math.max(maxRs, Math.ceil(cells() / C)) + extra : Math.max(1, maxRs);
@@ -1346,7 +1349,7 @@ function grid6One(keys, W, H, gap, ts) {
     ['aufgabe', 'ape'].forEach(k => { if (k in span) grow(k, G6_MAX[k]); });
     const tb = blk.find(b => b.k === 'timer');
     if (tb && ts[0] === 2 && free > 0 && rest.length) { const t = Math.max(0, Math.min(Math.floor(free / tb.rs), G6_MAX.timer - tb.cs)); tb.cs += t; free -= t * tb.rs; }
-    const growable = rest.filter(k => k !== 'qr'); // QR-Code bleibt 1 × 1
+    const growable = rest.filter(k => k !== 'qr' && k !== 'plan'); // QR-Code und Fahrplan bleiben 1 × 1
     const small = growable.filter(k => !(k in G6_W));
     for (let i = 0; free > 0 && small.length && i < small.length * 2; i++) { const k = small[i % small.length]; if (span[k] < 2 + Math.floor(i / small.length)) { span[k]++; free--; } }
     for (let i = 0; free > 0 && growable.length && i < 40; i++) { span[growable[i % growable.length]]++; free--; }

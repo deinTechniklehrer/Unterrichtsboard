@@ -104,6 +104,8 @@ main{flex:1; min-height:0; display:grid; gap:var(--gap)}
   pointer-events:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.2;
 }
 @media (min-width:900px) and (min-height:640px){ .label{font-size:15px; left:18px} }
+/* schmale Kacheln (z. B. 1 × 1 auf dem iPad 9. Gen.): Überschrift enger, damit „Gefährdungen“ ganz zu lesen ist */
+@container (max-width:185px){ .label{font-size:13px; letter-spacing:.02em; left:12px; right:8px} }
 .empty[hidden]{display:none}
 .empty{grid-column:1/-1; display:grid; place-items:center; color:var(--muted); font-size:clamp(18px,3vh,28px); text-align:center; min-height:200px}
 
@@ -548,6 +550,21 @@ body.clean .tk-code{border-color:transparent}
 #apeView[hidden]{display:none}
 #apeView img{max-width:100%;max-height:calc(100% - 34px);object-fit:contain}
 .tb-clean-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+/* APE als Bild über die ganze Kachel (seit 23.11.2026, Wunsch Daniel): Foto füllt die Kachel, Auswahl als kleine Knöpfe
+   unten auf dem Bild (in „Nur Anzeige“ ausgeblendet), Name der APE in der Überschrift, Antippen zeigt das Foto bildschirmfüllend */
+#tApe.ape-bg .tb-body{position:relative;container-type:size}
+#tApe.ape-bg .ape-split{position:absolute;inset:0;display:block}
+#tApe.ape-bg .tb-photos{position:absolute;inset:0;flex:none;display:flex;flex-direction:row;gap:6px}
+#tApe.ape-bg .tb-photos.col{flex-direction:column}
+#tApe.ape-bg .tb-photo{border-radius:12px;overflow:hidden;background:var(--line)}
+#tApe.ape-bg .tb-photo img{object-fit:cover}
+#tApe.ape-bg .tb-photo.none{min-height:0;font-size:15px}
+#tApe.ape-bg .tb-chips{position:absolute;left:6px;right:6px;bottom:6px;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;pointer-events:none}
+#tApe.ape-bg .tb-chip{pointer-events:auto;min-height:34px;padding:0 12px;font-size:14px;background:rgba(255,255,255,.9);color:#334;border-color:rgba(0,0,0,.15);box-shadow:0 1px 6px rgba(0,0,0,.3)}
+#tApe.ape-bg .tb-chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+body.clean #tApe.ape-bg .tb-chips{display:none}
+@container (max-width:220px){#tApe.ape-bg .tb-chips{flex-wrap:nowrap;gap:3px;left:3px;right:3px;bottom:4px}#tApe.ape-bg .tb-chip{min-height:28px;padding:0 5px;font-size:12px;border-width:2px}}
+#apeView span b{font-size:18px;margin-right:8px}
 :root{--unsafe:#c62828;--safe:#15803d}
 :root[data-theme="dark"]{--unsafe:#a81f1f;--safe:#116a32}
 body{background:var(--bg)}
@@ -945,7 +962,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
       <div class="ctrl so-btns" id="foBtns"></div>
     </section>
     <section class="tile" id="tApe" data-k="ape">
-      <div class="label">APE</div>
+      <div class="label" id="apeLbl" data-noi18n>APE</div>
       <div class="tb-body"><div class="tb-chips" id="apes"></div>
       <div class="ape-split" id="apeSplit" hidden><div class="tb-sym" id="rules" hidden></div>
       <div class="tb-photos" id="apePhotos"></div></div>
@@ -994,7 +1011,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
   <div class="mv-bar"><button class="btn" id="ipvTone">Ton nochmal</button><button class="btn primary" id="ipvClose">Weiterarbeiten</button></div>
 </div>
 <div id="qrView" hidden role="dialog" aria-label="QR-Code groß"><div class="qrv-box"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" shape-rendering="crispEdges" aria-hidden="true"><path fill="#fff" d="M0 0h41v41h-41z"/><path class="qrline" stroke="#000" d="M2 2.5h7m1 0h1m3 0h1m2 0h1m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m1 0h7m-37 1h1m5 0h1m1 0h1m1 0h1m2 0h1m2 0h2m3 0h1m1 0h2m1 0h1m3 0h1m5 0h1m-37 1h1m1 0h3m1 0h1m2 0h2m1 0h1m1 0h2m2 0h2m2 0h1m2 0h1m4 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m5 0h1m1 0h2m3 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m4 0h2m3 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-37 1h1m5 0h1m3 0h1m3 0h2m1 0h3m1 0h2m1 0h3m3 0h1m5 0h1m-37 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-29 1h1m3 0h1m1 0h1m4 0h1m2 0h3m2 0h1m-28 1h1m1 0h2m1 0h3m3 0h1m2 0h2m2 0h1m2 0h2m3 0h1m1 0h1m1 0h1m2 0h1m1 0h2m-36 1h5m3 0h2m1 0h1m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h1m6 0h1m-34 1h1m2 0h2m1 0h2m1 0h1m2 0h1m1 0h1m1 0h6m1 0h1m2 0h1m-29 1h1m2 0h1m5 0h2m2 0h2m1 0h1m1 0h1m1 0h1m1 0h4m6 0h3m-35 1h5m1 0h1m3 0h3m1 0h2m1 0h3m2 0h6m1 0h2m1 0h5m-34 1h1m3 0h1m3 0h7m1 0h3m2 0h1m1 0h8m2 0h1m-37 1h1m5 0h1m2 0h2m5 0h1m2 0h1m1 0h1m7 0h2m1 0h1m1 0h2m-36 1h1m4 0h1m2 0h1m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m2 0h3m1 0h2m3 0h1m-34 1h1m2 0h1m2 0h1m2 0h2m3 0h1m5 0h1m1 0h2m6 0h2m-34 1h3m1 0h1m1 0h1m3 0h4m2 0h3m2 0h3m2 0h1m1 0h2m2 0h4m-31 1h2m2 0h1m1 0h2m3 0h1m2 0h1m1 0h1m1 0h1m2 0h5m1 0h4m-36 1h1m2 0h1m3 0h1m1 0h2m1 0h6m1 0h1m1 0h2m4 0h1m2 0h3m1 0h1m-36 1h2m1 0h2m1 0h2m5 0h3m2 0h2m1 0h1m1 0h2m1 0h1m1 0h2m1 0h2m3 0h1m-36 1h2m4 0h1m1 0h4m3 0h6m1 0h1m1 0h1m2 0h1m4 0h1m1 0h1m-34 1h2m2 0h1m2 0h2m1 0h3m3 0h1m4 0h1m1 0h1m3 0h1m1 0h1m-30 1h3m2 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m2 0h2m2 0h2m1 0h4m-36 1h4m2 0h1m1 0h1m1 0h1m5 0h1m4 0h1m1 0h8m1 0h1m1 0h1m1 0h1m-36 1h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m6 0h1m2 0h2m1 0h10m-36 1h4m1 0h1m3 0h2m2 0h1m3 0h1m3 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h1m-36 1h1m1 0h4m1 0h1m1 0h1m5 0h1m2 0h7m1 0h2m1 0h4m2 0h2m-35 1h1m1 0h1m1 0h8m4 0h2m1 0h3m1 0h1m1 0h8m-27 1h8m4 0h2m1 0h3m1 0h2m3 0h1m1 0h1m1 0h1m-37 1h7m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m3 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h3m-37 1h1m5 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h2m1 0h3m3 0h1m2 0h1m-36 1h1m1 0h3m1 0h1m5 0h1m1 0h1m1 0h1m3 0h1m5 0h1m1 0h6m1 0h2m-37 1h1m1 0h3m1 0h1m1 0h4m2 0h3m4 0h1m1 0h1m1 0h1m1 0h4m1 0h2m2 0h1m-37 1h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2m3 0h3m2 0h4m1 0h1m1 0h1m-35 1h1m5 0h1m3 0h1m3 0h2m2 0h2m2 0h1m1 0h2m5 0h4m-35 1h7m1 0h1m2 0h2m1 0h1m1 0h2m4 0h1m1 0h3m2 0h1m2 0h5"/></svg></div><b>Lernplattformen Technik</b><span>deintechniklehrer.github.io/Lernplattformen/schueler/technik</span><span class="qrv-close">Antippen zum Schließen</span></div>
-<div id="apeView" hidden role="dialog" aria-label="APE groß"><img id="apeViewImg" alt="Arbeitsplatzeinrichtung"><span>Antippen zum Schließen</span></div>
+<div id="apeView" hidden role="dialog" aria-label="APE groß"><img id="apeViewImg" alt="Arbeitsplatzeinrichtung"><span><b id="apeViewName" data-noi18n></b>Antippen zum Schließen</span></div>
 <dialog id="dlg">
   <div class="dlg">
     <h2>Einstellungen</h2>
@@ -1063,7 +1080,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. So kannst du den Plan vorbereiten: Nummern verteilen, dann „Speichern“ (oben oder unten neben „Aufräumen beenden“). Das Board geht zurück in die Phase, aus der du gekommen bist, der Timer läuft dort weiter, und später nutzt das Aufräumen genau diese Verteilung. Startest du im Aufräumen den Timer, gilt es als echtes Aufräumen, oben steht dann wieder „Beenden“. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Gesperrt zeigt der Plan nur noch die Aufträge mit Nummern und blendet leere Felder (Springer, Nicht dabei) und die Einstellknöpfe aus, damit die Aufträge groß zu lesen sind. Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Dobot, 3D-Druck, Arduino oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“, dann suchen sich alle selbst etwas aus. Antippen des großen Bildes schaltet weiter.</p>
-    <p><strong>APE:</strong> Wähle Robotik oder Arduino. Robotik zeigt ein Foto des Arbeitsplatzes (Laptop, Not-Aus, Roboterarm), Antippen vergrößert es.</p>
+    <p><strong>APE:</strong> Wähle Robotik oder Arduino. Robotik zeigt ein Foto des Arbeitsplatzes (Laptop, Not-Aus, Roboterarm). Das Foto füllt die ganze Kachel, der Name der APE steht in der Überschrift, die Auswahlknöpfe liegen unten auf dem Bild (in „Nur Anzeige“ ausgeblendet). Antippen zeigt das Foto bildschirmfüllend.</p>
     <p><strong>Gefährdungen:</strong> Nicht gewählte Symbole sind grau, gewählte farbig. In „Nur Anzeige“ siehst du nur die gewählten. Die Warn- und Gebotszeichen folgen ISO 7010 (Grafiken aus dem Paket iso-safety-signs von Karl Norling, MIT-Lizenz, und damit von CC BY-NC-SA ausgenommen). „Fenster auf Kipp“ ist selbst gezeichnet, dafür gibt es kein Normzeichen. Die Anzeige ersetzt keine Kennzeichnung im Raum.</p>
     <p><strong>Stundenfahrplan:</strong> Über den Listen-Knopf oben ein- und ausblenden, mit dem Stift in der Kachel beschriften. „Weiter“ oder Antippen einer Phase schiebt den Pfeil. Ist bei der Phase eine Sozialform gewählt, springt die Sozialform-Kachel automatisch mit. Solange der Fahrplan an ist, hat jede Phase ihre eigene Aufgabe: Was du in die Aufgaben-Kachel tippst, gehört zur aktuellen Phase. Mit „+“ in der Kachel fügst du schnell eine Phase hinzu. Jede Phase kann eine Dauer in Minuten haben (Vorlage: Einstieg 5, Arbeitsphase 70, Aufräumen 10, Sicherung 5). Beim Wechsel der Phase lädt der Timer diese Zeit. Mit dem Auto-Knopf (Pfeilkreis mit Play-Zeichen) springt der Fahrplan nach Ablauf der Zeit selbst zur nächsten Phase und startet den Timer neu. Bei einer Phase mit „Sicherung“ im Namen wechselt die Sozialform auf Plenum (wenn die Phase keine eigene hat) und der Arbeitsort auf „Nur im Raum“.</p>
     <p><strong>iPad:</strong> Zwei Angaben, für alle sichtbar. Nutzung: erlaubt oder nicht erlaubt. Wo liegt das iPad: geöffnet auf dem Tisch, zugeklappt auf dem Tisch oder in der Schultasche. Beim Umschalten der Nutzung schlägt das Board eine passende Lage vor, du kannst sie danach ändern.</p>
@@ -1567,10 +1584,28 @@ function grid6Layout(keys, W, H, gap) {
 }
 let layoutRaf = 0;
 /* Piktogramme: gleiche Beschriftungshöhe je Kachel, Schrift so groß wie möglich */
+// APE: Name in der Überschrift, zwei Fotos nebeneinander (breite Kachel) oder untereinander (hohe Kachel)
+function apeFit() {
+  const t = document.getElementById('tApe'); if (!t) return;
+  const sel = TB_APE.filter(a => S.ape.includes(a)), tr = a => (window.tbTr && window.tbTr(a)) || a;
+  const L = document.getElementById('apeLbl'); if (L) L.textContent = 'APE' + (sel.length ? ' · ' + sel.map(tr).join(' + ') : '');
+  const p = document.getElementById('apePhotos'); if (p) p.classList.toggle('col', t.clientHeight > t.clientWidth * 1.1);
+}
 function fitSym() {
+  apeFit();
   for (const sel of ['#rules', '#hazards']) {
     const box = $(sel); if (!box || !box.offsetWidth) continue;
     box.classList.remove('nolbl');
+    {
+      // Spaltenzahl so wählen, dass die Piktogramme am größten werden (seit 23.11.2026: auf dem iPad 9. Gen.
+      // fiel die Auto-Spaltenzahl bei schmalen 1 × 1-Kacheln auf 1 Spalte, die Knöpfe wurden flache Streifen).
+      // Sicherheit: Sind nur 1–3 Regeln zu sehen (Nur Anzeige), werden die Symbole so groß wie möglich (Klasse big).
+      const k = $$('.tb-s', box).filter(e => getComputedStyle(e).display !== 'none').length;
+      const big = sel === '#rules' && k > 0 && k <= 3; box.classList.toggle('big', big);
+      const W = box.clientWidth, H = box.clientHeight, g = 6, lbl = big ? 34 : 20; let best = null;
+      for (let c = 1; c <= k; c++) { const r = Math.ceil(k / c), w = (W - (c - 1) * g) / c, h = (H - (r - 1) * g) / r, sz = Math.min(w, h - lbl); if (!best || sz > best.sz + 0.5) best = { c, sz }; }
+      box.style.gridTemplateColumns = best && !document.body.classList.contains('scroll') ? `repeat(${best.c}, minmax(0, 1fr))` : '';
+    }
     const sps = $$('.tb-s span', box).filter(s => s.offsetWidth); if (!sps.length) continue;
     // gleich übersetzt eintragen, damit die Messung mit dem Text der eingestellten Sprache rechnet
     const L = window.tbLang || 'de';
@@ -2760,10 +2795,11 @@ function tbRender() {
   $$('#rules .tb-s').forEach(e => { const o = S.rules.includes(e.dataset.id); e.classList.toggle('on', o); e.setAttribute('aria-pressed', String(o)); });
   $$('#hazards .tb-s').forEach(e => { const o = S.haz.includes(e.dataset.id); e.classList.toggle('on', o); e.setAttribute('aria-pressed', String(o)); });
   $('#apePhotos').innerHTML = TB_APE.filter(a => S.ape.includes(a)).map(a => TB_APE_IMG[a]
-    ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}"></button>`
+    ? `<button type="button" class="tb-photo" data-img="${TB_APE_IMG[a]}" data-name="${a}" aria-label="APE ${a} groß zeigen"><img src="${TB_APE_IMG[a]}" alt="Arbeitsplatzeinrichtung ${a}"></button>`
     : `<div class="tb-photo none">APE ${a}: Bild folgt</div>`).join('');
   // Robotiklabor: APE ohne Sicherheitssymbole
   $('#rules').hidden = true; $('#apeSplit').hidden = !S.ape.length; $('#ruleHint').hidden = !!S.ape.length;
+  $('#tApe').classList.toggle('ape-bg', !!S.ape.length); apeFit();
 }
 function tbTone(f, d, t0) {
   const c = ac(); if (!c) return;
@@ -3156,7 +3192,7 @@ function tbInit() {
   TB_HAZ.forEach(h => $('#hazards').append(tbToggleBtn('tb-s haz', h[0], h[1], h[2], 'haz')));
   $('#apePhotos').addEventListener('click', e => {
     const b = e.target.closest('[data-img]'); if (!b) return;
-    $('#apeViewImg').src = b.dataset.img; $('#apeView').hidden = false;
+    $('#apeViewImg').src = b.dataset.img; $('#apeViewName').textContent = 'APE ' + ((window.tbTr && window.tbTr(b.dataset.name)) || b.dataset.name); $('#apeView').hidden = false;
   });
   $('#apeView').addEventListener('click', () => { $('#apeView').hidden = true; });
   $('#cleanRefl').addEventListener('click', () => { S.rfTab = 'aufr'; save(); openReflex(); });
