@@ -6,6 +6,8 @@ Weitere Boards in diesem Repository:
 
 - [Tech-Board](https://deintechniklehrer.github.io/Unterrichtsboard/tech-board/) für den Technikunterricht: Sicher/Unsicher, Alarm, Treffpunkt, Timer, Aufräumphase, APE, Sicherheitsregeln (eigene Kachel) und Gefährdungen
 - [Robo-Board](https://deintechniklehrer.github.io/Unterrichtsboard/robo-board/) für das Robotiklabor: wie das Tech-Board, Fokus (Dobot, 3D-Druck, Arduino, Freie Wahl), APE Robotik/Arduino ohne Sicherheitssymbole, mit dem Aufräumplan des Robotiklabors
+- [Küchen-Board](https://deintechniklehrer.github.io/Unterrichtsboard/kuechen-board/) für die Lehrküche (Hauswirtschaft): wie das Tech-Board, mit Küchenregeln, Gefährdungen der Küche, Allergene heute (14 Hauptallergene), Fokus Kochen/Backen/Kalte Küche und Küchendienst als Aufräumplan
+- [Textil-Board](https://deintechniklehrer.github.io/Unterrichtsboard/textil-board/) für den Textilraum: wie das Tech-Board, mit Nähregeln, Gefährdungen am Näharbeitsplatz, Nähmaschine heute (Stich, Stichlänge, Stichbreite, Nadel), Fokus Nähmaschine/Handnähen/Zuschnitt und Aufräumplan des Textilraums
 - [Klassenrat Dashboard](https://deintechniklehrer.github.io/Unterrichtsboard/klassenrat/): Ablauf, Ämter, Protokoll mit PDF-Export, Reflexion (gut/mittel/schlecht) und Lärmampel mit Alarm; Kacheln und Vorgaben anpassbar
 
 Läuft im Browser und lässt sich als App auf dem Home-Bildschirm installieren (funktioniert danach auch offline).
