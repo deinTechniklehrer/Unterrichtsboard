@@ -76,6 +76,10 @@ body.standalone #btnFS{display:none}
 :root[data-theme="dark"] .hbtn .i-moon{display:none}
 @media (max-width:1180px){ #btnTheme .lbl, #btnFS .lbl{display:none} #btnTheme, #btnFS{width:clamp(38px,5.4vh,50px); padding:0} }
 @media (max-width:900px){ #btnReflex .lbl, #btnPlan .lbl{display:none} #btnReflex, #btnPlan{width:clamp(38px,5.4vh,50px); padding:0} }
+/* Platz für „Stunde neu starten“ (26.11.2026): schmal nur Symbole, unter 480 px ohne Vollbild-Knopf */
+@media (max-width:900px){ #btnClean .lbl, #btnInput .lbl{display:none} #btnClean, #btnInput, #btnSet, #btnRestart{width:clamp(38px,5.4vh,50px); padding:0} }
+@media (max-width:480px){ #btnFS{display:none} }
+@media (max-width:420px){ #btnTheme, #btnFS, #btnReflex, #btnPlan, #btnClean, #btnInput, #btnSet, #btnRestart{width:36px} }
 @media (max-width:400px){ .clock{display:none} }
 @media (max-width:720px){
   .hbtn .lbl{display:none}
@@ -760,6 +764,9 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <button class="hbtn" id="btnSet" title="Einstellungen" aria-label="Einstellungen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
     </button>
+    <button class="hbtn" id="btnRestart" title="Stunde neu starten" aria-label="Stunde neu starten">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3 3.5v5h5"/></svg>
+    </button>
   </header>
   <div id="safeBand">
     <button id="btnSafe" aria-pressed="false"></button>
@@ -1060,6 +1067,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Ansagen:</strong> Alarm- und Aufräumansage sind Audiodateien mit KI-Stimmen. Deutsch: erzeugt mit dem KI-Multimedia-Tool von fobizz. Englisch und Französisch: erzeugt mit der freien Sprachsynthese Piper (englische Stimme „Kathleen“, CC0; französische Stimme aus der SIWIS French Speech Synthesis Database, University of Edinburgh, CC BY 4.0). Auf Spanisch spricht die Stimme des Geräts. Die Dateien werden mit dem Board offline gespeichert. Lässt sich eine Datei nicht abspielen, spricht die Stimme des Geräts.</p>
     <p><strong>iPad-Verstoß:</strong> Den Knopf schaltest du in den Einstellungen ein (anfangs aus). Ein Tipp zeigt groß „iPad-Verstoß“, spielt einen Gong und sagt an, was die Klasse tun soll. Gleichzeitig geht die iPad-Nutzung eine Stufe herunter: erlaubt → zugeklappt auf dem Tisch → Schultasche. Die Ansage passt dazu („Alle klappen jetzt ihr iPad zu“ oder „Alle packen jetzt ihr iPad in die Schultasche“). In den Einstellungen kannst du das Herunterschalten und den Ton einzeln ausschalten. Ohne Herunterschalten heißt die Ansage, je nach Stand, „Bitte haltet euch an die iPad-Regeln“. Das Fenster schließt sich nach 15 Sekunden von selbst.</p>
     <p><strong>Treffpunkt:</strong> Der blaue Knopf oben holt alle zusammen: Ein Gong erklingt, und ein großes Fenster zeigt „Treffpunkt“. Darunter steht eine kurze Überschrift. Wähle „Hinweis“, „Sicherheitsunterweisung“ oder „Zwischenstand“, oder tippe eine eigene ein. „Weiterarbeiten“ schließt das Fenster.</p>
+    <p><strong>Stunde neu starten:</strong> Der Kreispfeil oben rechts (neben dem Zahnrad, auch im Aufräumen sichtbar) fragt nach und setzt dann den Fahrplan auf die erste Phase, den Timer zurück, beendet Aufräumen und Alarm und lädt das Board neu. Einstellungen, Aufräumplan, Verteilung und PIN bleiben. Hilft auch, wenn das Board hängt oder eine neue Fassung laden soll.</p>
     <p><strong>Aufräumen:</strong> In der Aufräumphase bleiben nur Timer, Sicherheit und Alarm aktiv. Sie startet über den Knopf oben oder über eine Phase im Stundenfahrplan, deren Name „Aufräumen“ enthält. „Aufräumen beenden“ springt im Fahrplan zur nächsten Phase. Beim Start erklingen ein Ton und eine Ansage mit der Stimme des Geräts (abschaltbar in den Einstellungen). „Zufällig verteilen“ gibt jedem Auftrag seine Nummern (Fegen und Werkzeug je zwei, einstellbar unter „Plan bearbeiten“), alle übrigen Nummern sind Springer und lassen sich noch einem Auftrag zuordnen. Mit „Plan bearbeiten“ passt du die Aufträge an deinen Raum an, „Vorlage wiederherstellen“ holt den ursprünglichen Plan zurück. Ohne Auto-Modus kommt die Ansage erst, wenn du den Timer für das Aufräumen startest. Öffnest du das Aufräumen von Hand (Knopf oben), starten Timer und Ansage nie von selbst, auch nicht im Auto-Modus. So kannst du den Plan vorbereiten: Nummern verteilen, dann „Speichern“ (oben oder unten neben „Aufräumen beenden“). Das Board geht zurück in die Phase, aus der du gekommen bist, der Timer läuft dort weiter, und später nutzt das Aufräumen genau diese Verteilung. Startest du im Aufräumen den Timer, gilt es als echtes Aufräumen, oben steht dann wieder „Beenden“. Mit „Sperren“ schützt du den Aufräumplan mit einer 4-stelligen PIN vor Änderungen; zum Entsperren brauchst du dieselbe PIN. PIN vergessen? „Alles zurücksetzen“ in den Einstellungen hebt die Sperre auf (setzt aber auch alles andere zurück). Gesperrt zeigt der Plan nur noch die Aufträge mit Nummern und blendet leere Felder (Springer, Nicht dabei) und die Einstellknöpfe aus, damit die Aufträge groß zu lesen sind. Im Auto-Modus öffnet sich der Aufräumplan von selbst, der Timer läuft los und die Ansage kommt sofort. Die Aufträge verteilst du trotzdem selbst.</p>
     <p><strong>Reflexion Aufräumen:</strong> Im Reflexions-Fenster gibt es einen eigenen Reiter „Aufräumen“. Die Klasse tippt die Karten an wie beim offenen Arbeiten, „Auswerten“ sortiert nach Stimmen. Du erreichst ihn auch direkt aus der Aufräumphase.</p>
     <p><strong>Fokus:</strong> Zeigt, woran die Klasse heute arbeitet: Holz, Metall, Elektro oder Sicherheitsunterweisung (mit Achtung-Zeichen). Bei „Freie Wahl“ steht „Kein Fokus“. Antippen des großen Bildes schaltet weiter.</p>
@@ -2602,6 +2610,19 @@ function bind() {
   });
   if (window.ResizeObserver) new ResizeObserver(() => sizePlan()).observe($('#planList'));
   $('#btnSet').addEventListener('click', openSettings);
+  /* Stunde neu starten (Knopf oben rechts, seit 26.11.2026, Wunsch Daniel): Fahrplan auf Phase 1, Timer zurück,
+     Aufräumen und Alarm aus, danach neu laden (holt dabei auch eine neue Fassung). Einstellungen, Aufräumplan und Verteilung bleiben. */
+  $('#btnRestart').addEventListener('click', () => {
+    const t = s => (window.tbTr && window.tbTr(s)) || s;
+    if (!confirm(t("Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt, Aufräumen und Alarm werden beendet und das Board lädt neu. Einstellungen, Aufräumplan und Verteilung bleiben."))) return;
+    try { if (typeof tbAlarm === 'function' && tbAlarmOn) tbAlarm(false); } catch (e) {}
+    const m = Math.max(1, (S.plan[0] || {}).min || 5);
+    S.planCur = 0; S.clPrep = null;
+    S.timer = Object.assign({}, S.timer, { duration: m * 60, remaining: m * 60, endAt: null });
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+    location.reload();
+  });
+
   $('#btnClose').addEventListener('click', closeSettings);
   $('#btnExport').addEventListener('click', exportBoard);
   $('#btnImport').addEventListener('click', () => { $('#importFile').value = ''; $('#importFile').click(); });
@@ -3234,6 +3255,8 @@ setInterval(clock, 1000);
 const LKEY = 'techboard.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Stunde neu starten": ["Restart lesson", "Recommencer le cours"],
+  "Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt, Aufräumen und Alarm werden beendet und das Board lädt neu. Einstellungen, Aufräumplan und Verteilung bleiben.": ["Restart the lesson? The plan jumps to the first phase, the timer is reset, tidy-up and alarm end and the board reloads. Settings, tidy-up plan and assignment stay.", "Recommencer le cours ? Le plan revient à la première phase, le minuteur est remis à zéro, le rangement et l’alarme s’arrêtent et le tableau se recharge. Les réglages, le plan de rangement et la répartition restent."],
 
   // Aufräumplan
   'Springer': ['Floaters', 'Renforts'],
@@ -3627,6 +3650,8 @@ const D = {
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
 const ES = {
+  "Stunde neu starten": "Reiniciar la clase",
+  "Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt, Aufräumen und Alarm werden beendet und das Board lädt neu. Einstellungen, Aufräumplan und Verteilung bleiben.": "¿Reiniciar la clase? El plan vuelve a la primera fase, el temporizador se reinicia, se terminan la recogida y la alarma y el tablero se recarga. Se mantienen los ajustes, el plan de recogida y el reparto.",
   "Springer": "Comodines",
   "Material": "Material",
   "Nicht dabei": "Ausentes",
