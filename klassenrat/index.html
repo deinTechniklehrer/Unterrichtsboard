@@ -199,6 +199,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 #dView .micsel{max-width:58%; min-width:0; font:inherit; font-size:15px; font-weight:600; padding:8px 12px; border-radius:12px; border:2px solid var(--line); background:var(--tile); color:var(--ink); text-overflow:ellipsis}
 #dView .micnote{font-size:14px; color:var(--muted); margin:6px 0 0}
 #dView .micnote:empty{display:none}
+#dView .fbtxt{font-size:14px;color:var(--muted);margin:4px 0 0}
 
 .sw{appearance:none;-webkit-appearance:none;width:52px;height:32px;border-radius:16px;background:var(--line);border:0;padding:0;position:relative;flex:none;cursor:pointer;transition:background .2s}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
@@ -234,6 +235,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
   <button class="hb" id="bSet">Zeiten</button>
   <button class="hb ic" id="bClean" aria-pressed="false" title="Bedienelemente aus- oder einblenden" aria-label="Nur Anzeige"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
   <button class="hb ic" id="bView" title="Kacheln und Vorgaben anpassen" aria-label="Einstellungen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  <button class="hb ic" id="bRestart" title="Sitzung neu starten" aria-label="Sitzung neu starten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3 3.5v5h5"/></svg></button>
   <button class="hb ic" id="bRW" title="Regelwache: Verwarnungen zeigen und eintragen" aria-label="Regelwache"><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c62828"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8l12 4.5v9c0 8.5-5 13.5-12 17.5-7-4-12-9-12-17.5v-9z"/><path d="M18.5 24l4 4 7.5-8.5"/></g></svg></button>
   <button class="hb ic" id="bTheme" aria-label="Auf dunkel umschalten"></button>
   <button class="hb ic" id="bLang" aria-label="Sprache / Language / Langue" data-noi18n><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.8 6 3.8 9.5s-1.2 6.7-3.8 9.5c-2.6-2.8-3.8-6-3.8-9.5S9.4 5.3 12 2.5z"/></svg><span class="lcode" id="langCode">DE</span></button>
@@ -293,7 +295,12 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
       <div class="seg" style="margin-top:6px"><button class="btn" id="micFind">Mikrofone suchen</button></div>
     </div>
 
+    <h3 class="sh">Feedback</h3>
+    <p class="fbtxt">Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.</p>
+    <div class="seg" style="margin-top:6px"><a class="btn primary" id="fbLink" href="https://tally.so/r/Kp1Mpk" target="_blank" rel="noopener" style="text-decoration:none">Feedback geben</a></div>
+
     <h3 class="sh">Gut zu wissen</h3>
+    <p><strong>Sitzung neu starten:</strong> Der Kreispfeil oben neben dem Zahnrad fragt nach, setzt den Ablauf an den Anfang und die Zeitwache zurück und lädt das Board neu. Protokoll, Themen und Ämter bleiben. Ein leeres Protokoll für die nächste Sitzung gibt es über „Neue Sitzung“.</p>
     <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
     <p><strong>Nur Anzeige:</strong> Das Auge oben blendet alle Knöpfe aus, damit über den Beamer nichts versehentlich geändert wird. Ort und Größe der Kacheln bleiben gleich.</p>
     <p><strong>Ablauf und Reflexion:</strong> Antippen einer Phase schiebt die Markierung weiter. Die Reflexion ist immer der letzte Schritt und öffnet sich groß.</p>
@@ -684,6 +691,17 @@ function micInit() {
   micFill();
 }
 micInit();
+/* Sitzung neu starten (seit 26.11.2026, Wunsch Daniel: Neustart-Knopf in allen Boards): Ablauf an den Anfang, Zeitwache zurück, neu laden.
+   Protokoll, Themen und Ämter bleiben; ein leeres Protokoll gibt es weiter über „Neue Sitzung“. */
+$('#bRestart').onclick=()=>{if(!confirm("Sitzung neu starten? Der Ablauf springt an den Anfang, die Zeitwache wird zurückgesetzt und das Board lädt neu. Protokoll, Themen und Ämter bleiben. Für ein leeres Protokoll nimm „Neue Sitzung“."))return;S.phase=-1;save();location.reload()};
+/* Feedback-Knopf in den Einstellungen (seit 26.11.2026, Wunsch Daniel): Tally-Formular „Feedback zu den Unterrichtsboards“
+   (https://tally.so/r/Kp1Mpk, Konto deinTechniklehrer). Board und Cache-Version gehen als versteckte Felder board/version mit. */
+(function fbInit() {
+  const a = document.getElementById('fbLink'); if (!a) return;
+  const set = v => { a.href = 'https://tally.so/r/Kp1Mpk?board=' + encodeURIComponent("Klassenrat Dashboard") + '&version=' + encodeURIComponent(v || 'online'); };
+  set('');
+  try { caches.keys().then(ks => { const k = ks.find(x => x.startsWith('klassenrat-')); if (k) set(k); }).catch(() => {}); } catch (e) {}
+})();
 /* „Gut zu wissen“ ein- und ausklappbar, Thema oben wählbar (seit 26.11.2026, Wunsch Daniel: der Infotext war zu lang).
    Die Absätze bleiben im HTML wie bisher (<p><strong>Thema:</strong> …); das Skript baut daraus die Themenknöpfe. */
 (function gzwInit() {
@@ -757,6 +775,10 @@ if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWo
 const LKEY = 'klassenrat.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": ["Found a bug or have an idea for the board? Let me know, it takes about 2 minutes. The form opens in a new tab (provider: Tally). The form is in German. Please do not enter names of students or colleagues.", "Une erreur ou une idée pour le tableau ? Dis-le-moi, cela prend environ 2 minutes. Le formulaire s’ouvre dans un nouvel onglet (fournisseur : Tally), il est en allemand. Merci de ne pas indiquer de noms d’élèves ou de collègues."],
+  "Feedback geben": ["Give feedback", "Donner un avis"],
+  "Sitzung neu starten": ["Restart meeting", "Recommencer la séance"],
+  "Sitzung neu starten? Der Ablauf springt an den Anfang, die Zeitwache wird zurückgesetzt und das Board lädt neu. Protokoll, Themen und Ämter bleiben. Für ein leeres Protokoll nimm „Neue Sitzung“.": ["Restart the meeting? The agenda jumps back to the start, the time keeper is reset and the board reloads. Minutes, topics and roles stay. For empty minutes use “New meeting”.", "Recommencer la séance ? Le déroulement revient au début, le gardien du temps est remis à zéro et le tableau se recharge. Le procès-verbal, les sujets et les rôles restent. Pour un procès-verbal vide, utilise « Nouvelle séance »."],
   "Eingabegerät für die Lautstärke": ["Input device for the volume meter", "Entrée audio pour le volume"],
   "Standard des Geräts": ["Device default", "Par défaut"],
   "Mikrofone suchen": ["Find microphones", "Chercher les micros"],
@@ -951,6 +973,10 @@ const D = {
   'Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.': ['The rule keeper’s list and the reflection votes will be cleared. Save the PDFs first.', 'La liste du gardien des règles et les voix de la réflexion seront vidées. Enregistre d’abord les PDF.']
 };
 const ES = {
+  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": "¿Has encontrado un error o tienes una idea para el tablero? Cuéntamelo, tarda unos 2 minutos. El formulario se abre en una pestaña nueva (proveedor: Tally) y está en alemán. Por favor, no escribas nombres de alumnos ni de colegas.",
+  "Feedback geben": "Dar opinión",
+  "Sitzung neu starten": "Reiniciar la sesión",
+  "Sitzung neu starten? Der Ablauf springt an den Anfang, die Zeitwache wird zurückgesetzt und das Board lädt neu. Protokoll, Themen und Ämter bleiben. Für ein leeres Protokoll nimm „Neue Sitzung“.": "¿Reiniciar la sesión? El orden vuelve al principio, el control del tiempo se reinicia y el tablero se recarga. El acta, los temas y los cargos se mantienen. Para un acta vacía usa «Nueva sesión».",
   "Eingabegerät für die Lautstärke": "Dispositivo de entrada para el volumen",
   "Standard des Geräts": "Predeterminado del dispositivo",
   "Mikrofone suchen": "Buscar micrófonos",

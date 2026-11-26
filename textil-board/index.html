@@ -507,6 +507,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .micsel{max-width:58%; min-width:0; font:inherit; font-size:15px; font-weight:600; padding:8px 12px; border-radius:12px; border:2px solid var(--line); background:var(--tile); color:var(--ink); text-overflow:ellipsis}
 .micnote{font-size:14px; color:var(--muted); margin:6px 0 0}
 .micnote:empty{display:none}
+.fbtxt{font-size:14px;color:var(--muted);margin:4px 0 0}
 .sw{appearance:none; -webkit-appearance:none; width:52px; height:32px; border-radius:16px; background:var(--line); position:relative; flex:none; cursor:pointer; transition:background .2s}
 .sw::after{content:""; position:absolute; top:3px; left:3px; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .2s}
 .sw:checked{background:var(--ok)}
@@ -1111,6 +1112,10 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <h3>Technik-Check</h3>
     <div class="diag" id="diag"></div>
     <div class="seg" style="margin-top:8px"><button class="btn" id="diagMic">Mikrofon jetzt testen</button></div>
+
+    <h3>Feedback</h3>
+    <p class="fbtxt">Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.</p>
+    <div class="seg" style="margin-top:6px"><a class="btn primary" id="fbLink" href="https://tally.so/r/Kp1Mpk" target="_blank" rel="noopener" style="text-decoration:none">Feedback geben</a></div>
 
     <h3>Gut zu wissen</h3>
     <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
@@ -2769,6 +2774,14 @@ function bind() {
   $('#importFile').addEventListener('change', e => importBoard(e.target.files && e.target.files[0]));
   $('#diagMic').addEventListener('click', async () => { closeSettings(); if (!S.show.ampel) { S.show.ampel = true; save(); queueLayout(); } if (!mic.on) await micStart(); });
   micInit();
+  /* Feedback-Knopf in den Einstellungen (seit 26.11.2026, Wunsch Daniel): Tally-Formular „Feedback zu den Unterrichtsboards“
+     (https://tally.so/r/Kp1Mpk, Konto deinTechniklehrer). Board und Cache-Version gehen als versteckte Felder board/version mit. */
+  (function fbInit() {
+    const a = document.getElementById('fbLink'); if (!a) return;
+    const set = v => { a.href = 'https://tally.so/r/Kp1Mpk?board=' + encodeURIComponent("Textil-Board") + '&version=' + encodeURIComponent(v || 'online'); };
+    set('');
+    try { caches.keys().then(ks => { const k = ks.find(x => x.startsWith('textilboard-')); if (k) set(k); }).catch(() => {}); } catch (e) {}
+  })();
   /* „Gut zu wissen“ ein- und ausklappbar, Thema oben wählbar (seit 26.11.2026, Wunsch Daniel: der Infotext war zu lang).
      Die Absätze bleiben im HTML wie bisher (<p><strong>Thema:</strong> …); das Skript baut daraus die Themenknöpfe. */
   (function gzwInit() {
@@ -3524,6 +3537,8 @@ setInterval(clock, 1000);
 const LKEY = 'textilboard.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": ["Found a bug or have an idea for the board? Let me know, it takes about 2 minutes. The form opens in a new tab (provider: Tally). The form is in German. Please do not enter names of students or colleagues.", "Une erreur ou une idée pour le tableau ? Dis-le-moi, cela prend environ 2 minutes. Le formulaire s’ouvre dans un nouvel onglet (fournisseur : Tally), il est en allemand. Merci de ne pas indiquer de noms d’élèves ou de collègues."],
+  "Feedback geben": ["Give feedback", "Donner un avis"],
   "Dreifacher Stretchstich": ["Triple stretch stitch", "Point droit triple"],
   "Elastischer Zickzack": ["3-step zigzag", "Zigzag 3 points"],
   "Überwendlingstich": ["Overcasting stitch", "Point de surfilage"],
@@ -4056,6 +4071,8 @@ const D = {
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
 const ES = {
+  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": "¿Has encontrado un error o tienes una idea para el tablero? Cuéntamelo, tarda unos 2 minutos. El formulario se abre en una pestaña nueva (proveedor: Tally) y está en alemán. Por favor, no escribas nombres de alumnos ni de colegas.",
+  "Feedback geben": "Dar opinión",
   "Dreifacher Stretchstich": "Puntada recta triple",
   "Elastischer Zickzack": "Zigzag de 3 pasos",
   "Überwendlingstich": "Puntada de sobrehilado",

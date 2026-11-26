@@ -89,9 +89,10 @@ body.hdr2 .hbtn .lbl{display:none}
 :root[data-theme="dark"] .hbtn .i-moon{display:none}
 @media (max-width:1180px){ #btnTheme .lbl, #btnFS .lbl{display:none} #btnTheme, #btnFS{width:clamp(38px,5.4vh,50px); padding:0} }
 @media (max-width:900px){ #btnReflex .lbl, #btnPlan .lbl, #btnInput .lbl, #btnBasic .lbl{display:none} #btnReflex, #btnPlan, #btnInput, #btnBasic{width:clamp(38px,5.4vh,50px); padding:0} }
-@media (max-width:480px){ #btnFS{display:none} .logo{max-width:24vw} #btnReflex, #btnPlan, #btnInput, #btnTheme, #btnMeet, #btnBasic{width:36px; height:36px} }
+body.hdr3 #btnFS{display:none} body.hdr4 #btnTheme{display:none}
+@media (max-width:480px){ #btnFS{display:none} .logo{max-width:24vw} #btnReflex, #btnPlan, #btnInput, #btnTheme, #btnMeet, #btnBasic, #btnRestart{width:36px; height:36px} }
 @media (max-width:360px){ .logo{display:none!important} }
-@media (max-width:380px){ header{gap:3px!important} .hbtn, #btnLang, #btnMeet, #btnIpv, #btnBasic, #btnReflex, #btnPlan, #btnInput, #btnTheme{width:34px!important; height:34px!important} }
+@media (max-width:380px){ header{gap:3px!important} .hbtn, #btnLang, #btnMeet, #btnIpv, #btnBasic, #btnReflex, #btnPlan, #btnInput, #btnTheme, #btnRestart{width:34px!important; height:34px!important} }
 @media (max-width:400px){ .clock{display:none} }
 @media (max-width:720px){
   .hbtn .lbl{display:none}
@@ -496,6 +497,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .micsel{max-width:58%; min-width:0; font:inherit; font-size:15px; font-weight:600; padding:8px 12px; border-radius:12px; border:2px solid var(--line); background:var(--tile); color:var(--ink); text-overflow:ellipsis}
 .micnote{font-size:14px; color:var(--muted); margin:6px 0 0}
 .micnote:empty{display:none}
+.fbtxt{font-size:14px;color:var(--muted);margin:4px 0 0}
 .sw{appearance:none; -webkit-appearance:none; width:52px; height:32px; border-radius:16px; background:var(--line); position:relative; flex:none; cursor:pointer; transition:background .2s}
 .sw::after{content:""; position:absolute; top:3px; left:3px; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .2s}
 .sw:checked{background:var(--ok)}
@@ -621,6 +623,9 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     </button>
     <button class="hbtn" id="btnSet" title="Einstellungen" aria-label="Einstellungen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+    <button class="hbtn" id="btnRestart" title="Stunde neu starten" aria-label="Stunde neu starten">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3 3.5v5h5"/></svg>
     </button>
   </header>
 
@@ -866,7 +871,12 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <div class="diag" id="diag"></div>
     <div class="seg" style="margin-top:8px"><button class="btn" id="diagMic">Mikrofon jetzt testen</button></div>
 
+    <h3>Feedback</h3>
+    <p class="fbtxt">Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.</p>
+    <div class="seg" style="margin-top:6px"><a class="btn primary" id="fbLink" href="https://tally.so/r/Kp1Mpk" target="_blank" rel="noopener" style="text-decoration:none">Feedback geben</a></div>
+
     <h3>Gut zu wissen</h3>
+    <p><strong>Stunde neu starten:</strong> Der Kreispfeil oben rechts neben dem Zahnrad fragt nach und setzt dann den Fahrplan auf die erste Phase und den Timer zurück; das Board lädt neu (holt dabei auch eine neue Fassung). Einstellungen und Inhalte der Kacheln bleiben.</p>
     <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
     <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort) sind 1 Spalte breit, der Stundenfahrplan 1 × 1 (ab 5 Phasen 1 × 2), Timer und Aufgabe 2 Spalten. Den Timer kannst du oben in den Einstellungen auf 2 × 2, 2 × 1, 1 × 2 oder 1 × 1 stellen. Ist das Board so voll, dass die Zeilen niedriger als 200 px würden, wird er automatisch kleiner (2 × 2 → 2 × 1 → 1 × 1, 1 × 2 → 1 × 1). Blendest du Kacheln aus, wird die Aufgabe 3 Spalten breit.</p>
@@ -1410,9 +1420,10 @@ function grid6Layout(keys, W, H, gap) {
 let layoutRaf = 0;
 function fitHeader() {
   const h = document.querySelector('header'), b = document.body; if (!h) return;
-  b.classList.remove('hdr1', 'hdr2');
+  // Stufen: hdr1/hdr2 Beschriftungen aus; seit 26.11.2026 (Neustart-Knopf) hdr3 ohne Vollbild, hdr4 ohne Hell/Dunkel (beides auch in den Einstellungen bzw. im Input)
+  const st = ['hdr1', 'hdr2', 'hdr3', 'hdr4']; b.classList.remove(...st);
   const over = () => h.scrollWidth > h.clientWidth + 1;
-  if (over()) { b.classList.add('hdr1'); if (over()) b.classList.add('hdr2'); }
+  for (const c of st) { if (!over()) break; b.classList.add(c); }
 }
 window.ubFitHeader = fitHeader;
 function queueLayout(fromResize) { cancelAnimationFrame(layoutRaf); layoutRaf = requestAnimationFrame(() => layout(fromResize === true)); }
@@ -2418,12 +2429,30 @@ function bind() {
   });
   if (window.ResizeObserver) new ResizeObserver(() => sizePlan()).observe($('#planList'));
   $('#btnSet').addEventListener('click', openSettings);
+  /* Stunde neu starten (seit 26.11.2026, wie in Tech/Robo/Küche/Textil): Fahrplan auf Phase 1, Timer zurück, neu laden.
+     Einstellungen und Inhalte der Kacheln bleiben. */
+  $('#btnRestart').addEventListener('click', () => {
+    if (!confirm("Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt und das Board lädt neu. Einstellungen und Inhalte der Kacheln bleiben.")) return;
+    const m = Math.max(1, (S.plan[0] || {}).min || 5);
+    S.planCur = 0;
+    S.timer = Object.assign({}, S.timer, { duration: m * 60, remaining: m * 60, endAt: null });
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+    location.reload();
+  });
   $('#btnClose').addEventListener('click', closeSettings);
   $('#btnExport').addEventListener('click', exportBoard);
   $('#btnImport').addEventListener('click', () => { $('#importFile').value = ''; $('#importFile').click(); });
   $('#importFile').addEventListener('change', e => importBoard(e.target.files && e.target.files[0]));
   $('#diagMic').addEventListener('click', async () => { closeSettings(); if (!S.show.ampel) { S.show.ampel = true; save(); queueLayout(); } if (!mic.on) await micStart(); });
   micInit();
+  /* Feedback-Knopf in den Einstellungen (seit 26.11.2026, Wunsch Daniel): Tally-Formular „Feedback zu den Unterrichtsboards“
+     (https://tally.so/r/Kp1Mpk, Konto deinTechniklehrer). Board und Cache-Version gehen als versteckte Felder board/version mit. */
+  (function fbInit() {
+    const a = document.getElementById('fbLink'); if (!a) return;
+    const set = v => { a.href = 'https://tally.so/r/Kp1Mpk?board=' + encodeURIComponent("Unterrichtsboard") + '&version=' + encodeURIComponent(v || 'online'); };
+    set('');
+    try { caches.keys().then(ks => { const k = ks.find(x => x.startsWith('unterrichtsboard-')); if (k) set(k); }).catch(() => {}); } catch (e) {}
+  })();
   /* „Gut zu wissen“ ein- und ausklappbar, Thema oben wählbar (seit 26.11.2026, Wunsch Daniel: der Infotext war zu lang).
      Die Absätze bleiben im HTML wie bisher (<p><strong>Thema:</strong> …); das Skript baut daraus die Themenknöpfe. */
   (function gzwInit() {
@@ -2551,6 +2580,10 @@ setInterval(clock, 1000);
 const LKEY = 'unterrichtsboard.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": ["Found a bug or have an idea for the board? Let me know, it takes about 2 minutes. The form opens in a new tab (provider: Tally). The form is in German. Please do not enter names of students or colleagues.", "Une erreur ou une idée pour le tableau ? Dis-le-moi, cela prend environ 2 minutes. Le formulaire s’ouvre dans un nouvel onglet (fournisseur : Tally), il est en allemand. Merci de ne pas indiquer de noms d’élèves ou de collègues."],
+  "Feedback geben": ["Give feedback", "Donner un avis"],
+  "Stunde neu starten": ["Restart lesson", "Recommencer le cours"],
+  "Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt und das Board lädt neu. Einstellungen und Inhalte der Kacheln bleiben.": ["Restart the lesson? The plan jumps to the first phase, the timer is reset and the board reloads. Settings and tile contents stay.", "Recommencer le cours ? Le plan revient à la première phase, le minuteur est remis à zéro et le tableau se recharge. Les réglages et le contenu des tuiles restent."],
   "Eingabegerät für die Lautstärke": ["Input device for the volume meter", "Entrée audio pour le volume"],
   "Standard des Geräts": ["Device default", "Par défaut"],
   "Mikrofone suchen": ["Find microphones", "Chercher les micros"],
@@ -2818,6 +2851,10 @@ const D = {
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
 const ES = {
+  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": "¿Has encontrado un error o tienes una idea para el tablero? Cuéntamelo, tarda unos 2 minutos. El formulario se abre en una pestaña nueva (proveedor: Tally) y está en alemán. Por favor, no escribas nombres de alumnos ni de colegas.",
+  "Feedback geben": "Dar opinión",
+  "Stunde neu starten": "Reiniciar la clase",
+  "Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt und das Board lädt neu. Einstellungen und Inhalte der Kacheln bleiben.": "¿Reiniciar la clase? El plan vuelve a la primera fase, el temporizador se reinicia y el tablero se recarga. Se mantienen los ajustes y el contenido de las fichas.",
   "Eingabegerät für die Lautstärke": "Dispositivo de entrada para el volumen",
   "Standard des Geräts": "Predeterminado del dispositivo",
   "Mikrofone suchen": "Buscar micrófonos",
