@@ -2711,6 +2711,40 @@ function bind() {
   $('#importFile').addEventListener('change', e => importBoard(e.target.files && e.target.files[0]));
   $('#diagMic').addEventListener('click', async () => { closeSettings(); if (!S.show.ampel) { S.show.ampel = true; save(); queueLayout(); } if (!mic.on) await micStart(); });
   micInit();
+  /* „Gut zu wissen“ ein- und ausklappbar, Thema oben wählbar (seit 26.11.2026, Wunsch Daniel: der Infotext war zu lang).
+     Die Absätze bleiben im HTML wie bisher (<p><strong>Thema:</strong> …); das Skript baut daraus die Themenknöpfe. */
+  (function gzwInit() {
+    const h = [...document.querySelectorAll('h3')].find(e => e.textContent.trim() === 'Gut zu wissen');
+    if (!h || h.dataset.gzw) return; h.dataset.gzw = '1';
+    const ps = []; let n = h.nextElementSibling;
+    while (n && n.tagName === 'P') { ps.push(n); n = n.nextElementSibling; }
+    if (!ps.length) return;
+    const st = document.createElement('style');
+    st.textContent = '.gzw-h{cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none}.gzw-h .gzw-ar{display:inline-block;transition:transform .15s;font-size:1.1em;line-height:1}.gzw-h[aria-expanded="true"] .gzw-ar{transform:rotate(90deg)}'
+      + '.gzw-h .gzw-n{font-weight:600;text-transform:none;letter-spacing:0;opacity:.8}.gzw-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}'
+      + '.gzw-bar button{font:inherit;font-size:14px;font-weight:700;padding:6px 12px;border-radius:999px;border:2px solid var(--line);background:var(--tile);color:var(--ink);cursor:pointer}'
+      + '.gzw-bar button.sel{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff)}.gzw>p[hidden]{display:none!important}';
+    document.head.appendChild(st);
+    const items = ps.map(p => { const s = p.querySelector('strong'); return { p, t: s ? s.textContent.replace(/:\s*$/, '').trim() : 'Weiteres' }; });
+    const box = document.createElement('div'); box.className = 'gzw'; box.hidden = true;
+    const bar = document.createElement('div'); bar.className = 'gzw-bar';
+    h.classList.add('gzw-h'); h.setAttribute('role', 'button'); h.tabIndex = 0; h.setAttribute('aria-expanded', 'false');
+    h.insertAdjacentHTML('afterbegin', '<span class="gzw-ar" aria-hidden="true">▸</span>');
+    h.insertAdjacentHTML('beforeend', '<span class="gzw-n" data-noi18n>(' + items.length + ')</span>');
+    h.after(box); box.append(bar, ...ps);
+    let cur = null;
+    const show = t => {
+      cur = t; items.forEach(it => { it.p.hidden = !(t === '*' || it.t === t); });
+      bar.querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.t === t));
+    };
+    const btn = (t, lbl) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.t = t; b.textContent = lbl; b.addEventListener('click', () => show(cur === t ? null : t)); bar.appendChild(b); };
+    btn('*', 'Alle');
+    items.slice().sort((a, b) => a.t.localeCompare(b.t, 'de')).forEach(it => btn(it.t, it.t));
+    show(null);
+    const tog = () => { const o = box.hidden; box.hidden = !o; h.setAttribute('aria-expanded', String(o)); };
+    h.addEventListener('click', tog);
+    h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } });
+  })();
   $('#dlg').addEventListener('click', e => { if (e.target.id === 'dlg') closeSettings(); });
 
 

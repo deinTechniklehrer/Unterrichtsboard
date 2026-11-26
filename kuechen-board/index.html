@@ -58,6 +58,14 @@ header{display:flex; align-items:center; gap:8px; height:clamp(40px,7vh,68px); f
 .logo.dark{display:none}
 /* Küchen- und Textil-Board: rundes Fach-Piktogramm aus dem AWT-Logo, daneben der Name */
 .logo.pikto{height:82%;aspect-ratio:1;flex:0 1 auto;min-width:0;object-fit:contain}
+/* allgemeines AWT-Logo links neben dem Fach-Piktogramm (Wunsch Daniel, 26.11.2026); auf dem Handy nur das Piktogramm */
+.logo.awtlogo{height:70%;aspect-ratio:377/228;flex:none;width:auto;object-fit:contain;margin-right:6px}
+@media (max-width:560px){.logo.awtlogo{display:none}}
+@media (min-width:561px){.logo.pikto{flex:none;width:auto}}
+body.hdr1 .bname{display:none}
+body.hdr2 header .hbtn .lbl{display:none}
+body.hdr2 header .hbtn{padding:0 11px}
+body.hdr3 .logo.awtlogo{display:none}
 .bname{font-weight:800;font-size:clamp(16px,1.7vw,24px);white-space:nowrap;margin-left:8px;color:var(--ink)}
 @media (max-width:1100px){.bname{display:none}}
 :root[data-theme="dark"] .logo.light{display:none}
@@ -745,7 +753,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 <div class="app">
   <header>
     <a class="logolink" href="https://deintechniklehrer.github.io/Lernplattformen/schueler/" target="_blank" rel="noopener" title="Lernplattformen AWT für Schüler:innen (neuer Tab)" aria-label="Lernplattformen AWT für Schüler:innen (neuer Tab)">
-    <img class="logo pikto" alt="AWT-Piktogramm Hauswirtschaft" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii01MCAtNTAgMTAwIDEwMCI+PCEtLSBBV1QtUGlrdG9ncmFtbSwgRGFuaWVsIEJleXJvZHQsIENDIEJZLU5DLVNBIDQuMCAtLT48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjNzlDOTZCIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PGNpcmNsZSByPSIxOSIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgcj0iMTIuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzlDOTZCIiBzdHJva2Utd2lkdGg9IjEuOCIvPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0tMzIgLTI1IFYtMTcgUS0zMiAtMTMgLTI5IC0xMyBRLTI2IC0xMyAtMjYgLTE3IFYtMjUiLz48bGluZSB4MT0iLTI5IiB5MT0iLTI1IiB4Mj0iLTI5IiB5Mj0iLTE3Ii8+PGxpbmUgeDE9Ii0yOSIgeTE9Ii0xMyIgeDI9Ii0yOSIgeTI9IjI1IiBzdHJva2Utd2lkdGg9IjMuNSIvPjxsaW5lIHgxPSIyOSIgeTE9IjEiIHgyPSIyOSIgeTI9IjI1IiBzdHJva2Utd2lkdGg9IjMuNSIvPjwvZz48cGF0aCBkPSJNMjYuNSAyIFYtMjUgUTM0LjUgLTE4IDMyLjUgMiBaIiBmaWxsPSIjZmZmIi8+PC9nPjwvc3ZnPg=="><span class="bname" data-noi18n>Küchen-Board</span></a>
+    <img class="logo awtlogo" alt="AWT-Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNzciIGhlaWdodD0iMjI4LjQxIiB2aWV3Qm94PSIwIDAgMzc3IDIyOC40MSI+PCEtLSBBV1QtUGlrdG9ncmFtbWUsIERhbmllbCBCZXlyb2R0LCBDQyBCWS1OQy1TQSA0LjAgLS0+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTY3LjUsLTE0MS43OTM2MjcxNTkwMjMyMykiPjxnIGZpbGw9IiMzQ0E3REQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk2LjAsMjgxLjIwNjM3Mjg0MDk3Njc3KSBzY2FsZSgwLjE5MDU4OTYzNjY4ODUwNTA3LC0wLjE5MDU4OTYzNjY4ODUwNTA3KSI+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgZD0iTTMyNSAxMSAzMDkgMTA3UTMwOSAxMTIgMzAzIDExMkgxNzZRMTcwIDExMiAxNzAgMTA3TDE1NCAxMVExNTMgMCAxNDEgMEgyNFExMSAwIDE0IDEzTDE2MSA2ODlRMTYzIDcwMCAxNzQgNzAwSDMwOVEzMjAgNzAwIDMyMiA2ODlMNDY4IDEzTDQ2OSA5UTQ2OSAwIDQ1OCAwSDMzOFEzMjYgMCAzMjUgMTFaTTE5NCAyMjFIMjg0UTI4OSAyMjEgMjg4IDIyNkwyNDEgNDk5UTI0MCA1MDIgMjM4LjAgNTAyLjBRMjM2IDUwMiAyMzUgNDk5TDE5MCAyMjZRMTkwIDIyMSAxOTQgMjIxWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUwMi4wLDApIiBkPSJNMTU2IDExIDIxIDY4NyAyMCA2OTFRMjAgNzAwIDMxIDcwMEgxNTNRMTY1IDcwMCAxNjYgNjg5TDIyMyAzMjlRMjI0IDMyNSAyMjYuMCAzMjUuMFEyMjggMzI1IDIyOSAzMjlMMjgzIDY4OVEyODQgNzAwIDI5NiA3MDBIMzk3UTQwOSA3MDAgNDEwIDY4OUw0NjkgMzI5UTQ3MCAzMjUgNDcyLjAgMzI1LjBRNDc0IDMyNSA0NzUgMzI5TDUyNiA2ODlRNTI3IDcwMCA1MzkgNzAwSDY1N1E2NzAgNzAwIDY2OCA2ODdMNTQxIDExUTU0MCAwIDUyOCAwSDQyMFE0MDggMCA0MDcgMTFMMzQ4IDM4MVEzNDcgMzg1IDM0NS4wIDM4NS4wUTM0MyAzODUgMzQyIDM4MUwyODkgMTFRMjg4IDAgMjc2IDBIMTY5UTE1OCAwIDE1NiAxMVoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjExLjAsMCkiIGQ9Ik00NDQgNjg4VjU5MVE0NDQgNTg2IDQ0MC41IDU4Mi41UTQzNyA1NzkgNDMyIDU3OUgzMDdRMzAyIDU3OSAzMDIgNTc0VjEyUTMwMiA3IDI5OC41IDMuNVEyOTUgMCAyOTAgMEgxNzNRMTY4IDAgMTY0LjUgMy41UTE2MSA3IDE2MSAxMlY1NzRRMTYxIDU3OSAxNTYgNTc5SDM2UTMxIDU3OSAyNy41IDU4Mi41UTI0IDU4NiAyNCA1OTFWNjg4UTI0IDY5MyAyNy41IDY5Ni41UTMxIDcwMCAzNiA3MDBINDMyUTQzNyA3MDAgNDQwLjUgNjk2LjVRNDQ0IDY5MyA0NDQgNjg4WiIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDYuMCwzMzEuNzA2MzcyODQwOTc2NzcpIHNjYWxlKDAuNjUpIj48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjM0NBN0REIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PHJlY3QgeD0iLTUiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTMiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNLTE2IC0xMiBWMjQgSDE2IFYtMTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTS0yNCAtNCBMMCAtMjQgTDI0IC00IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODEuMCwzMzEuNzA2MzcyODQwOTc2NzcpIHNjYWxlKDAuNjUpIj48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjMDA3QTdDIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PGcgZmlsbD0iI2ZmZiI+PHJlY3QgeD0iLTI0IiB5PSIxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEyIi8+PHJlY3QgeD0iLTkiIHk9IjQiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMiIvPjxyZWN0IHg9IjYiIHk9Ii02IiB3aWR0aD0iMTAiIGhlaWdodD0iMzIiLz48L2c+PGxpbmUgeDE9Ii0yNSIgeTE9IjIiIHgyPSIxNC4zIiB5Mj0iLTE4IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTI1IC0yMy41IEwxNy41IC0xMS44IEwxMS4xIC0yNC4zIFoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L2c+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1Ni4wLDMzMS43MDYzNzI4NDA5NzY3Nykgc2NhbGUoMC42NSkiPjxjaXJjbGUgcj0iNDgiIGZpbGw9IiM3OUM5NkIiLz48ZyB0cmFuc2Zvcm09InNjYWxlKDEuMDUpIj48Y2lyY2xlIHI9IjE5IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSByPSIxMi41IiBmaWxsPSJub25lIiBzdHJva2U9IiM3OUM5NkIiIHN0cm9rZS13aWR0aD0iMS44Ii8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTS0zMiAtMjUgVi0xNyBRLTMyIC0xMyAtMjkgLTEzIFEtMjYgLTEzIC0yNiAtMTcgVi0yNSIvPjxsaW5lIHgxPSItMjkiIHkxPSItMjUiIHgyPSItMjkiIHkyPSItMTciLz48bGluZSB4MT0iLTI5IiB5MT0iLTEzIiB4Mj0iLTI5IiB5Mj0iMjUiIHN0cm9rZS13aWR0aD0iMy41Ii8+PGxpbmUgeDE9IjI5IiB5MT0iMSIgeDI9IjI5IiB5Mj0iMjUiIHN0cm9rZS13aWR0aD0iMy41Ii8+PC9nPjxwYXRoIGQ9Ik0yNi41IDIgVi0yNSBRMzQuNSAtMTggMzIuNSAyIFoiIGZpbGw9IiNmZmYiLz48L2c+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMzMS4wLDMzMS43MDYzNzI4NDA5NzY3Nykgc2NhbGUoMC42NSkiPjxjaXJjbGUgcj0iNDgiIGZpbGw9IiNGRjk4MDAiLz48ZyB0cmFuc2Zvcm09InNjYWxlKDEuMDUpIj48cmVjdCB4PSIyIiB5PSItMjgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIHJ4PSIxIiBmaWxsPSIjZmZmIi8+PGxpbmUgeDE9IjE4IiB5MT0iLTQiIHgyPSIxOCIgeTI9IjEzIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTS0yMiAyMSBWLTE0IFEtMjIgLTIyIC0xNCAtMjIgSDE4IFEyNiAtMjIgMjYgLTE0IFYtNCBILTggVjIxIFoiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSItMTUiIGN5PSItOCIgcj0iNCIgZmlsbD0iI0ZGOTgwMCIvPjxyZWN0IHg9Ii0yOCIgeT0iMjMiIHdpZHRoPSI1NiIgaGVpZ2h0PSI1IiByeD0iMiIgZmlsbD0iI2ZmZiIvPjwvZz48L2c+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDA2LjAsMzMxLjcwNjM3Mjg0MDk3Njc3KSBzY2FsZSgwLjY1KSI+PGNpcmNsZSByPSI0OCIgZmlsbD0iIzAzNTU5MSIvPjxnIHRyYW5zZm9ybT0ic2NhbGUoMS4xKSB0cmFuc2xhdGUoNC4wNSwxLjkpIj48ZyB0cmFuc2Zvcm09InJvdGF0ZSg0NSkiIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Ik00IC0yNi4yNSBBMTEgMTEgMCAxIDEgLTQgLTI2LjI1IEwtNCAtMTggTDQgLTE4IFoiLz48cmVjdCB4PSItMy41IiB5PSItOCIgd2lkdGg9IjciIGhlaWdodD0iMzQiIHJ4PSIzIi8+PC9nPjxnIHRyYW5zZm9ybT0icm90YXRlKC00NSkiPjxnIGZpbGw9IiMwMzU1OTEiIHN0cm9rZT0iIzAzNTU5MSIgc3Ryb2tlLXdpZHRoPSIzLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0tMyAtMTcgTC00LjUgMjIgUS00LjUgMjcgMCAyNyBRNC41IDI3IDQuNSAyMiBMMyAtMTcgWiIvPjxyZWN0IHg9Ii0xMSIgeT0iLTI1IiB3aWR0aD0iMTQiIGhlaWdodD0iOCIvPjxyZWN0IHg9Ii0xNiIgeT0iLTI3IiB3aWR0aD0iNiIgaGVpZ2h0PSIxMiIgcng9IjEuNSIvPjxwYXRoIGQ9Ik0zIC0yNSBRMTQgLTI1IDE5IC0xNiBMMTYgLTE0LjUgUTExIC0xOS41IDMgLTE3IFoiLz48L2c+PGcgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTS0zIC0xNyBMLTQuNSAyMiBRLTQuNSAyNyAwIDI3IFE0LjUgMjcgNC41IDIyIEwzIC0xNyBaIi8+PHJlY3QgeD0iLTExIiB5PSItMjUiIHdpZHRoPSIxNCIgaGVpZ2h0PSI4Ii8+PHJlY3QgeD0iLTE2IiB5PSItMjciIHdpZHRoPSI2IiBoZWlnaHQ9IjEyIiByeD0iMS41Ii8+PHBhdGggZD0iTTMgLTI1IFExNCAtMjUgMTkgLTE2IEwxNiAtMTQuNSBRMTEgLTE5LjUgMyAtMTcgWiIvPjwvZz48L2c+PC9nPjwvZz48L2c+PC9zdmc+"><img class="logo pikto" alt="AWT-Piktogramm Hauswirtschaft" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii01MCAtNTAgMTAwIDEwMCI+PCEtLSBBV1QtUGlrdG9ncmFtbSwgRGFuaWVsIEJleXJvZHQsIENDIEJZLU5DLVNBIDQuMCAtLT48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjNzlDOTZCIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PGNpcmNsZSByPSIxOSIgZmlsbD0iI2ZmZiIvPjxjaXJjbGUgcj0iMTIuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzlDOTZCIiBzdHJva2Utd2lkdGg9IjEuOCIvPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0tMzIgLTI1IFYtMTcgUS0zMiAtMTMgLTI5IC0xMyBRLTI2IC0xMyAtMjYgLTE3IFYtMjUiLz48bGluZSB4MT0iLTI5IiB5MT0iLTI1IiB4Mj0iLTI5IiB5Mj0iLTE3Ii8+PGxpbmUgeDE9Ii0yOSIgeTE9Ii0xMyIgeDI9Ii0yOSIgeTI9IjI1IiBzdHJva2Utd2lkdGg9IjMuNSIvPjxsaW5lIHgxPSIyOSIgeTE9IjEiIHgyPSIyOSIgeTI9IjI1IiBzdHJva2Utd2lkdGg9IjMuNSIvPjwvZz48cGF0aCBkPSJNMjYuNSAyIFYtMjUgUTM0LjUgLTE4IDMyLjUgMiBaIiBmaWxsPSIjZmZmIi8+PC9nPjwvc3ZnPg=="><span class="bname" data-noi18n>Küchen-Board</span></a>
     <div class="clock" id="clock">--:--</div>
     <button class="hbtn" id="btnClean" aria-pressed="false" title="Bedienelemente aus- oder einblenden" aria-label="Nur Anzeige">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1660,7 +1668,16 @@ function fitSym() {
 window.fitSym = fitSym;
 function queueLayout(fromResize) { cancelAnimationFrame(layoutRaf); layoutRaf = requestAnimationFrame(() => layout(fromResize === true)); }
 let lastW = 0;
+/* Kopfleiste passt sich an (seit 26.11.2026: AWT-Logo und Fach-Piktogramm nebeneinander). Läuft die Leiste über,
+   zuerst den Board-Namen ausblenden (hdr1), dann die Beschriftungen der Kopfknöpfe (hdr2), zuletzt das AWT-Logo (hdr3). */
+function hwFitHeader() {
+  const H = document.querySelector('header'), B = document.body; if (!H) return;
+  const st = ['hdr1', 'hdr2', 'hdr3']; B.classList.remove(...st);
+  for (const c of st) { if (H.scrollWidth <= H.clientWidth + 1) break; B.classList.add(c); }
+}
+window.tbFitHeader = hwFitHeader;
 function layout(fromResize) {
+  hwFitHeader();
   const g = $('#grid');
   // Beim Tippen öffnet sich die Bildschirmtastatur: dann nicht umsortieren
   if (fromResize && document.activeElement === $('#task') && Math.abs(innerWidth - lastW) < 2) { fitTask(); return; }
@@ -2733,6 +2750,40 @@ function bind() {
   $('#importFile').addEventListener('change', e => importBoard(e.target.files && e.target.files[0]));
   $('#diagMic').addEventListener('click', async () => { closeSettings(); if (!S.show.ampel) { S.show.ampel = true; save(); queueLayout(); } if (!mic.on) await micStart(); });
   micInit();
+  /* „Gut zu wissen“ ein- und ausklappbar, Thema oben wählbar (seit 26.11.2026, Wunsch Daniel: der Infotext war zu lang).
+     Die Absätze bleiben im HTML wie bisher (<p><strong>Thema:</strong> …); das Skript baut daraus die Themenknöpfe. */
+  (function gzwInit() {
+    const h = [...document.querySelectorAll('h3')].find(e => e.textContent.trim() === 'Gut zu wissen');
+    if (!h || h.dataset.gzw) return; h.dataset.gzw = '1';
+    const ps = []; let n = h.nextElementSibling;
+    while (n && n.tagName === 'P') { ps.push(n); n = n.nextElementSibling; }
+    if (!ps.length) return;
+    const st = document.createElement('style');
+    st.textContent = '.gzw-h{cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none}.gzw-h .gzw-ar{display:inline-block;transition:transform .15s;font-size:1.1em;line-height:1}.gzw-h[aria-expanded="true"] .gzw-ar{transform:rotate(90deg)}'
+      + '.gzw-h .gzw-n{font-weight:600;text-transform:none;letter-spacing:0;opacity:.8}.gzw-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}'
+      + '.gzw-bar button{font:inherit;font-size:14px;font-weight:700;padding:6px 12px;border-radius:999px;border:2px solid var(--line);background:var(--tile);color:var(--ink);cursor:pointer}'
+      + '.gzw-bar button.sel{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff)}.gzw>p[hidden]{display:none!important}';
+    document.head.appendChild(st);
+    const items = ps.map(p => { const s = p.querySelector('strong'); return { p, t: s ? s.textContent.replace(/:\s*$/, '').trim() : 'Weiteres' }; });
+    const box = document.createElement('div'); box.className = 'gzw'; box.hidden = true;
+    const bar = document.createElement('div'); bar.className = 'gzw-bar';
+    h.classList.add('gzw-h'); h.setAttribute('role', 'button'); h.tabIndex = 0; h.setAttribute('aria-expanded', 'false');
+    h.insertAdjacentHTML('afterbegin', '<span class="gzw-ar" aria-hidden="true">▸</span>');
+    h.insertAdjacentHTML('beforeend', '<span class="gzw-n" data-noi18n>(' + items.length + ')</span>');
+    h.after(box); box.append(bar, ...ps);
+    let cur = null;
+    const show = t => {
+      cur = t; items.forEach(it => { it.p.hidden = !(t === '*' || it.t === t); });
+      bar.querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.t === t));
+    };
+    const btn = (t, lbl) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.t = t; b.textContent = lbl; b.addEventListener('click', () => show(cur === t ? null : t)); bar.appendChild(b); };
+    btn('*', 'Alle');
+    items.slice().sort((a, b) => a.t.localeCompare(b.t, 'de')).forEach(it => btn(it.t, it.t));
+    show(null);
+    const tog = () => { const o = box.hidden; box.hidden = !o; h.setAttribute('aria-expanded', String(o)); };
+    h.addEventListener('click', tog);
+    h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } });
+  })();
   $('#dlg').addEventListener('click', e => { if (e.target.id === 'dlg') closeSettings(); });
 
 
@@ -4492,7 +4543,7 @@ window.confirm = m => oConfirm(tr(String(m)) || m);
 
 function setLang(l, announce) {
   lang = LANGS.includes(l) ? l : 'de'; window.tbLang = lang;
-  setTimeout(() => { if (window.fitSym) window.fitSym(); }, 0);
+  setTimeout(() => { if (window.tbFitHeader) window.tbFitHeader(); if (window.fitSym) window.fitSym(); }, 0);
   try { localStorage.setItem(LKEY, lang); } catch (e) { }
   document.documentElement.lang = lang;
   walk(document.body);

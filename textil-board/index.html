@@ -58,6 +58,14 @@ header{display:flex; align-items:center; gap:8px; height:clamp(40px,7vh,68px); f
 .logo.dark{display:none}
 /* Küchen- und Textil-Board: rundes Fach-Piktogramm aus dem AWT-Logo, daneben der Name */
 .logo.pikto{height:82%;aspect-ratio:1;flex:0 1 auto;min-width:0;object-fit:contain}
+/* allgemeines AWT-Logo links neben dem Fach-Piktogramm (Wunsch Daniel, 26.11.2026); auf dem Handy nur das Piktogramm */
+.logo.awtlogo{height:70%;aspect-ratio:377/228;flex:none;width:auto;object-fit:contain;margin-right:6px}
+@media (max-width:560px){.logo.awtlogo{display:none}}
+@media (min-width:561px){.logo.pikto{flex:none;width:auto}}
+body.hdr1 .bname{display:none}
+body.hdr2 header .hbtn .lbl{display:none}
+body.hdr2 header .hbtn{padding:0 11px}
+body.hdr3 .logo.awtlogo{display:none}
 .bname{font-weight:800;font-size:clamp(16px,1.7vw,24px);white-space:nowrap;margin-left:8px;color:var(--ink)}
 @media (max-width:1100px){.bname{display:none}}
 :root[data-theme="dark"] .logo.light{display:none}
@@ -537,20 +545,25 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 #qrView .qrv-close{font-size:14px;color:#777}
 /* Nähmaschine heute (Textil-Board): Stich, Stichlänge, Stichbreite und Nadel für die ganze Klasse */
 .nm-body{display:flex;flex-direction:column;gap:4px;min-height:0;overflow:hidden;container-type:size}
-.nm-pic{flex:1 1 0;min-height:18px;width:100%}
-.nm-pic .stoff{fill:#ffe0b2}.nm-pic .naht{fill:none;stroke:#c62828;stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}
+.nm-pic{flex:1 1 0;min-height:max(18px,26cqh);width:100%}
+.nm-pic .stoff{fill:#ffe0b2}.nm-pic .naht{fill:none;stroke:#c62828;stroke-width:3.2;stroke-linejoin:round;stroke-linecap:round}.nm-pic .naht.thin{stroke-width:1.6}.nm-pic .schlitz{stroke:#8d6e63;stroke-width:1.4;stroke-dasharray:3 2}.nm-pic .stoffkante{fill:none;stroke:#8d6e63;stroke-width:1.2;stroke-dasharray:2 2}
 :root[data-theme="dark"] .nm-pic .stoff{fill:#5d4037}
-.nm-txt{flex:none;text-align:center;font-weight:800;font-size:clamp(14px,11cqh,26px);line-height:1.15}
+.nm-txt{flex:none;text-align:center;font-weight:800;font-size:clamp(13px,8.5cqh,24px);line-height:1.15}
 body.clean .nm-txt{font-size:clamp(16px,17cqh,54px)}
 .nm-txt small{display:block;font-size:.62em;color:var(--muted);font-weight:700}
 .nm-ctrl{flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 8px}
 .nm-seg,.nm-row{display:flex;gap:2px;align-items:center;justify-content:center;min-width:0}
 .nm-ctrl .btn{min-height:28px;padding:0 5px;font-size:12px;min-width:0;flex:0 1 auto}
 .nm-row .btn{width:28px;padding:0}
+.nm-sel{min-width:0;width:100%;min-height:28px;font:inherit;font-size:12px;font-weight:700;padding:0 6px;border-radius:999px;border:2px solid var(--line);background:var(--tile);color:var(--ink)}
+.nm-stw{grid-column:auto}
+.nm-txt .nm-use{font-weight:600}
+@container (max-height:150px){.nm-txt .nm-use{display:none}}
 .nm-row b{min-width:46px;text-align:center;font-size:13px}
 .nm-ctrl span{color:var(--muted);font-weight:700;font-size:12px}
 body.clean .nm-ctrl{display:none}
-@container (max-width:300px){.nm-ctrl{grid-template-columns:minmax(0,1fr)}.nm-ctrl span{display:none}}
+@container (max-width:300px){.nm-ctrl span{display:none}.nm-stw,.nm-ctrl>.nm-seg{grid-column:1/-1}.nm-row b{min-width:40px;font-size:12px}}
+@container (max-height:260px){.nm-txt .nm-use{display:none}.nm-pic{min-height:18px}}
 @container (max-height:105px){.nm-pic{display:none}}
 /* ---------- Textil-Board ---------- */
 /* APE: links Schutzmaßnahmen, rechts das ganze Bild (eingepasst, nie abgeschnitten) */
@@ -751,7 +764,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
 <div class="app">
   <header>
     <a class="logolink" href="https://deintechniklehrer.github.io/Lernplattformen/schueler/" target="_blank" rel="noopener" title="Lernplattformen AWT für Schüler:innen (neuer Tab)" aria-label="Lernplattformen AWT für Schüler:innen (neuer Tab)">
-    <img class="logo pikto" alt="AWT-Piktogramm Textil" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii01MCAtNTAgMTAwIDEwMCI+PCEtLSBBV1QtUGlrdG9ncmFtbSwgRGFuaWVsIEJleXJvZHQsIENDIEJZLU5DLVNBIDQuMCAtLT48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjRkY5ODAwIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PHJlY3QgeD0iMiIgeT0iLTI4IiB3aWR0aD0iOCIgaGVpZ2h0PSI2IiByeD0iMSIgZmlsbD0iI2ZmZiIvPjxsaW5lIHgxPSIxOCIgeTE9Ii00IiB4Mj0iMTgiIHkyPSIxMyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0tMjIgMjEgVi0xNCBRLTIyIC0yMiAtMTQgLTIyIEgxOCBRMjYgLTIyIDI2IC0xNCBWLTQgSC04IFYyMSBaIiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iLTE1IiBjeT0iLTgiIHI9IjQiIGZpbGw9IiNGRjk4MDAiLz48cmVjdCB4PSItMjgiIHk9IjIzIiB3aWR0aD0iNTYiIGhlaWdodD0iNSIgcng9IjIiIGZpbGw9IiNmZmYiLz48L2c+PC9zdmc+"><span class="bname" data-noi18n>Textil-Board</span></a>
+    <img class="logo awtlogo" alt="AWT-Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNzciIGhlaWdodD0iMjI4LjQxIiB2aWV3Qm94PSIwIDAgMzc3IDIyOC40MSI+PCEtLSBBV1QtUGlrdG9ncmFtbWUsIERhbmllbCBCZXlyb2R0LCBDQyBCWS1OQy1TQSA0LjAgLS0+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTY3LjUsLTE0MS43OTM2MjcxNTkwMjMyMykiPjxnIGZpbGw9IiMzQ0E3REQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDk2LjAsMjgxLjIwNjM3Mjg0MDk3Njc3KSBzY2FsZSgwLjE5MDU4OTYzNjY4ODUwNTA3LC0wLjE5MDU4OTYzNjY4ODUwNTA3KSI+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgZD0iTTMyNSAxMSAzMDkgMTA3UTMwOSAxMTIgMzAzIDExMkgxNzZRMTcwIDExMiAxNzAgMTA3TDE1NCAxMVExNTMgMCAxNDEgMEgyNFExMSAwIDE0IDEzTDE2MSA2ODlRMTYzIDcwMCAxNzQgNzAwSDMwOVEzMjAgNzAwIDMyMiA2ODlMNDY4IDEzTDQ2OSA5UTQ2OSAwIDQ1OCAwSDMzOFEzMjYgMCAzMjUgMTFaTTE5NCAyMjFIMjg0UTI4OSAyMjEgMjg4IDIyNkwyNDEgNDk5UTI0MCA1MDIgMjM4LjAgNTAyLjBRMjM2IDUwMiAyMzUgNDk5TDE5MCAyMjZRMTkwIDIyMSAxOTQgMjIxWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDUwMi4wLDApIiBkPSJNMTU2IDExIDIxIDY4NyAyMCA2OTFRMjAgNzAwIDMxIDcwMEgxNTNRMTY1IDcwMCAxNjYgNjg5TDIyMyAzMjlRMjI0IDMyNSAyMjYuMCAzMjUuMFEyMjggMzI1IDIyOSAzMjlMMjgzIDY4OVEyODQgNzAwIDI5NiA3MDBIMzk3UTQwOSA3MDAgNDEwIDY4OUw0NjkgMzI5UTQ3MCAzMjUgNDcyLjAgMzI1LjBRNDc0IDMyNSA0NzUgMzI5TDUyNiA2ODlRNTI3IDcwMCA1MzkgNzAwSDY1N1E2NzAgNzAwIDY2OCA2ODdMNTQxIDExUTU0MCAwIDUyOCAwSDQyMFE0MDggMCA0MDcgMTFMMzQ4IDM4MVEzNDcgMzg1IDM0NS4wIDM4NS4wUTM0MyAzODUgMzQyIDM4MUwyODkgMTFRMjg4IDAgMjc2IDBIMTY5UTE1OCAwIDE1NiAxMVoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjExLjAsMCkiIGQ9Ik00NDQgNjg4VjU5MVE0NDQgNTg2IDQ0MC41IDU4Mi41UTQzNyA1NzkgNDMyIDU3OUgzMDdRMzAyIDU3OSAzMDIgNTc0VjEyUTMwMiA3IDI5OC41IDMuNVEyOTUgMCAyOTAgMEgxNzNRMTY4IDAgMTY0LjUgMy41UTE2MSA3IDE2MSAxMlY1NzRRMTYxIDU3OSAxNTYgNTc5SDM2UTMxIDU3OSAyNy41IDU4Mi41UTI0IDU4NiAyNCA1OTFWNjg4UTI0IDY5MyAyNy41IDY5Ni41UTMxIDcwMCAzNiA3MDBINDMyUTQzNyA3MDAgNDQwLjUgNjk2LjVRNDQ0IDY5MyA0NDQgNjg4WiIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDYuMCwzMzEuNzA2MzcyODQwOTc2NzcpIHNjYWxlKDAuNjUpIj48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjM0NBN0REIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PHJlY3QgeD0iLTUiIHk9IjEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTMiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNLTE2IC0xMiBWMjQgSDE2IFYtMTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTS0yNCAtNCBMMCAtMjQgTDI0IC00IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODEuMCwzMzEuNzA2MzcyODQwOTc2NzcpIHNjYWxlKDAuNjUpIj48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjMDA3QTdDIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PGcgZmlsbD0iI2ZmZiI+PHJlY3QgeD0iLTI0IiB5PSIxNCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEyIi8+PHJlY3QgeD0iLTkiIHk9IjQiIHdpZHRoPSIxMCIgaGVpZ2h0PSIyMiIvPjxyZWN0IHg9IjYiIHk9Ii02IiB3aWR0aD0iMTAiIGhlaWdodD0iMzIiLz48L2c+PGxpbmUgeDE9Ii0yNSIgeTE9IjIiIHgyPSIxNC4zIiB5Mj0iLTE4IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTI1IC0yMy41IEwxNy41IC0xMS44IEwxMS4xIC0yNC4zIFoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L2c+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1Ni4wLDMzMS43MDYzNzI4NDA5NzY3Nykgc2NhbGUoMC42NSkiPjxjaXJjbGUgcj0iNDgiIGZpbGw9IiM3OUM5NkIiLz48ZyB0cmFuc2Zvcm09InNjYWxlKDEuMDUpIj48Y2lyY2xlIHI9IjE5IiBmaWxsPSIjZmZmIi8+PGNpcmNsZSByPSIxMi41IiBmaWxsPSJub25lIiBzdHJva2U9IiM3OUM5NkIiIHN0cm9rZS13aWR0aD0iMS44Ii8+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTS0zMiAtMjUgVi0xNyBRLTMyIC0xMyAtMjkgLTEzIFEtMjYgLTEzIC0yNiAtMTcgVi0yNSIvPjxsaW5lIHgxPSItMjkiIHkxPSItMjUiIHgyPSItMjkiIHkyPSItMTciLz48bGluZSB4MT0iLTI5IiB5MT0iLTEzIiB4Mj0iLTI5IiB5Mj0iMjUiIHN0cm9rZS13aWR0aD0iMy41Ii8+PGxpbmUgeDE9IjI5IiB5MT0iMSIgeDI9IjI5IiB5Mj0iMjUiIHN0cm9rZS13aWR0aD0iMy41Ii8+PC9nPjxwYXRoIGQ9Ik0yNi41IDIgVi0yNSBRMzQuNSAtMTggMzIuNSAyIFoiIGZpbGw9IiNmZmYiLz48L2c+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMzMS4wLDMzMS43MDYzNzI4NDA5NzY3Nykgc2NhbGUoMC42NSkiPjxjaXJjbGUgcj0iNDgiIGZpbGw9IiNGRjk4MDAiLz48ZyB0cmFuc2Zvcm09InNjYWxlKDEuMDUpIj48cmVjdCB4PSIyIiB5PSItMjgiIHdpZHRoPSI4IiBoZWlnaHQ9IjYiIHJ4PSIxIiBmaWxsPSIjZmZmIi8+PGxpbmUgeDE9IjE4IiB5MT0iLTQiIHgyPSIxOCIgeTI9IjEzIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTS0yMiAyMSBWLTE0IFEtMjIgLTIyIC0xNCAtMjIgSDE4IFEyNiAtMjIgMjYgLTE0IFYtNCBILTggVjIxIFoiIGZpbGw9IiNmZmYiLz48Y2lyY2xlIGN4PSItMTUiIGN5PSItOCIgcj0iNCIgZmlsbD0iI0ZGOTgwMCIvPjxyZWN0IHg9Ii0yOCIgeT0iMjMiIHdpZHRoPSI1NiIgaGVpZ2h0PSI1IiByeD0iMiIgZmlsbD0iI2ZmZiIvPjwvZz48L2c+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDA2LjAsMzMxLjcwNjM3Mjg0MDk3Njc3KSBzY2FsZSgwLjY1KSI+PGNpcmNsZSByPSI0OCIgZmlsbD0iIzAzNTU5MSIvPjxnIHRyYW5zZm9ybT0ic2NhbGUoMS4xKSB0cmFuc2xhdGUoNC4wNSwxLjkpIj48ZyB0cmFuc2Zvcm09InJvdGF0ZSg0NSkiIGZpbGw9IiNmZmYiPjxwYXRoIGQ9Ik00IC0yNi4yNSBBMTEgMTEgMCAxIDEgLTQgLTI2LjI1IEwtNCAtMTggTDQgLTE4IFoiLz48cmVjdCB4PSItMy41IiB5PSItOCIgd2lkdGg9IjciIGhlaWdodD0iMzQiIHJ4PSIzIi8+PC9nPjxnIHRyYW5zZm9ybT0icm90YXRlKC00NSkiPjxnIGZpbGw9IiMwMzU1OTEiIHN0cm9rZT0iIzAzNTU5MSIgc3Ryb2tlLXdpZHRoPSIzLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0tMyAtMTcgTC00LjUgMjIgUS00LjUgMjcgMCAyNyBRNC41IDI3IDQuNSAyMiBMMyAtMTcgWiIvPjxyZWN0IHg9Ii0xMSIgeT0iLTI1IiB3aWR0aD0iMTQiIGhlaWdodD0iOCIvPjxyZWN0IHg9Ii0xNiIgeT0iLTI3IiB3aWR0aD0iNiIgaGVpZ2h0PSIxMiIgcng9IjEuNSIvPjxwYXRoIGQ9Ik0zIC0yNSBRMTQgLTI1IDE5IC0xNiBMMTYgLTE0LjUgUTExIC0xOS41IDMgLTE3IFoiLz48L2c+PGcgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTS0zIC0xNyBMLTQuNSAyMiBRLTQuNSAyNyAwIDI3IFE0LjUgMjcgNC41IDIyIEwzIC0xNyBaIi8+PHJlY3QgeD0iLTExIiB5PSItMjUiIHdpZHRoPSIxNCIgaGVpZ2h0PSI4Ii8+PHJlY3QgeD0iLTE2IiB5PSItMjciIHdpZHRoPSI2IiBoZWlnaHQ9IjEyIiByeD0iMS41Ii8+PHBhdGggZD0iTTMgLTI1IFExNCAtMjUgMTkgLTE2IEwxNiAtMTQuNSBRMTEgLTE5LjUgMyAtMTcgWiIvPjwvZz48L2c+PC9nPjwvZz48L2c+PC9zdmc+"><img class="logo pikto" alt="AWT-Piktogramm Textil" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii01MCAtNTAgMTAwIDEwMCI+PCEtLSBBV1QtUGlrdG9ncmFtbSwgRGFuaWVsIEJleXJvZHQsIENDIEJZLU5DLVNBIDQuMCAtLT48Y2lyY2xlIHI9IjQ4IiBmaWxsPSIjRkY5ODAwIi8+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjA1KSI+PHJlY3QgeD0iMiIgeT0iLTI4IiB3aWR0aD0iOCIgaGVpZ2h0PSI2IiByeD0iMSIgZmlsbD0iI2ZmZiIvPjxsaW5lIHgxPSIxOCIgeTE9Ii00IiB4Mj0iMTgiIHkyPSIxMyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0tMjIgMjEgVi0xNCBRLTIyIC0yMiAtMTQgLTIyIEgxOCBRMjYgLTIyIDI2IC0xNCBWLTQgSC04IFYyMSBaIiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iLTE1IiBjeT0iLTgiIHI9IjQiIGZpbGw9IiNGRjk4MDAiLz48cmVjdCB4PSItMjgiIHk9IjIzIiB3aWR0aD0iNTYiIGhlaWdodD0iNSIgcng9IjIiIGZpbGw9IiNmZmYiLz48L2c+PC9zdmc+"><span class="bname" data-noi18n>Textil-Board</span></a>
     <div class="clock" id="clock">--:--</div>
     <button class="hbtn" id="btnClean" aria-pressed="false" title="Bedienelemente aus- oder einblenden" aria-label="Nur Anzeige">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1002,7 +1015,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
         <svg class="nm-pic" id="nmPic" viewBox="0 0 200 60" aria-hidden="true"></svg>
         <div class="nm-txt" id="nmTxt"></div>
         <div class="nm-ctrl">
-          <div class="nm-seg"><button type="button" class="btn" data-nm-st="gerade">Geradstich</button><button type="button" class="btn" data-nm-st="zickzack">Zickzack</button></div>
+          <div class="nm-seg nm-stw"><select id="nmSt" class="nm-sel" aria-label="Stich"></select></div>
           <div class="nm-seg"><button type="button" class="btn" data-nm-n="Universal">Universal</button><button type="button" class="btn" data-nm-n="Jeans">Jeans</button><button type="button" class="btn" data-nm-n="Stretch">Stretch</button></div>
           <div class="nm-row"><span>Stichlänge</span><button type="button" class="btn" data-nm="l" data-d="-0.5" aria-label="Stichlänge kleiner">−</button><b id="nmL"></b><button type="button" class="btn" data-nm="l" data-d="0.5" aria-label="Stichlänge größer">+</button></div>
           <div class="nm-row" id="nmBRow"><span>Stichbreite</span><button type="button" class="btn" data-nm="b" data-d="-0.5" aria-label="Stichbreite kleiner">−</button><b id="nmB"></b><button type="button" class="btn" data-nm="b" data-d="0.5" aria-label="Stichbreite größer">+</button></div>
@@ -1125,7 +1138,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <p><strong>Arbeitsort:</strong> Zeigt, ob die Klasse auch außerhalb des Klassenraums arbeiten darf.</p>
     <p><strong>KI-Nutzung:</strong> Neben „Keine KI“ und „KI erlaubt“ kannst du die Stufe aus dem AI Badge zeigen: Level 1 (Prompt Trainee), Level 2 (Prompt Engineer) oder Level 3 (AI Architect).</p>
     <p><strong>QR-Code:</strong> Die Kachel (anfangs aus, Einstellungen) führt zur Übersicht der Lernplattformen AWT für Schüler:innen. Antippen zeigt den Code bildschirmfüllend, damit er auch von hinten scannbar ist.</p>
-    <p><strong>Nähmaschine heute:</strong> Zeigt für alle, wie die Maschinen eingestellt werden: Geradstich oder Zickzack, Stichlänge, bei Zickzack die Stichbreite, und die Nadel (Universal, Jeans, Stretch). Das Bild zeigt die Naht ungefähr maßstäblich. In „Nur Anzeige“ sind die Knöpfe ausgeblendet.</p><p><strong>Aufräumplan:</strong> Die Vorlage enthält die Dienste im Textilraum (Nähmaschinen, Kabel, Garn, Stecknadeln, Scheren zählen, Stoffreste, Bügeleisen, Tische, Boden, Werkstücke). Mit „Plan bearbeiten“ passt du sie an euren Raum an.</p>
+    <p><strong>Nähmaschine heute:</strong> Zeigt für alle, wie die Maschinen eingestellt werden: Stich, Stichlänge, Stichbreite, Nähfuß und Nadel (Universal, Jeans, Stretch). Zur Wahl stehen zehn Nutzstiche, die im Textilunterricht vorkommen: Geradstich, dreifacher Stretchstich, Zickzack, elastischer Zickzack, Überwendlingstich, Blindstich, Hexenstich, Muschelsaum, Knopfloch und Riegel. Namen, Nähfuß und die Werte (beim Wählen die Automatik-Werte, dann im erlaubten Bereich) folgen der Stichtabelle von Brother für die Computer-Nähmaschinen mit 20 und 30 Stichen; an anderen Maschinen können Nummern und Bereiche abweichen. Das Bild zeigt die Naht ungefähr maßstäblich. In „Nur Anzeige“ sind die Knöpfe ausgeblendet.</p><p><strong>Aufräumplan:</strong> Die Vorlage enthält die Dienste im Textilraum (Nähmaschinen, Kabel, Garn, Stecknadeln, Scheren zählen, Stoffreste, Bügeleisen, Tische, Boden, Werkstücke). Mit „Plan bearbeiten“ passt du sie an euren Raum an.</p>
     <p><strong>Timer:</strong> −10 und +10 stellen die Zeit in Zehn-Minuten-Schritten, −1 und +1 in Minutenschritten.</p>
     <p><strong>Bedienung:</strong> „Nur Anzeige“ blendet alle Knöpfe aus. Kacheln lassen sich trotzdem antippen: Timer starten/pausieren, Sozialform wechseln, iPad/KI umschalten.</p>
 
@@ -1674,7 +1687,16 @@ function fitSym() {
 window.fitSym = fitSym;
 function queueLayout(fromResize) { cancelAnimationFrame(layoutRaf); layoutRaf = requestAnimationFrame(() => layout(fromResize === true)); }
 let lastW = 0;
+/* Kopfleiste passt sich an (seit 26.11.2026: AWT-Logo und Fach-Piktogramm nebeneinander). Läuft die Leiste über,
+   zuerst den Board-Namen ausblenden (hdr1), dann die Beschriftungen der Kopfknöpfe (hdr2), zuletzt das AWT-Logo (hdr3). */
+function hwFitHeader() {
+  const H = document.querySelector('header'), B = document.body; if (!H) return;
+  const st = ['hdr1', 'hdr2', 'hdr3']; B.classList.remove(...st);
+  for (const c of st) { if (H.scrollWidth <= H.clientWidth + 1) break; B.classList.add(c); }
+}
+window.tbFitHeader = hwFitHeader;
 function layout(fromResize) {
+  hwFitHeader();
   const g = $('#grid');
   // Beim Tippen öffnet sich die Bildschirmtastatur: dann nicht umsortieren
   if (fromResize && document.activeElement === $('#task') && Math.abs(innerWidth - lastW) < 2) { fitTask(); return; }
@@ -2747,6 +2769,40 @@ function bind() {
   $('#importFile').addEventListener('change', e => importBoard(e.target.files && e.target.files[0]));
   $('#diagMic').addEventListener('click', async () => { closeSettings(); if (!S.show.ampel) { S.show.ampel = true; save(); queueLayout(); } if (!mic.on) await micStart(); });
   micInit();
+  /* „Gut zu wissen“ ein- und ausklappbar, Thema oben wählbar (seit 26.11.2026, Wunsch Daniel: der Infotext war zu lang).
+     Die Absätze bleiben im HTML wie bisher (<p><strong>Thema:</strong> …); das Skript baut daraus die Themenknöpfe. */
+  (function gzwInit() {
+    const h = [...document.querySelectorAll('h3')].find(e => e.textContent.trim() === 'Gut zu wissen');
+    if (!h || h.dataset.gzw) return; h.dataset.gzw = '1';
+    const ps = []; let n = h.nextElementSibling;
+    while (n && n.tagName === 'P') { ps.push(n); n = n.nextElementSibling; }
+    if (!ps.length) return;
+    const st = document.createElement('style');
+    st.textContent = '.gzw-h{cursor:pointer;display:flex;align-items:center;gap:6px;user-select:none}.gzw-h .gzw-ar{display:inline-block;transition:transform .15s;font-size:1.1em;line-height:1}.gzw-h[aria-expanded="true"] .gzw-ar{transform:rotate(90deg)}'
+      + '.gzw-h .gzw-n{font-weight:600;text-transform:none;letter-spacing:0;opacity:.8}.gzw-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}'
+      + '.gzw-bar button{font:inherit;font-size:14px;font-weight:700;padding:6px 12px;border-radius:999px;border:2px solid var(--line);background:var(--tile);color:var(--ink);cursor:pointer}'
+      + '.gzw-bar button.sel{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff)}.gzw>p[hidden]{display:none!important}';
+    document.head.appendChild(st);
+    const items = ps.map(p => { const s = p.querySelector('strong'); return { p, t: s ? s.textContent.replace(/:\s*$/, '').trim() : 'Weiteres' }; });
+    const box = document.createElement('div'); box.className = 'gzw'; box.hidden = true;
+    const bar = document.createElement('div'); bar.className = 'gzw-bar';
+    h.classList.add('gzw-h'); h.setAttribute('role', 'button'); h.tabIndex = 0; h.setAttribute('aria-expanded', 'false');
+    h.insertAdjacentHTML('afterbegin', '<span class="gzw-ar" aria-hidden="true">▸</span>');
+    h.insertAdjacentHTML('beforeend', '<span class="gzw-n" data-noi18n>(' + items.length + ')</span>');
+    h.after(box); box.append(bar, ...ps);
+    let cur = null;
+    const show = t => {
+      cur = t; items.forEach(it => { it.p.hidden = !(t === '*' || it.t === t); });
+      bar.querySelectorAll('button').forEach(b => b.classList.toggle('sel', b.dataset.t === t));
+    };
+    const btn = (t, lbl) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.t = t; b.textContent = lbl; b.addEventListener('click', () => show(cur === t ? null : t)); bar.appendChild(b); };
+    btn('*', 'Alle');
+    items.slice().sort((a, b) => a.t.localeCompare(b.t, 'de')).forEach(it => btn(it.t, it.t));
+    show(null);
+    const tog = () => { const o = box.hidden; box.hidden = !o; h.setAttribute('aria-expanded', String(o)); };
+    h.addEventListener('click', tog);
+    h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(); } });
+  })();
   $('#dlg').addEventListener('click', e => { if (e.target.id === 'dlg') closeSettings(); });
 
 
@@ -2885,31 +2941,97 @@ function tbSetCleaning(v) {
 }
 function tbSync() { tbSetCleaning(!!S.show.plan && tbIsClean(S.plan[S.planCur])); }
 /* ================= Nähmaschine heute (Textil-Board) ================= */
-const NM_ST = { gerade: 'Geradstich', zickzack: 'Zickzack' };
+/* Stiche nach der Stichtabelle von Brother für die Computer-Nähmaschinen mit 20/30 Stichen
+   (download.brother.com, Datei cpx20-30sc01de, Version 0; Wunsch Daniel 26.11.2026: „orientiere dich an einer modernen Brother“).
+   Werte: Automatik (beim Wählen des Stichs) und einstellbarer Bereich in mm, Nähfuß wie in der Tabelle.
+   b: null = keine Stichbreite in mm (Geradstiche: dort ist es die Nadelposition; Blindstich: Stufe 0–33). */
+const NM_ST = {
+  gerade:   { n: 'Geradstich', f: 'J', use: 'Zusammennähen, Absteppen', l: [2.5, 0.2, 5], b: null },
+  stretch:  { n: 'Dreifacher Stretchstich', f: 'J', use: 'Stark beanspruchte Nähte', l: [2.5, 1.5, 4], b: null },
+  zickzack: { n: 'Zickzack', f: 'J', use: 'Versäubern, Applizieren', l: [1.4, 0, 4], b: [3.5, 0, 7] },
+  zz3:      { n: 'Elastischer Zickzack', f: 'J', use: 'Versäubern, Gummiband annähen', l: [1, 0.2, 4], b: [5, 1.5, 7] },
+  overlock: { n: 'Überwendlingstich', f: 'G', use: 'Kanten versäubern', l: [2, 1, 4], b: [3.5, 2.5, 5] },
+  blind:    { n: 'Blindstich', f: 'R', use: 'Unsichtbar säumen', l: [2, 1, 3.5], b: null },
+  hexen:    { n: 'Hexenstich', f: 'J', use: 'Zierstich, Säume', l: [2.5, 1, 4], b: [5, 0, 7] },
+  muschel:  { n: 'Muschelsaum', f: 'J', use: 'Zierkante an dünnen Stoffen', l: [2.5, 0.2, 4], b: [4, 0, 7] },
+  knopf:    { n: 'Knopfloch', f: 'A', use: 'Knopflöcher', l: [0.5, 0.2, 1], b: [5, 3, 5] },
+  riegel:   { n: 'Riegel', f: 'A', use: 'Verstärken, z. B. an Taschen', l: [0.4, 0.3, 1], b: [2, 1, 3] }
+};
 const nmTr = t => (window.tbTr && window.tbTr(t)) || t;
 const mm = v => (Math.round(v * 10) / 10).toLocaleString('de-DE') + ' mm';
+const nmClamp = (v, r) => Math.min(r[2], Math.max(r[1], Math.round(v * 10) / 10));
+// Naht als Bild, Stichlänge und -breite ungefähr maßstäblich (1 mm = 6 Einheiten), Mitte y = 30
+function nmPath(st, l, b) {
+  const k = 6, L = Math.max(0.3, l) * k, A = (b || 0) * k / 2, X0 = 8, X1 = 192, Y = 30;
+  const P = [], dots = [], pt = (x, y, dot) => { P.push([x, y]); if (dot) dots.push([x, y]); };
+  const d = () => P.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  let x = X0, out = '';
+  if (st === 'gerade' || (A === 0 && ['zickzack', 'hexen', 'muschel'].includes(st))) { for (; x <= X1; x += L) pt(x, Y, true); }
+  else if (st === 'stretch') { // je Stich vor, zurück, vor: drei Fäden übereinander
+    for (; x <= X1; x += L) pt(x, Y, true);
+    const d0 = d(); out = `<path class="naht" d="${d0}" transform="translate(0,-2.2)"/><path class="naht" d="${d0}" transform="translate(0,2.2)"/>`;
+  }
+  else if (st === 'zickzack') { let up = true; for (; x <= X1; x += L / 2) { pt(x, Y + (up ? -A : A)); up = !up; } }
+  else if (st === 'zz3') { // jeder Schenkel aus drei kleinen Stichen
+    let up = true; const w = 1.5 * L; pt(x, Y + A, true);
+    while (x + w <= X1) { for (let j = 1; j <= 3; j++) pt(x + w * j / 3, Y + (up ? A - 2 * A * j / 3 : -A + 2 * A * j / 3), true); x += w; up = !up; }
+  }
+  else if (st === 'overlock') { // Zickzack an der Kante, oben ein durchgehender Geradstich
+    pt(x, Y - A); while (x + L <= X1) { pt(x + L / 2, Y + A); pt(x + L, Y - A); pt(x + L / 2, Y + A); pt(x + L, Y - A); x += L; }
+    out = `<path class="naht" d="M${X0} ${(Y - A).toFixed(1)} L${x.toFixed(1)} ${(Y - A).toFixed(1)}"/>`;
+  }
+  else if (st === 'blind' || st === 'muschel') { // einige Geradstiche, dann ein Zacken (Blindstich klein, Muschel über die ganze Breite)
+    const a = st === 'blind' ? 9 : 2 * A, y0 = st === 'blind' ? Y + 6 : Y - A, dir = st === 'blind' ? -1 : 1, n = st === 'blind' ? 5 : 4;
+    pt(x, y0, true);
+    while (x + (n + 1) * L <= X1 + 0.1) { for (let j = 0; j < n; j++) { x += L; pt(x, y0, true); } pt(x + L / 2, y0 + dir * a); x += L; pt(x, y0, true); }
+    if (st === 'muschel') out = `<path class="stoffkante" d="M${X0} ${(Y + A).toFixed(1)} ${(() => { let s2 = '', xx = X0; while (xx + (n + 1) * L <= X1 + 0.1) { const w = (n + 1) * L; s2 += `Q${(xx + w / 2).toFixed(1)} ${(Y - A - 4).toFixed(1)} ${(xx + w).toFixed(1)} ${(Y + A).toFixed(1)} `; xx += w; } return s2; })()}"/>`;
+  }
+  else if (st === 'hexen') { // zwei versetzte Zickzacklinien: Kreuze
+    let up = true; const P2 = []; for (; x <= X1; x += L) { pt(x, Y + (up ? -A : A)); P2.push([x, Y + (up ? A : -A)]); up = !up; }
+    out = `<path class="naht" d="${P2.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ')}"/>`;
+  }
+  else if (st === 'knopf' || st === 'riegel') { // Raupen aus dichtem Zickzack
+    const raupe = (x0, x1, yc, h) => { let s2 = `M${x0} ${yc - h}`, up = false, xx = x0; for (; xx <= x1; xx += Math.max(0.6, L) / 2) { s2 += ` L${xx.toFixed(1)} ${(yc + (up ? -h : h)).toFixed(1)}`; up = !up; } return `<path class="naht thin" d="${s2}"/>`; };
+    if (st === 'riegel') return raupe(70, 130, Y, Math.max(3, A));
+    const g = 0.6 * k, h = Math.max(2, (A - g / 2) / 2), x0 = 40, x1 = 160; // zwei Raupen mit Schlitz, Riegel an den Enden
+    return `<line class="schlitz" x1="${x0 + 6}" y1="${Y}" x2="${x1 - 6}" y2="${Y}"/>` + raupe(x0, x1, Y - g / 2 - h, h) + raupe(x0, x1, Y + g / 2 + h, h)
+      + raupe(x0 - 4, x0 + 2, Y, A) + raupe(x1 - 2, x1 + 4, Y, A);
+  }
+  return `<path class="naht" d="${d()}"/>` + out + dots.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="1.6" fill="#7f0000"/>`).join('');
+}
 function hwRender() {
   const P = $('#nmPic'); if (!P) return;
   const N = S.naeh = Object.assign({ st: 'gerade', l: 2.5, b: 3, n: 'Universal' }, S.naeh || {});
-  // Naht auf einem Stoffstreifen, Stichlänge und -breite maßstäblich (1 mm = 6 Einheiten)
-  const k = 6, len = Math.max(0.5, N.l) * k, amp = N.st === 'zickzack' ? Math.max(0.5, N.b) * k / 2 : 0;
-  let d = 'M8 30', x = 8, up = true;
-  if (amp) { while (x + len / 2 <= 192) { x += len / 2; d += ' L' + x.toFixed(1) + ' ' + (30 + (up ? -amp : amp)).toFixed(1); up = !up; } }
-  else { while (x + len <= 192) { x += len; d += ' L' + x.toFixed(1) + ' 30'; } }
-  const dots = amp ? '' : Array.from({ length: Math.floor(184 / len) + 1 }, (_, i) => `<circle cx="${(8 + i * len).toFixed(1)}" cy="30" r="1.6" fill="#7f0000"/>`).join('');
-  P.innerHTML = `<rect class="stoff" x="0" y="${Math.max(6, 30 - amp - 10)}" width="200" height="${Math.min(48, 2 * amp + 20)}" rx="4"/><path class="naht" d="${d}"/>${dots}`;
-  $('#nmTxt').innerHTML = `${nmTr(NM_ST[N.st])} · ${mm(N.l)}${N.st === 'zickzack' ? ' × ' + mm(N.b) : ''}<small>${nmTr('Nadel')}: ${nmTr(N.n)}</small>`;
-  $('#nmL').textContent = mm(N.l); $('#nmB').textContent = mm(N.b); $('#nmBRow').hidden = N.st !== 'zickzack';
-  $$('[data-nm-st]').forEach(b => b.classList.toggle('sel', b.dataset.nmSt === N.st));
+  if (!NM_ST[N.st]) N.st = 'gerade';
+  const T = NM_ST[N.st];
+  N.l = nmClamp(N.l, T.l); if (T.b) N.b = nmClamp(N.b, T.b);
+  const A = T.b ? N.b * 3 : (N.st === 'blind' ? 6 : 0), top = Math.max(4, 30 - Math.max(A, N.st === 'blind' ? 6 : 0) - 9);
+  P.innerHTML = `<rect class="stoff" x="0" y="${top}" width="200" height="${Math.min(52, 60 - 2 * top)}" rx="4"/>` + nmPath(N.st, N.l, T.b ? N.b : 0);
+  const sel = $('#nmSt');
+  if (sel && !sel.options.length) Object.entries(NM_ST).forEach(([k, v]) => { const o = document.createElement('option'); o.value = k; o.textContent = v.n; sel.appendChild(o); });
+  if (sel) sel.value = N.st;
+  $('#nmTxt').innerHTML = `${nmTr(T.n)} · ${mm(N.l)}${T.b ? ' × ' + mm(N.b) : ''}<small>${nmTr('Nähfuß')} ${T.f} · ${nmTr('Nadel')}: ${nmTr(N.n)}</small><small class="nm-use">${nmTr(T.use)}</small>`;
+  $('#nmL').textContent = mm(N.l); $('#nmB').textContent = T.b ? mm(N.b) : ''; $('#nmBRow').style.display = T.b ? '' : 'none'; // .nm-row setzt display, darum nicht über hidden
   $$('[data-nm-n]').forEach(b => b.classList.toggle('sel', b.dataset.nmN === N.n));
 }
 function hwFit() {}
+document.addEventListener('change', e => {
+  if (e.target.id !== 'nmSt') return;
+  const T = NM_ST[e.target.value]; if (!T) return;
+  // wie an der Maschine: beim Wählen eines Stichs gelten seine Automatik-Werte
+  Object.assign(S.naeh, { st: e.target.value, l: T.l[0] }, T.b ? { b: T.b[0] } : {});
+  save(); hwRender();
+});
 document.addEventListener('click', e => {
-  const b = e.target.closest('[data-nm-st],[data-nm],[data-nm-n]'); if (!b) return;
-  const N = S.naeh;
-  if (b.dataset.nmSt) N.st = b.dataset.nmSt;
+  const b = e.target.closest('[data-nm],[data-nm-n]'); if (!b) return;
+  const N = S.naeh, T = NM_ST[N.st] || NM_ST.gerade;
   if (b.dataset.nmN) N.n = b.dataset.nmN;
-  if (b.dataset.nm) { const lim = b.dataset.nm === 'l' ? [0.5, 5] : [0.5, 7]; N[b.dataset.nm] = Math.min(lim[1], Math.max(lim[0], Math.round((N[b.dataset.nm] + Number(b.dataset.d)) * 10) / 10)); }
+  if (b.dataset.nm) {
+    const r = b.dataset.nm === 'l' ? T.l : T.b; if (!r) return;
+    const up = Number(b.dataset.d) > 0, v = N[b.dataset.nm];
+    const step = r[2] <= 1.5 || (up ? v < 1 : v <= 1) ? 0.1 : 0.5; // kleine Werte in Zehnteln wie am Display
+    N[b.dataset.nm] = nmClamp(v + (up ? step : -step), r);
+  }
   save(); hwRender();
 });
 function tbRender() {
@@ -3402,6 +3524,25 @@ setInterval(clock, 1000);
 const LKEY = 'textilboard.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Dreifacher Stretchstich": ["Triple stretch stitch", "Point droit triple"],
+  "Elastischer Zickzack": ["3-step zigzag", "Zigzag 3 points"],
+  "Überwendlingstich": ["Overcasting stitch", "Point de surfilage"],
+  "Blindstich": ["Blind hem stitch", "Point invisible"],
+  "Hexenstich": ["Herringbone stitch", "Point de chausson"],
+  "Muschelsaum": ["Shell tuck", "Ourlet coquille"],
+  "Knopfloch": ["Buttonhole", "Boutonnière"],
+  "Riegel": ["Bar tack", "Point d’arrêt"],
+  "Nähfuß": ["Presser foot", "Pied"],
+  "Zusammennähen, Absteppen": ["Joining seams, topstitching", "Assembler, surpiquer"],
+  "Stark beanspruchte Nähte": ["Seams under strain", "Coutures très sollicitées"],
+  "Versäubern, Applizieren": ["Neatening edges, appliqué", "Surfiler, appliquer"],
+  "Versäubern, Gummiband annähen": ["Neatening edges, sewing on elastic", "Surfiler, coudre un élastique"],
+  "Kanten versäubern": ["Neatening edges", "Surfiler les bords"],
+  "Unsichtbar säumen": ["Invisible hems", "Ourlets invisibles"],
+  "Zierstich, Säume": ["Decorative stitch, hems", "Point décoratif, ourlets"],
+  "Zierkante an dünnen Stoffen": ["Decorative edge on thin fabric", "Bordure décorative sur tissu fin"],
+  "Knopflöcher": ["Buttonholes", "Boutonnières"],
+  "Verstärken, z. B. an Taschen": ["Reinforcing, e.g. at pockets", "Renforcer, p. ex. aux poches"],
   "Eingabegerät für die Lautstärke": ["Input device for the volume meter", "Entrée audio pour le volume"],
   "Standard des Geräts": ["Device default", "Par défaut"],
   "Mikrofone suchen": ["Find microphones", "Chercher les micros"],
@@ -3915,6 +4056,25 @@ const D = {
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
 const ES = {
+  "Dreifacher Stretchstich": "Puntada recta triple",
+  "Elastischer Zickzack": "Zigzag de 3 pasos",
+  "Überwendlingstich": "Puntada de sobrehilado",
+  "Blindstich": "Puntada invisible",
+  "Hexenstich": "Punto de espiga",
+  "Muschelsaum": "Dobladillo de concha",
+  "Knopfloch": "Ojal",
+  "Riegel": "Presilla",
+  "Nähfuß": "Prensatelas",
+  "Zusammennähen, Absteppen": "Unir costuras, pespuntear",
+  "Stark beanspruchte Nähte": "Costuras muy exigidas",
+  "Versäubern, Applizieren": "Rematar bordes, aplicar",
+  "Versäubern, Gummiband annähen": "Rematar bordes, coser elástico",
+  "Kanten versäubern": "Rematar bordes",
+  "Unsichtbar säumen": "Dobladillos invisibles",
+  "Zierstich, Säume": "Puntada decorativa, dobladillos",
+  "Zierkante an dünnen Stoffen": "Borde decorativo en tela fina",
+  "Knopflöcher": "Ojales",
+  "Verstärken, z. B. an Taschen": "Reforzar, p. ej. en bolsillos",
   "Eingabegerät für die Lautstärke": "Dispositivo de entrada para el volumen",
   "Standard des Geräts": "Predeterminado del dispositivo",
   "Mikrofone suchen": "Buscar micrófonos",
@@ -4510,7 +4670,7 @@ window.confirm = m => oConfirm(tr(String(m)) || m);
 
 function setLang(l, announce) {
   lang = LANGS.includes(l) ? l : 'de'; window.tbLang = lang;
-  setTimeout(() => { if (window.fitSym) window.fitSym(); }, 0);
+  setTimeout(() => { if (window.tbFitHeader) window.tbFitHeader(); if (window.fitSym) window.fitSym(); }, 0);
   try { localStorage.setItem(LKEY, lang); } catch (e) { }
   document.documentElement.lang = lang;
   walk(document.body);
