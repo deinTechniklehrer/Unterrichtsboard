@@ -496,6 +496,9 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
 .dlg h2{font-size:22px; margin-bottom:12px}
 .dlg h3{font-size:13px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); margin:16px 0 6px}
 .row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:17px; font-weight:600}
+.micsel{max-width:58%; min-width:0; font:inherit; font-size:15px; font-weight:600; padding:8px 12px; border-radius:12px; border:2px solid var(--line); background:var(--tile); color:var(--ink); text-overflow:ellipsis}
+.micnote{font-size:14px; color:var(--muted); margin:6px 0 0}
+.micnote:empty{display:none}
 .sw{appearance:none; -webkit-appearance:none; width:52px; height:32px; border-radius:16px; background:var(--line); position:relative; flex:none; cursor:pointer; transition:background .2s}
 .sw::after{content:""; position:absolute; top:3px; left:3px; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .2s}
 .sw:checked{background:var(--ok)}
@@ -1085,11 +1088,19 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
       <input type="file" id="importFile" accept=".json,application/json" hidden>
     </div>
 
+    <h3>Mikrofon</h3>
+    <div id="micBox">
+      <div class="row">Eingabegerät für die Lautstärke <select id="micSel" class="micsel" aria-label="Mikrofon"></select></div>
+      <p class="micnote" id="micNote"></p>
+      <div class="seg" style="margin-top:6px"><button class="btn" id="micFind">Mikrofone suchen</button></div>
+    </div>
+
     <h3>Technik-Check</h3>
     <div class="diag" id="diag"></div>
     <div class="seg" style="margin-top:8px"><button class="btn" id="diagMic">Mikrofon jetzt testen</button></div>
 
     <h3>Gut zu wissen</h3>
+    <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
     <p><strong>Raster:</strong> Im Querformat liegen die Kacheln in 6 Spalten. Kleine Anzeigen (Sozialform, Lautstärke, iPad, KI, Arbeitsort, Gefährdungen, QR-Code) sind 1 Spalte breit, der Stundenfahrplan 1 × 1 (ab 5 Phasen 1 Spalte und 2 Zeilen hoch), Timer und Aufgabe 2 Spalten. Die APE ist immer quadratisch: 2 × 2, wenn Platz ist, sonst 1 × 1. Den Timer kannst du oben in den Einstellungen auf 2 × 2, 2 × 1, 1 × 2 oder 1 × 1 stellen. Ist das Board so voll, dass die Zeilen niedriger als 200 px würden, wird er automatisch kleiner (2 × 2 → 2 × 1 → 1 × 1, 1 × 2 → 1 × 1).</p>
     <p><strong>Handy und iPad:</strong> Das Board passt sich an Hoch- und Querformat an. Auf kleinen Bildschirmen kannst du nach unten scrollen. „Nur Anzeige“ (Auge oben) blendet nur die Knöpfe aus, Ort und Größe der Kacheln bleiben gleich.</p>
@@ -2353,14 +2364,85 @@ async function renderDiag() {
   ];
   box.innerHTML = rows.map(([k, v, c]) => `<div><span>${k}</span><b class="${c}">${v}</b></div>`).join('');
 }
-async function getMic() {
-  try {
-    return await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }, video: false });
-  } catch (e) {
+/* Mikrofon wählen (seit 26.11.2026, Wunsch Daniel: in Chrome und Edge ließ sich das Eingabegerät nicht auswählen).
+   Die Wahl gilt nur für dieses Gerät und diesen Browser: eigener Speicher MICKEY = {id, lbl}, nicht im Export.
+   Ändert der Browser die Geräte-ID (Safari, privates Fenster), findet das Board das Mikrofon über den Namen wieder. */
+const MICKEY = KEY + '.mic';
+function micPref() { try { return JSON.parse(localStorage.getItem(MICKEY)) || {}; } catch (e) { return {}; } }
+async function micDevices() {
+  try { return (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput' && d.deviceId && d.deviceId !== 'default' && d.deviceId !== 'communications'); }
+  catch (e) { return []; }
+}
+async function micWanted() {
+  const p = micPref(); if (!p.id) return '';
+  const l = await micDevices();
+  if (l.some(d => d.deviceId === p.id)) return p.id;
+  const m = p.lbl && l.find(d => d.label === p.lbl);
+  return m ? m.deviceId : p.id;
+}
+async function micTry(dev) {
+  try { return await navigator.mediaDevices.getUserMedia({ audio: Object.assign({}, dev, { echoCancellation: false, noiseSuppression: false, autoGainControl: false }), video: false }); }
+  catch (e) {
     // manche Geräte mögen die Sonderwünsche nicht: einfach nochmal ganz normal fragen
-    if (['OverconstrainedError', 'TypeError', 'NotReadableError', 'AbortError'].includes(e && e.name)) return navigator.mediaDevices.getUserMedia({ audio: true });
+    if (['OverconstrainedError', 'TypeError', 'NotReadableError', 'AbortError'].includes(e && e.name)) return navigator.mediaDevices.getUserMedia({ audio: dev.deviceId ? dev : true });
     throw e;
   }
+}
+async function getMic() {
+  const id = await micWanted();
+  if (id) {
+    try { return await micTry({ deviceId: { exact: id } }); }
+    catch (e) {
+      if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) throw e;
+      toast('Das gewählte Mikrofon ist gerade nicht erreichbar. Das Board nimmt das Standard-Mikrofon.', 7000);
+    }
+  }
+  return micTry({});
+}
+async function micFill() {
+  const sel = $('#micSel'); if (!sel) return;
+  const md = navigator.mediaDevices;
+  if (!md || !md.enumerateDevices) { $('#micBox').style.display = 'none'; return; }
+  const l = await micDevices(), p = micPref();
+  sel.textContent = '';
+  const add = (v, t, raw) => { const o = document.createElement('option'); o.value = v; o.textContent = t; if (raw) o.setAttribute('data-noi18n', ''); sel.appendChild(o); };
+  add('', 'Standard des Geräts');
+  l.forEach((d, i) => add(d.deviceId, d.label || ('Mikrofon ' + (i + 1)), true));
+  const exact = p.id && l.find(d => d.deviceId === p.id);
+  const byName = p.id && !exact && p.lbl && l.find(d => d.label === p.lbl);
+  const here = !p.id || !!exact || !!byName;
+  if (!p.id) sel.value = '';
+  else if (exact) sel.value = p.id;
+  else if (byName) sel.value = byName.deviceId;
+  else { add(p.id, (p.lbl || 'Mikrofon') + ' (–)', true); sel.value = p.id; }
+  const noName = !l.length || l.some(d => !d.label);
+  const note = $('#micNote');
+  note.textContent = !here ? 'Das gewählte Mikrofon ist gerade nicht angeschlossen. Bis es wieder da ist, nimmt das Board das Standard-Mikrofon.'
+    : noName ? 'Die Namen der Mikrofone zeigt der Browser erst, wenn das Board das Mikrofon einmal benutzen darf. Tippe auf „Mikrofone suchen“.'
+    : l.length < 2 ? 'Der Browser findet nur ein Mikrofon.' : '';
+  $('#micFind').style.display = noName ? '' : 'none'; // .btn setzt display, darum nicht über hidden
+}
+async function micFind() {
+  const md = navigator.mediaDevices;
+  if (!window.isSecureContext || !md || !md.getUserMedia) { micFill(); return; }
+  if (!(typeof mic !== 'undefined' && mic.on)) {
+    try { const st = await md.getUserMedia({ audio: true }); st.getTracks().forEach(t => t.stop()); }
+    catch (e) { micHelp(e); }
+  }
+  micFill();
+}
+function micInit() {
+  const sel = $('#micSel'); if (!sel) return;
+  sel.addEventListener('change', async () => {
+    const id = sel.value, d = (await micDevices()).find(x => x.deviceId === id);
+    try { if (id) localStorage.setItem(MICKEY, JSON.stringify({ id, lbl: d ? d.label : (micPref().lbl || '') })); else localStorage.removeItem(MICKEY); } catch (e) {}
+    if (mic.on) { micStop(); await micStart(); }
+    micFill();
+  });
+  $('#micFind').addEventListener('click', micFind);
+  const bs = $('#btnSet'); if (bs) bs.addEventListener('click', micFill); // Namen neu holen, sobald die Einstellungen aufgehen
+  try { navigator.mediaDevices.addEventListener('devicechange', micFill); } catch (e) {}
+  micFill();
 }
 async function micStart() {
   if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -2664,6 +2746,7 @@ function bind() {
   $('#btnImport').addEventListener('click', () => { $('#importFile').value = ''; $('#importFile').click(); });
   $('#importFile').addEventListener('change', e => importBoard(e.target.files && e.target.files[0]));
   $('#diagMic').addEventListener('click', async () => { closeSettings(); if (!S.show.ampel) { S.show.ampel = true; save(); queueLayout(); } if (!mic.on) await micStart(); });
+  micInit();
   $('#dlg').addEventListener('click', e => { if (e.target.id === 'dlg') closeSettings(); });
 
 
@@ -3319,6 +3402,13 @@ setInterval(clock, 1000);
 const LKEY = 'textilboard.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Eingabegerät für die Lautstärke": ["Input device for the volume meter", "Entrée audio pour le volume"],
+  "Standard des Geräts": ["Device default", "Par défaut"],
+  "Mikrofone suchen": ["Find microphones", "Chercher les micros"],
+  "Das gewählte Mikrofon ist gerade nicht erreichbar. Das Board nimmt das Standard-Mikrofon.": ["The selected microphone is not available right now. The board uses the default microphone.", "Le micro choisi n’est pas disponible pour le moment. Le tableau utilise le micro par défaut."],
+  "Das gewählte Mikrofon ist gerade nicht angeschlossen. Bis es wieder da ist, nimmt das Board das Standard-Mikrofon.": ["The selected microphone is not connected. Until it is back, the board uses the default microphone.", "Le micro choisi n’est pas branché. En attendant, le tableau utilise le micro par défaut."],
+  "Die Namen der Mikrofone zeigt der Browser erst, wenn das Board das Mikrofon einmal benutzen darf. Tippe auf „Mikrofone suchen“.": ["The browser only shows the microphone names once the board may use the microphone. Tap “Find microphones”.", "Le navigateur n’affiche le nom des micros qu’une fois que le tableau a le droit d’utiliser le micro. Touche « Chercher les micros »."],
+  "Der Browser findet nur ein Mikrofon.": ["The browser finds only one microphone.", "Le navigateur ne trouve qu’un seul micro."],
   "Stunde neu starten": ["Restart lesson", "Recommencer le cours"],
   "Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt, Aufräumen und Alarm werden beendet und das Board lädt neu. Einstellungen, Aufräumplan und Verteilung bleiben.": ["Restart the lesson? The plan jumps to the first phase, the timer is reset, tidy-up and alarm end and the board reloads. Settings, tidy-up plan and assignment stay.", "Recommencer le cours ? Le plan revient à la première phase, le minuteur est remis à zéro, le rangement et l’alarme s’arrêtent et le tableau se recharge. Les réglages, le plan de rangement et la répartition restent."],
   // Küchen- und Textil-Board (25.11.2026)
@@ -3825,6 +3915,13 @@ const D = {
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
 const ES = {
+  "Eingabegerät für die Lautstärke": "Dispositivo de entrada para el volumen",
+  "Standard des Geräts": "Predeterminado del dispositivo",
+  "Mikrofone suchen": "Buscar micrófonos",
+  "Das gewählte Mikrofon ist gerade nicht erreichbar. Das Board nimmt das Standard-Mikrofon.": "El micrófono elegido no está disponible ahora. El tablero usa el micrófono predeterminado.",
+  "Das gewählte Mikrofon ist gerade nicht angeschlossen. Bis es wieder da ist, nimmt das Board das Standard-Mikrofon.": "El micrófono elegido no está conectado. Mientras tanto, el tablero usa el micrófono predeterminado.",
+  "Die Namen der Mikrofone zeigt der Browser erst, wenn das Board das Mikrofon einmal benutzen darf. Tippe auf „Mikrofone suchen“.": "El navegador solo muestra los nombres de los micrófonos cuando el tablero puede usar el micrófono. Toca «Buscar micrófonos».",
+  "Der Browser findet nur ein Mikrofon.": "El navegador solo encuentra un micrófono.",
   "Stunde neu starten": "Reiniciar la clase",
   "Stunde neu starten? Der Fahrplan springt auf die erste Phase, der Timer wird zurückgesetzt, Aufräumen und Alarm werden beendet und das Board lädt neu. Einstellungen, Aufräumplan und Verteilung bleiben.": "¿Reiniciar la clase? El plan vuelve a la primera fase, el temporizador se reinicia, se terminan la recogida y la alarma y el tablero se recarga. Se mantienen los ajustes, el plan de recogida y el reparto.",
   // Küchen- und Textil-Board (25.11.2026)

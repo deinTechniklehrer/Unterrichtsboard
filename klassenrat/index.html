@@ -196,6 +196,10 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 #dView p strong{color:var(--ink)}#dView a{color:var(--accent)}
 #dView .srow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:17px;font-weight:600;color:var(--ink);margin:0;flex-wrap:wrap}
 #dView .srow input.sw{width:52px;margin:0}
+#dView .micsel{max-width:58%; min-width:0; font:inherit; font-size:15px; font-weight:600; padding:8px 12px; border-radius:12px; border:2px solid var(--line); background:var(--tile); color:var(--ink); text-overflow:ellipsis}
+#dView .micnote{font-size:14px; color:var(--muted); margin:6px 0 0}
+#dView .micnote:empty{display:none}
+
 .sw{appearance:none;-webkit-appearance:none;width:52px;height:32px;border-radius:16px;background:var(--line);border:0;padding:0;position:relative;flex:none;cursor:pointer;transition:background .2s}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
 .sw:checked{background:var(--accent)}.sw:checked::after{transform:translateX(20px)}
@@ -282,7 +286,15 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
     <div class="srow">Sprache
       <div class="seg" data-noi18n><button class="btn" data-lang-set="de">Deutsch</button><button class="btn" data-lang-set="en">English</button><button class="btn" data-lang-set="fr">Français</button><button class="btn" data-lang-set="es">Español</button></div>
     </div>
+    <h3 class="sh">Mikrofon</h3>
+    <div id="micBox">
+      <div class="srow">Eingabegerät für die Lautstärke <select id="micSel" class="micsel" aria-label="Mikrofon"></select></div>
+      <p class="micnote" id="micNote"></p>
+      <div class="seg" style="margin-top:6px"><button class="btn" id="micFind">Mikrofone suchen</button></div>
+    </div>
+
     <h3 class="sh">Gut zu wissen</h3>
+    <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
     <p><strong>Nur Anzeige:</strong> Das Auge oben blendet alle Knöpfe aus, damit über den Beamer nichts versehentlich geändert wird. Ort und Größe der Kacheln bleiben gleich.</p>
     <p><strong>Ablauf und Reflexion:</strong> Antippen einer Phase schiebt die Markierung weiter. Die Reflexion ist immer der letzte Schritt und öffnet sich groß.</p>
     <p><strong>Ämter auslosen:</strong> Trag die Namen der Klasse einmal ein. Wer fehlt, tippst du an. Das Board zieht vier Namen in Reihenfolge, die vier wählen nacheinander ihr Amt.</p>
@@ -539,7 +551,7 @@ function paintRqEdit(){const l=$('#vRq');l.textContent='';S.rq.forEach((q,i)=>{c
  r.append(mkIn(q.t,'Reflexionsfrage','Frage',x=>{q.t=x.value;save();paintRefl()},'pq'),mkX(()=>{delete S.rv[q.id];S.rq.splice(i,1);save();paintRqEdit();paintRefl()}));l.append(r)})}
 function openView(){const l=$('#vCards');l.textContent='';
  CARDS.forEach(([k,t])=>{const lb=document.createElement('label');lb.className='srow';const c=document.createElement('input');c.type='checkbox';c.className='sw';c.checked=!!S.show[k];c.onchange=()=>{S.show[k]=c.checked;save();applyShow()};lb.append(t,c);l.append(lb)});
- paintPhEdit();paintRqEdit();$('#dView').showModal()}
+ paintPhEdit();paintRqEdit();micFill();$('#dView').showModal()}
 $('#bView').onclick=openView;$('#vOk').onclick=()=>$('#dView').close();
 $('#vPhAdd').onclick=()=>{S.ph.push({n:'Neue Phase',d:'',m:5});save();paintPhEdit();paintSteps()};
 $('#vPhDef').onclick=()=>{S.ph=defPh();S.phase=-1;save();paintPhEdit();paintSteps()};
@@ -591,11 +603,91 @@ function micHelp(err){const n=(err&&err.name)||'Fehler';let m;
  else if(IS_ANDROID)m='Mikrofon erlauben: In Chrome links neben der Adresse auf das Symbol tippen → Berechtigungen → Mikrofon → Erlauben.';
  else m='Mikrofon erlauben: Links neben der Adresse auf das Schloss-Symbol klicken und das Mikrofon erlauben.';
  toast(m+' ('+n+')')}
+/* Mikrofon wählen (seit 26.11.2026, Wunsch Daniel: in Chrome und Edge ließ sich das Eingabegerät nicht auswählen).
+   Die Wahl gilt nur für dieses Gerät und diesen Browser: eigener Speicher MICKEY = {id, lbl}, nicht im Export.
+   Ändert der Browser die Geräte-ID (Safari, privates Fenster), findet das Board das Mikrofon über den Namen wieder. */
+const MICKEY = KEY + '.mic';
+function micPref() { try { return JSON.parse(localStorage.getItem(MICKEY)) || {}; } catch (e) { return {}; } }
+async function micDevices() {
+  try { return (await navigator.mediaDevices.enumerateDevices()).filter(d => d.kind === 'audioinput' && d.deviceId && d.deviceId !== 'default' && d.deviceId !== 'communications'); }
+  catch (e) { return []; }
+}
+async function micWanted() {
+  const p = micPref(); if (!p.id) return '';
+  const l = await micDevices();
+  if (l.some(d => d.deviceId === p.id)) return p.id;
+  const m = p.lbl && l.find(d => d.label === p.lbl);
+  return m ? m.deviceId : p.id;
+}
+async function micTry(dev) {
+  try { return await navigator.mediaDevices.getUserMedia({ audio: Object.assign({}, dev, { echoCancellation: false, noiseSuppression: false, autoGainControl: false }), video: false }); }
+  catch (e) {
+    // manche Geräte mögen die Sonderwünsche nicht: einfach nochmal ganz normal fragen
+    if (['OverconstrainedError', 'TypeError', 'NotReadableError', 'AbortError'].includes(e && e.name)) return navigator.mediaDevices.getUserMedia({ audio: dev.deviceId ? dev : true });
+    throw e;
+  }
+}
+async function getMic() {
+  const id = await micWanted();
+  if (id) {
+    try { return await micTry({ deviceId: { exact: id } }); }
+    catch (e) {
+      if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) throw e;
+      toast('Das gewählte Mikrofon ist gerade nicht erreichbar. Das Board nimmt das Standard-Mikrofon.');
+    }
+  }
+  return micTry({});
+}
+async function micFill() {
+  const sel = $('#micSel'); if (!sel) return;
+  const md = navigator.mediaDevices;
+  if (!md || !md.enumerateDevices) { $('#micBox').style.display = 'none'; return; }
+  const l = await micDevices(), p = micPref();
+  sel.textContent = '';
+  const add = (v, t, raw) => { const o = document.createElement('option'); o.value = v; o.textContent = t; if (raw) o.setAttribute('data-noi18n', ''); sel.appendChild(o); };
+  add('', 'Standard des Geräts');
+  l.forEach((d, i) => add(d.deviceId, d.label || ('Mikrofon ' + (i + 1)), true));
+  const exact = p.id && l.find(d => d.deviceId === p.id);
+  const byName = p.id && !exact && p.lbl && l.find(d => d.label === p.lbl);
+  const here = !p.id || !!exact || !!byName;
+  if (!p.id) sel.value = '';
+  else if (exact) sel.value = p.id;
+  else if (byName) sel.value = byName.deviceId;
+  else { add(p.id, (p.lbl || 'Mikrofon') + ' (–)', true); sel.value = p.id; }
+  const noName = !l.length || l.some(d => !d.label);
+  const note = $('#micNote');
+  note.textContent = !here ? 'Das gewählte Mikrofon ist gerade nicht angeschlossen. Bis es wieder da ist, nimmt das Board das Standard-Mikrofon.'
+    : noName ? 'Die Namen der Mikrofone zeigt der Browser erst, wenn das Board das Mikrofon einmal benutzen darf. Tippe auf „Mikrofone suchen“.'
+    : l.length < 2 ? 'Der Browser findet nur ein Mikrofon.' : '';
+  $('#micFind').style.display = noName ? '' : 'none'; // .btn setzt display, darum nicht über hidden
+}
+async function micFind() {
+  const md = navigator.mediaDevices;
+  if (!window.isSecureContext || !md || !md.getUserMedia) { micFill(); return; }
+  if (!(typeof mic !== 'undefined' && mic.on)) {
+    try { const st = await md.getUserMedia({ audio: true }); st.getTracks().forEach(t => t.stop()); }
+    catch (e) { micHelp(e); }
+  }
+  micFill();
+}
+function micInit() {
+  const sel = $('#micSel'); if (!sel) return;
+  sel.addEventListener('change', async () => {
+    const id = sel.value, d = (await micDevices()).find(x => x.deviceId === id);
+    try { if (id) localStorage.setItem(MICKEY, JSON.stringify({ id, lbl: d ? d.label : (micPref().lbl || '') })); else localStorage.removeItem(MICKEY); } catch (e) {}
+    if (mic.on) { micStop(); await micStart(); }
+    micFill();
+  });
+  $('#micFind').addEventListener('click', micFind);
+  const bs = $('#btnSet'); if (bs) bs.addEventListener('click', micFill); // Namen neu holen, sobald die Einstellungen aufgehen
+  try { navigator.mediaDevices.addEventListener('devicechange', micFill); } catch (e) {}
+  micFill();
+}
+micInit();
 async function micStart(){
  if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast(IN_WEBVIEW?'Das Mikrofon ist in einer App-Vorschau gesperrt. Öffne die Adresse direkt im Browser.':'Das Mikrofon funktioniert nur über eine sichere Adresse (https://). Bis dahin kannst du die Ampel per Tippen schalten.');return}
  setSession('play-and-record');const c=ctx();if(!c){toast('Dieser Browser kann die Lautstärke leider nicht messen.');return}
- let st;try{st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false})}
- catch(e){if(['OverconstrainedError','TypeError'].includes(e&&e.name)){try{st=await navigator.mediaDevices.getUserMedia({audio:true})}catch(x){setSession('playback');micHelp(x);return}}else{setSession('playback');micHelp(e);return}}
+ let st;try{st=await getMic()}catch(e){setSession('playback');micHelp(e);return}
  try{if(c.state==='suspended')await c.resume();mic.stream=st;mic.src=c.createMediaStreamSource(st);mic.an=c.createAnalyser();mic.an.fftSize=2048;mic.an.smoothingTimeConstant=0;mic.buf=new Float32Array(mic.an.fftSize);mic.src.connect(mic.an);mic.on=true;mic.lvl=0;mic.light=null;renderAmp();micLoop()}
  catch(e){try{st.getTracks().forEach(t=>t.stop())}catch(x){}setSession('playback');toast('Die Lautstärke ließ sich nicht messen. Lade die Seite neu und versuch es nochmal.')}}
 function micStop(){cancelAnimationFrame(mic.raf);try{mic.src&&mic.src.disconnect()}catch(e){}try{mic.stream&&mic.stream.getTracks().forEach(t=>t.stop())}catch(e){}
@@ -631,6 +723,13 @@ if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWo
 const LKEY = 'klassenrat.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Eingabegerät für die Lautstärke": ["Input device for the volume meter", "Entrée audio pour le volume"],
+  "Standard des Geräts": ["Device default", "Par défaut"],
+  "Mikrofone suchen": ["Find microphones", "Chercher les micros"],
+  "Das gewählte Mikrofon ist gerade nicht erreichbar. Das Board nimmt das Standard-Mikrofon.": ["The selected microphone is not available right now. The board uses the default microphone.", "Le micro choisi n’est pas disponible pour le moment. Le tableau utilise le micro par défaut."],
+  "Das gewählte Mikrofon ist gerade nicht angeschlossen. Bis es wieder da ist, nimmt das Board das Standard-Mikrofon.": ["The selected microphone is not connected. Until it is back, the board uses the default microphone.", "Le micro choisi n’est pas branché. En attendant, le tableau utilise le micro par défaut."],
+  "Die Namen der Mikrofone zeigt der Browser erst, wenn das Board das Mikrofon einmal benutzen darf. Tippe auf „Mikrofone suchen“.": ["The browser only shows the microphone names once the board may use the microphone. Tap “Find microphones”.", "Le navigateur n’affiche le nom des micros qu’une fois que le tableau a le droit d’utiliser le micro. Touche « Chercher les micros »."],
+  "Der Browser findet nur ein Mikrofon.": ["The browser finds only one microphone.", "Le navigateur ne trouve qu’un seul micro."],
   'Klassenrat Dashboard': ['Class Council Dashboard', 'Tableau de bord du conseil de classe'],
   'Protokoll als PDF': ['Minutes as PDF', 'Procès-verbal en PDF'],
   'Text kopieren': ['Copy text', 'Copier le texte'],
@@ -818,6 +917,13 @@ const D = {
   'Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.': ['The rule keeper’s list and the reflection votes will be cleared. Save the PDFs first.', 'La liste du gardien des règles et les voix de la réflexion seront vidées. Enregistre d’abord les PDF.']
 };
 const ES = {
+  "Eingabegerät für die Lautstärke": "Dispositivo de entrada para el volumen",
+  "Standard des Geräts": "Predeterminado del dispositivo",
+  "Mikrofone suchen": "Buscar micrófonos",
+  "Das gewählte Mikrofon ist gerade nicht erreichbar. Das Board nimmt das Standard-Mikrofon.": "El micrófono elegido no está disponible ahora. El tablero usa el micrófono predeterminado.",
+  "Das gewählte Mikrofon ist gerade nicht angeschlossen. Bis es wieder da ist, nimmt das Board das Standard-Mikrofon.": "El micrófono elegido no está conectado. Mientras tanto, el tablero usa el micrófono predeterminado.",
+  "Die Namen der Mikrofone zeigt der Browser erst, wenn das Board das Mikrofon einmal benutzen darf. Tippe auf „Mikrofone suchen“.": "El navegador solo muestra los nombres de los micrófonos cuando el tablero puede usar el micrófono. Toca «Buscar micrófonos».",
+  "Der Browser findet nur ein Mikrofon.": "El navegador solo encuentra un micrófono.",
   "Klassenrat Dashboard": "Panel del consejo de clase",
   "Protokoll als PDF": "Acta en PDF",
   "Text kopieren": "Copiar texto",
