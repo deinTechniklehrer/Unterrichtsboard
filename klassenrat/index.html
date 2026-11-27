@@ -199,7 +199,10 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 #dView .micsel{max-width:58%; min-width:0; font:inherit; font-size:15px; font-weight:600; padding:8px 12px; border-radius:12px; border:2px solid var(--line); background:var(--tile); color:var(--ink); text-overflow:ellipsis}
 #dView .micnote{font-size:14px; color:var(--muted); margin:6px 0 0}
 #dView .micnote:empty{display:none}
-#dView .fbtxt{font-size:14px;color:var(--muted);margin:4px 0 0}
+#dView .fbtxt{font-size:14px;color:var(--muted);margin:6px 2px 10px}
+#dView .fbtop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;border:2px solid var(--line);border-radius:14px;margin:6px 0 0}
+#dView .fbtop .fbq{font-weight:700}
+#dView .fbtop .btn{flex:none}
 
 .sw{appearance:none;-webkit-appearance:none;width:52px;height:32px;border-radius:16px;background:var(--line);border:0;padding:0;position:relative;flex:none;cursor:pointer;transition:background .2s}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
@@ -272,6 +275,9 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
 <dialog id="dView">
   <div class="dlg">
     <h2>Einstellungen</h2>
+    <!-- Feedback ganz oben (Wunsch Daniel, 27.11.2026: bei Fehlern schnell zu finden) -->
+    <div class="fbtop"><span class="fbq">Fehler gefunden oder eine Idee?</span><a class="btn primary" id="fbLink" href="https://tally.so/r/Kp1Mpk" target="_blank" rel="noopener" style="text-decoration:none">Feedback geben</a></div>
+    <p class="fbtxt">Öffnet ein kurzes Formular in einem neuen Tab (Anbieter Tally, etwa 2 Minuten). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.</p>
     <h3 class="sh">Kacheln anzeigen</h3>
     <div id="vCards"></div>
     <h3 class="sh">Ablauf anpassen</h3>
@@ -294,10 +300,6 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
       <p class="micnote" id="micNote"></p>
       <div class="seg" style="margin-top:6px"><button class="btn" id="micFind">Mikrofone suchen</button></div>
     </div>
-
-    <h3 class="sh">Feedback</h3>
-    <p class="fbtxt">Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.</p>
-    <div class="seg" style="margin-top:6px"><a class="btn primary" id="fbLink" href="https://tally.so/r/Kp1Mpk" target="_blank" rel="noopener" style="text-decoration:none">Feedback geben</a></div>
 
     <h3 class="sh">Gut zu wissen</h3>
     <p><strong>Sitzung neu starten:</strong> Der Kreispfeil oben neben dem Zahnrad fragt nach, setzt den Ablauf an den Anfang und die Zeitwache zurück und lädt das Board neu. Protokoll, Themen und Ämter bleiben. Ein leeres Protokoll für die nächste Sitzung gibt es über „Neue Sitzung“.</p>
@@ -775,7 +777,8 @@ if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWo
 const LKEY = 'klassenrat.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
-  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": ["Found a bug or have an idea for the board? Let me know, it takes about 2 minutes. The form opens in a new tab (provider: Tally). The form is in German. Please do not enter names of students or colleagues.", "Une erreur ou une idée pour le tableau ? Dis-le-moi, cela prend environ 2 minutes. Le formulaire s’ouvre dans un nouvel onglet (fournisseur : Tally), il est en allemand. Merci de ne pas indiquer de noms d’élèves ou de collègues."],
+  "Fehler gefunden oder eine Idee?": ["Found a bug or have an idea?", "Une erreur ou une idée ?"],
+  "Öffnet ein kurzes Formular in einem neuen Tab (Anbieter Tally, etwa 2 Minuten). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": ["Opens a short form in a new tab (provider: Tally, about 2 minutes, in German). Please do not enter names of students or colleagues.", "Ouvre un court formulaire dans un nouvel onglet (fournisseur : Tally, environ 2 minutes, en allemand). Merci de ne pas indiquer de noms d’élèves ou de collègues."],
   "Feedback geben": ["Give feedback", "Donner un avis"],
   "Sitzung neu starten": ["Restart meeting", "Recommencer la séance"],
   "Sitzung neu starten? Der Ablauf springt an den Anfang, die Zeitwache wird zurückgesetzt und das Board lädt neu. Protokoll, Themen und Ämter bleiben. Für ein leeres Protokoll nimm „Neue Sitzung“.": ["Restart the meeting? The agenda jumps back to the start, the time keeper is reset and the board reloads. Minutes, topics and roles stay. For empty minutes use “New meeting”.", "Recommencer la séance ? Le déroulement revient au début, le gardien du temps est remis à zéro et le tableau se recharge. Le procès-verbal, les sujets et les rôles restent. Pour un procès-verbal vide, utilise « Nouvelle séance »."],
@@ -973,7 +976,8 @@ const D = {
   'Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.': ['The rule keeper’s list and the reflection votes will be cleared. Save the PDFs first.', 'La liste du gardien des règles et les voix de la réflexion seront vidées. Enregistre d’abord les PDF.']
 };
 const ES = {
-  "Fehler gefunden oder eine Idee für das Board? Schreib es mir kurz, das dauert etwa 2 Minuten. Das Formular öffnet sich in einem neuen Tab (Anbieter Tally). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": "¿Has encontrado un error o tienes una idea para el tablero? Cuéntamelo, tarda unos 2 minutos. El formulario se abre en una pestaña nueva (proveedor: Tally) y está en alemán. Por favor, no escribas nombres de alumnos ni de colegas.",
+  "Fehler gefunden oder eine Idee?": "¿Un error o una idea?",
+  "Öffnet ein kurzes Formular in einem neuen Tab (Anbieter Tally, etwa 2 Minuten). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": "Abre un formulario breve en una pestaña nueva (proveedor: Tally, unos 2 minutos, en alemán). Por favor, no escribas nombres de alumnos ni de colegas.",
   "Feedback geben": "Dar opinión",
   "Sitzung neu starten": "Reiniciar la sesión",
   "Sitzung neu starten? Der Ablauf springt an den Anfang, die Zeitwache wird zurückgesetzt und das Board lädt neu. Protokoll, Themen und Ämter bleiben. Für ein leeres Protokoll nimm „Neue Sitzung“.": "¿Reiniciar la sesión? El orden vuelve al principio, el control del tiempo se reinicia y el tablero se recarga. El acta, los temas y los cargos se mantienen. Para un acta vacía usa «Nueva sesión».",
