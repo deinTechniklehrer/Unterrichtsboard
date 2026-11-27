@@ -158,6 +158,7 @@ body.clean .hint{display:none}
 .t-digits{font-size:24cqmin; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.02em; line-height:1}
 .t-digits.long{font-size:17cqmin}
 .t-end{font-size:max(12px,6cqmin); font-weight:700; color:var(--muted); margin-top:1.2cqmin; font-variant-numeric:tabular-nums; min-height:1.2em}
+.t-end.prev{opacity:.65; font-weight:600}
 .t-state{font-size:max(11px,5.5cqmin); font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:2cqmin}
 .tile.warn .t-prog{stroke:var(--warn)}
 .tile.crit .t-prog{stroke:var(--no)}
@@ -878,6 +879,7 @@ dialog::backdrop{background:rgba(5,10,18,.5)}
     <div class="seg" style="margin-top:8px"><button class="btn" id="diagMic">Mikrofon jetzt testen</button></div>
 
     <h3>Gut zu wissen</h3>
+    <p><strong>Endzeit:</strong> Unter der Zeit steht immer, wann der Timer endet. Läuft er noch nicht, steht dort blasser, wann er enden würde, wenn du jetzt startest; die Uhrzeit rechnet sich laufend neu. So stellst du die Minuten passend zur Uhr ein, z. B. bis zum Klingeln.</p>
     <p><strong>Stunde neu starten:</strong> Der Kreispfeil oben rechts neben dem Zahnrad fragt nach und setzt dann den Fahrplan auf die erste Phase und den Timer zurück; das Board lädt neu (holt dabei auch eine neue Fassung). Einstellungen und Inhalte der Kacheln bleiben.</p>
     <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
     <p><strong>Wie eine App:</strong> In Safari auf „Teilen“ → „Zum Home-Bildschirm“ tippen (Android/Chrome: „App installieren“). Dann startet das Board mit eigenem Symbol ohne Browserleiste und funktioniert nach dem ersten Öffnen auch ohne Internet.</p>
@@ -1703,8 +1705,12 @@ function renderTimer() {
   tile.classList.toggle('crit', !doneFlag && !!t.endAt && r <= 10);
   tile.classList.toggle('warn', !doneFlag && r > 10 && frac <= 0.25 && r < t.duration);
   // kleine Zeile: um wie viel Uhr die Zeit um ist
-  const endTxt = t.endAt && !doneFlag ? 'Ende ' + new Date(t.endAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr' : '';
+  // seit 27.11.2026 (Wunsch Daniel) immer sichtbar: läuft der Timer nicht, steht dort, wann er enden würde, wenn man jetzt startet
+  // (wird jede Sekunde neu gerechnet, so lässt sich die Zeit passend zur Uhr einstellen); blasser, solange er nicht läuft
+  const endAt = t.endAt || (r > 0 ? Date.now() + r * 1000 : 0);
+  const endTxt = endAt && !doneFlag ? 'Ende ' + new Date(endAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr' : '';
   const te = $('#tEnd'); if (te.textContent !== endTxt) te.textContent = endTxt;
+  te.classList.toggle('prev', !t.endAt);
   $('#tState').textContent = doneFlag ? 'Zeit ist um!' : t.endAt ? 'läuft' : (r < t.duration && r > 0 ? 'pausiert' : 'bereit');
   $('#tStart').textContent = t.endAt ? 'Pause' : (r < t.duration && r > 0 && !doneFlag ? 'Weiter' : 'Start');
   const curMin = t.duration / 60;

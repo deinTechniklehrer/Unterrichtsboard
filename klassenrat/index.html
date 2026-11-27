@@ -42,6 +42,8 @@ h2{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute
 .step.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--tile))}
 #digits{font-size:clamp(40px,25cqw,80px);font-weight:900;font-variant-numeric:tabular-nums;text-align:center;line-height:1.05}
 #tBox.done #digits{color:#d32f2f}
+.tendk{text-align:center;font-size:clamp(13px,5cqw,18px);font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;min-height:1.3em;margin:-2px 0 6px}
+.tendk.prev{opacity:.65;font-weight:600}
 .row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:6px}
 .row button{min-height:44px;min-width:48px;border-radius:12px;border:2px solid var(--line);background:var(--tile);font-weight:800;padding:0 10px}
 #tStart{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);min-width:84px}
@@ -256,7 +258,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
     <label class="chk"><input type="checkbox" id="aAlarm"> Alarm, wenn die Ampel rot wird</label>
     <p class="hint">Der Alarm pulsiert rot und gibt einen Signalton, bis du ihn antippst, spätestens nach 15 Sekunden. Das Mikrofon misst nur die Lautstärke im Browser, nichts wird aufgenommen.</p>
   </div>
-  <div class="tile" id="tBox" data-card="zeit"><h2><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>Zeitwache</h2><div id="digits" role="timer">00:00</div>
+  <div class="tile" id="tBox" data-card="zeit"><h2><svg class="ric" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#c77700"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="27" r="11"/><path d="M24 27v-6M20 10h8M24 10v6M33 17l2.5-2.5"/></g></svg>Zeitwache</h2><div id="digits" role="timer">00:00</div><div id="tEndK" class="tendk"></div>
     <div class="row"><button id="tMinus" aria-label="Eine Minute weniger">−1</button><button id="tStart">Start</button><button id="tPlus" aria-label="Eine Minute mehr">+1</button></div></div>
   <div class="tile" data-card="meta"><h2>Sitzung und Ämter</h2>
     <div class="grid2" id="meta"></div>
@@ -302,6 +304,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
     </div>
 
     <h3 class="sh">Gut zu wissen</h3>
+    <p><strong>Endzeit:</strong> Unter der Zeit steht immer, wann die Zeitwache endet. Läuft sie noch nicht, steht dort blasser, wann sie enden würde, wenn du jetzt startest; die Uhrzeit rechnet sich laufend neu. So stellst du die Minuten passend zur Uhr ein, z. B. bis zum Klingeln.</p>
     <p><strong>Sitzung neu starten:</strong> Der Kreispfeil oben neben dem Zahnrad fragt nach, setzt den Ablauf an den Anfang und die Zeitwache zurück und lädt das Board neu. Protokoll, Themen und Ämter bleiben. Ein leeres Protokoll für die nächste Sitzung gibt es über „Neue Sitzung“.</p>
     <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
     <p><strong>Nur Anzeige:</strong> Das Auge oben blendet alle Knöpfe aus, damit über den Beamer nichts versehentlich geändert wird. Ort und Größe der Kacheln bleiben gleich.</p>
@@ -457,7 +460,9 @@ document.querySelectorAll('.col').forEach(c=>{const k=c.dataset.k,i=c.querySelec
 /* Ablauf und Timer */
 let rem=0,end=0,run=false;
 const fmt=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
-function show(){$('#digits').textContent=fmt(run?(end-Date.now())/1000:rem);$('#tStart').textContent=run?'Pause':'Start'}
+function show(){$('#digits').textContent=fmt(run?(end-Date.now())/1000:rem);$('#tStart').textContent=run?'Pause':'Start';
+ /* Endzeit immer sichtbar (seit 27.11.2026, Wunsch Daniel): läuft die Zeitwache nicht, die Endzeit bei Start jetzt (blasser) */
+ const e=run?end:(rem>0?Date.now()+rem*1000:0),k=$('#tEndK'),tx=e?'Ende '+new Date(e).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr':'';if(k.textContent!==tx)k.textContent=tx;k.classList.toggle('prev',!run)}
 function paintSteps(){const h=$('#steps');h.textContent='';S.ph.forEach((p,i)=>{const b=document.createElement('button');b.className='step'+(S.phase===i?' on':'');b.innerHTML='';b.append(p.n+' · '+p.m+' min');const sm=document.createElement('small');sm.textContent=p.d;b.append(sm);
  b.onclick=()=>{S.phase=i;save();run=false;rem=p.m*60;$('#tBox').classList.remove('done');paintSteps();show()};h.append(b)});
  if(S.show.refl){const b=document.createElement('button');b.className='step rstep'+(S.phase==='r'?' on':'');b.title='Reflexion groß zeigen';b.insertAdjacentHTML('afterbegin',RICO);const tx=document.createElement('span');tx.append('Reflexion');const sm=document.createElement('small');sm.textContent='Wie lief es?';tx.append(sm);b.append(tx);
@@ -1198,6 +1203,7 @@ function trEs(s, el) {
 const CTX = {};
 const one = (i, s) => (D[s] ? D[s][i] : s);
 const P = [
+  [/^Ende (\d{1,2}:\d{2}) Uhr$/, (i, m) => ['Ends ' + m[1], 'Fin à ' + m[1]][i]],
   [/^(Eröffnung|Rückblick|Themen|Abschluss) · (\d+) min$/, (i, m) => one(i, m[1]) + ' · ' + m[2] + ' min'],
   [/^Sitzung (\d+) gestartet$/, (i, m) => ['Meeting ' + m[1] + ' started', 'Séance ' + m[1] + ' commencée'][i]],
   [/^(\d)\. Verwarnung$/, (i, m) => m[1] === '1' ? ['1st warning', '1er avertissement'][i] : ['2nd warning', '2e avertissement'][i]]
