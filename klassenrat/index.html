@@ -173,6 +173,12 @@ h2 .ric{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
 .meter i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--c2);border-radius:6px}
 .meter b{position:absolute;top:0;bottom:0;width:3px;background:var(--ink);opacity:.6}
 .slider{display:flex;align-items:center;gap:8px;margin-top:6px}
+.dual{position:relative; flex:1; min-width:0; height:32px; touch-action:none; cursor:pointer; --y:47%; --r:57%}
+.dual .dtrack{position:absolute; left:13px; right:13px; top:50%; height:10px; margin-top:-5px; border-radius:5px; background:linear-gradient(90deg,#34a853 0 var(--y),#ffcc00 var(--y) var(--r),#e53935 var(--r) 100%)}
+.dual .dth{position:absolute; top:50%; width:26px; height:26px; margin:-13px 0 0 -13px; border-radius:50%; border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.45); padding:0; cursor:grab; touch-action:none}
+.dual .dth.y{left:calc(13px + (100% - 26px) * var(--yf,.47)); background:#f2c200}
+.dual .dth.r{left:calc(13px + (100% - 26px) * var(--rf,.57)); background:#e53935}
+.dual .dth:focus-visible{outline:3px solid var(--accent,#1565c0); outline-offset:2px}
 .slider input{flex:1;min-width:0;padding:0;border:0;background:none;accent-color:var(--accent);height:28px}
 body.alarm{animation:krPulse 1s ease-in-out infinite}
 @keyframes krPulse{0%,100%{background:#ff1a1a}50%{background:#5c0000}}
@@ -253,7 +259,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
       <div><div class="amp-txt green" id="aTxt" aria-live="polite">Alles gut</div><div class="hint" id="aHint">Tippe auf die Ampel oder starte das Mikrofon.</div></div>
     </div>
     <div id="aMicBox" hidden><div class="meter" aria-hidden="true"><i id="aLvl"></i><b id="aMarkY"></b><b id="aMarkR"></b></div>
-      <label class="slider"><span>leise</span><input type="range" id="aLimit" min="25" max="95" step="1" aria-label="Ab wann die Ampel rot wird"><span>laut</span></label></div>
+      <label class="slider"><span>leise</span><div class="dual" id="aDual" role="group" aria-label="Grenzen der Ampel"><div class="dtrack"></div><button type="button" class="dth y" role="slider" aria-label="Gelb ab" aria-valuemin="0" aria-valuemax="100" title="Gelb ab"></button><button type="button" class="dth r" role="slider" aria-label="Rot ab" aria-valuemin="0" aria-valuemax="100" title="Rot ab"></button></div><span>laut</span></label></div>
     <div class="row"><button id="aMic">Mikrofon starten</button></div>
     <label class="chk"><input type="checkbox" id="aAlarm"> Alarm, wenn die Ampel rot wird</label>
     <p class="hint">Der Alarm pulsiert rot und gibt einen Signalton, bis du ihn antippst, spätestens nach 15 Sekunden. Das Mikrofon misst nur die Lautstärke im Browser, nichts wird aufgenommen.</p>
@@ -304,6 +310,7 @@ body.alarm{animation:krPulse 1s ease-in-out infinite}
     </div>
 
     <h3 class="sh">Gut zu wissen</h3>
+    <p><strong>Ampel-Grenzen:</strong> Unter der Lautstärke-Anzeige stehen zwei Griffe: der gelbe legt fest, ab wann die Ampel gelb wird, der rote, ab wann sie rot wird. Zieh sie einzeln (oder tippe auf die Leiste, dann springt der nähere Griff dorthin). Die Farben der Leiste zeigen die Bereiche. Ist das Mikrofon sehr empfindlich, schieb beide weiter nach rechts; die Skala reicht seit 27.11.2026 deutlich weiter nach oben als früher.</p>
     <p><strong>Endzeit:</strong> Unter der Zeit steht immer, wann die Zeitwache endet. Läuft sie noch nicht, steht dort blasser, wann sie enden würde, wenn du jetzt startest; die Uhrzeit rechnet sich laufend neu. So stellst du die Minuten passend zur Uhr ein, z. B. bis zum Klingeln.</p>
     <p><strong>Sitzung neu starten:</strong> Der Kreispfeil oben neben dem Zahnrad fragt nach, setzt den Ablauf an den Anfang und die Zeitwache zurück und lädt das Board neu. Protokoll, Themen und Ämter bleiben. Ein leeres Protokoll für die nächste Sitzung gibt es über „Neue Sitzung“.</p>
     <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
@@ -602,7 +609,7 @@ function setLight(l,user){if(mic.light===l)return;mic.light=l;document.querySele
  if(l==='red'){if(user&&armed&&S.ampel.alarm&&Date.now()>coolUntil)setAlarm(true)}else armed=true}
 function renderAmp(){$('#aMicBox').hidden=!mic.on;$('#aMic').textContent=mic.on?'Mikrofon stoppen':'Mikrofon starten';
  $('#aHint').textContent=mic.on?'Schieberegler: ab wann die Ampel rot wird.':'Tippe auf die Ampel oder starte das Mikrofon.';
- $('#aLimit').value=S.ampel.limit;$('#aMarkR').style.left=S.ampel.limit+'%';$('#aMarkY').style.left=Math.max(0,S.ampel.limit-12)+'%';$('#aAlarm').checked=!!S.ampel.alarm;if(!mic.on)setLight(S.ampel.manual)}
+ ampDualPaint();$('#aMarkR').style.left=S.ampel.limit+'%';$('#aMarkY').style.left=S.ampel.yel+'%';$('#aAlarm').checked=!!S.ampel.alarm;if(!mic.on)setLight(S.ampel.manual)}
 const UA=navigator.userAgent||'';
 const isStandalone=()=>(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
 const IS_IOS=/iPad|iPhone|iPod/.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -751,14 +758,56 @@ async function micStart(){
  catch(e){try{st.getTracks().forEach(t=>t.stop())}catch(x){}setSession('playback');toast('Die Lautstärke ließ sich nicht messen. Lade die Seite neu und versuch es nochmal.')}}
 function micStop(){cancelAnimationFrame(mic.raf);try{mic.src&&mic.src.disconnect()}catch(e){}try{mic.stream&&mic.stream.getTracks().forEach(t=>t.stop())}catch(e){}
  Object.assign(mic,{on:false,stream:null,src:null,an:null,light:null});setSession('playback');$('#aLvl').style.width='0';renderAmp()}
+/* Ampel-Grenzen (seit 27.11.2026, Wunsch Daniel): zwei Griffe „Gelb ab“ und „Rot ab“ statt eines Reglers (Gelb war fest 12 unter Rot).
+   Skala 0–100 = −80 … 0 dB (vorher −75 … −10 dB): oben mehr Spielraum für empfindliche Mikrofone.
+   Alte Stände (ohne S.ampel.sc2) werden einmal auf die neue Skala umgerechnet. */
+const AMP_GAP = 3;
+function ampMigrate() {
+  const A = S.ampel; if (A.sc2) return;
+  const c = x => Math.round((x * 0.65 + 5) / 0.8);
+  const old = typeof A.limit === 'number' ? A.limit : 62;
+  A.limit = Math.min(100, c(old)); A.yel = Math.max(0, c(old - 12)); A.sc2 = true; save();
+}
+function ampDualPaint() {
+  const A = S.ampel, d = document.getElementById('aDual'); if (!d) return;
+  d.style.setProperty('--y', A.yel + '%'); d.style.setProperty('--r', A.limit + '%'); d.style.setProperty('--yf', A.yel / 100); d.style.setProperty('--rf', A.limit / 100); // Griffe bleiben ganz in der Leiste (13 px Rand)
+  d.querySelector('.dth.y').setAttribute('aria-valuenow', A.yel); d.querySelector('.dth.r').setAttribute('aria-valuenow', A.limit);
+}
+function ampSet(w, v, render) {
+  const A = S.ampel; v = Math.round(Math.max(0, Math.min(100, v)));
+  if (w === 'r') { A.limit = Math.max(AMP_GAP, v); if (A.yel > A.limit - AMP_GAP) A.yel = A.limit - AMP_GAP; }
+  else { A.yel = Math.min(100 - AMP_GAP, v); if (A.limit < A.yel + AMP_GAP) A.limit = A.yel + AMP_GAP; }
+  save(); render();
+}
+function ampDualInit(render) {
+  ampMigrate();
+  const d = document.getElementById('aDual'); if (!d) { render(); return; }
+  let act = null;
+  const val = e => { const r = d.getBoundingClientRect(); return (e.clientX - r.left - 13) / Math.max(1, r.width - 26) * 100; };
+  d.addEventListener('pointerdown', e => {
+    const v = val(e), A = S.ampel, dy = Math.abs(v - A.yel), dr = Math.abs(v - A.limit);
+    act = dy < dr ? 'y' : dr < dy ? 'r' : (v > A.limit ? 'r' : 'y'); // näherer Griff; bei Gleichstand nach der Seite
+    try { d.setPointerCapture(e.pointerId); } catch (x) {}
+    ampSet(act, v, render); e.preventDefault();
+    const t = d.querySelector('.dth.' + act); if (t) t.focus({ preventScroll: true });
+  });
+  d.addEventListener('pointermove', e => { if (act) ampSet(act, val(e), render); });
+  const end = () => { act = null; };
+  d.addEventListener('pointerup', end); d.addEventListener('pointercancel', end);
+  d.querySelectorAll('.dth').forEach(t => t.addEventListener('keydown', e => {
+    const k = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -5, PageUp: 5 }[e.key]; if (!k) return;
+    e.preventDefault(); const w = t.classList.contains('r') ? 'r' : 'y'; ampSet(w, (w === 'r' ? S.ampel.limit : S.ampel.yel) + k, render);
+  }));
+  render();
+}
 function micLoop(){if(!mic.on)return;mic.an.getFloatTimeDomainData(mic.buf);let sum=0;for(let i=0;i<mic.buf.length;i++)sum+=mic.buf[i]*mic.buf[i];
- const db=20*Math.log10(Math.sqrt(sum/mic.buf.length)+1e-9),L=Math.max(0,Math.min(100,(db+75)/65*100));
+ const db=20*Math.log10(Math.sqrt(sum/mic.buf.length)+1e-9),L=Math.max(0,Math.min(100,(db+80)/80*100));
  mic.lvl+=(L-mic.lvl)*(L>mic.lvl?.25:.05);
- const now=performance.now(),red=S.ampel.limit,yel=red-12;let l;
+ const now=performance.now(),red=S.ampel.limit,yel=S.ampel.yel;let l;
  if(mic.lvl>=red){l='red';mic.redUntil=now+2500}else if(now<mic.redUntil)l='red';else if(mic.lvl>=yel){l='yellow';mic.yelUntil=now+1200}else if(now<mic.yelUntil)l='yellow';else l='green';
  setLight(l,true);const bar=$('#aLvl');bar.style.width=mic.lvl.toFixed(1)+'%';bar.style.background=mic.lvl>=red?'#d32f2f':mic.lvl>=yel?'#e0a000':'var(--c2)';mic.raf=requestAnimationFrame(micLoop)}
 $('#aMic').onclick=()=>{if(mic.on)micStop();else micStart()};
-$('#aLimit').oninput=e=>{S.ampel.limit=+e.target.value;save();renderAmp()};
+ampDualInit(renderAmp);
 $('#aAlarm').onchange=e=>{S.ampel.alarm=e.target.checked;save();if(!S.ampel.alarm&&alarmOn)setAlarm(false)};
 $('#aHous').onclick=e=>{if(mic.on){toast('Die Ampel wird gerade vom Mikrofon gesteuert.');return}
  const lamp=e.target.closest('.lamp'),order=['green','yellow','red'];S.ampel.manual=lamp?lamp.dataset.l:order[(order.indexOf(S.ampel.manual)+1)%3];save();setLight(S.ampel.manual,true)};
@@ -782,6 +831,9 @@ if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWo
 const LKEY = 'klassenrat.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Grenzen der Ampel": ["Traffic light thresholds", "Seuils du feu"],
+  "Gelb ab": ["Yellow from", "Jaune à partir de"],
+  "Rot ab": ["Red from", "Rouge à partir de"],
   "Fehler gefunden oder eine Idee?": ["Found a bug or have an idea?", "Une erreur ou une idée ?"],
   "Öffnet ein kurzes Formular in einem neuen Tab (Anbieter Tally, etwa 2 Minuten). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": ["Opens a short form in a new tab (provider: Tally, about 2 minutes, in German). Please do not enter names of students or colleagues.", "Ouvre un court formulaire dans un nouvel onglet (fournisseur : Tally, environ 2 minutes, en allemand). Merci de ne pas indiquer de noms d’élèves ou de collègues."],
   "Feedback geben": ["Give feedback", "Donner un avis"],
@@ -981,6 +1033,9 @@ const D = {
   'Die Liste der Regelwache und die Stimmen der Reflexion werden geleert. Speichere die PDFs vorher.': ['The rule keeper’s list and the reflection votes will be cleared. Save the PDFs first.', 'La liste du gardien des règles et les voix de la réflexion seront vidées. Enregistre d’abord les PDF.']
 };
 const ES = {
+  "Grenzen der Ampel": "Umbrales del semáforo",
+  "Gelb ab": "Amarillo desde",
+  "Rot ab": "Rojo desde",
   "Fehler gefunden oder eine Idee?": "¿Un error o una idea?",
   "Öffnet ein kurzes Formular in einem neuen Tab (Anbieter Tally, etwa 2 Minuten). Bitte keine Namen von Schüler:innen oder Kolleg:innen eintragen.": "Abre un formulario breve en una pestaña nueva (proveedor: Tally, unos 2 minutos, en alemán). Por favor, no escribas nombres de alumnos ni de colegas.",
   "Feedback geben": "Dar opinión",
