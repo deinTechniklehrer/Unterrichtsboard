@@ -77,9 +77,9 @@ body.standalone #btnFS{display:none}
 @media (max-width:1180px){ #btnTheme .lbl, #btnFS .lbl{display:none} #btnTheme, #btnFS{width:clamp(38px,5.4vh,50px); padding:0} }
 @media (max-width:900px){ #btnReflex .lbl, #btnPlan .lbl{display:none} #btnReflex, #btnPlan{width:clamp(38px,5.4vh,50px); padding:0} }
 /* Platz für „Stunde neu starten“ (26.11.2026): schmal nur Symbole, unter 480 px ohne Vollbild-Knopf */
-@media (max-width:900px){ #btnClean .lbl, #btnInput .lbl{display:none} #btnClean, #btnInput, #btnSet, #btnRestart{width:clamp(38px,5.4vh,50px); padding:0} }
+@media (max-width:900px){ #btnClean .lbl, #btnInput .lbl{display:none} #btnClean, #btnInput, #btnSet, #btnRestart, #btnBoardLock{width:clamp(38px,5.4vh,50px); padding:0} }
 @media (max-width:480px){ #btnFS{display:none} }
-@media (max-width:420px){ #btnTheme, #btnFS, #btnReflex, #btnPlan, #btnClean, #btnInput, #btnSet, #btnRestart{width:36px} }
+@media (max-width:420px){ #btnTheme, #btnFS, #btnReflex, #btnPlan, #btnClean, #btnInput, #btnSet, #btnRestart, #btnBoardLock, #btnLang{width:33px} header{gap:4px} }
 @media (max-width:400px){ .clock{display:none} }
 @media (max-width:720px){
   .hbtn .lbl{display:none}
@@ -775,6 +775,9 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.8 6 3.8 9.5s-1.2 6.7-3.8 9.5c-2.6-2.8-3.8-6-3.8-9.5S9.4 5.3 12 2.5z"/></svg>
       <span class="lcode" id="langCode">DE</span>
     </button>
+    <button class="hbtn" id="btnBoardLock" title="Board sperren" aria-label="Board sperren">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2.2"/><path class="blk-shackle" d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.6" r="1.4" fill="currentColor" stroke="none"/></svg>
+    </button>
     <button class="hbtn" id="btnSet" title="Einstellungen" aria-label="Einstellungen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
     </button>
@@ -1081,6 +1084,7 @@ body.tight .tb-chip{min-height:34px;font-size:clamp(12px,1.1vw,16px)}
     <div class="seg" style="margin-top:8px"><button class="btn" id="diagMic">Mikrofon jetzt testen</button></div>
 
     <h3>Gut zu wissen</h3>
+    <p><strong>Board sperren:</strong> Das Schloss oben links neben dem Zahnrad sperrt das ganze Board mit einer PIN aus 4 Ziffern (wie beim Aufräumplan). Gesperrt lässt sich nichts mehr antippen, nur das Schloss (rot). Timer, Fahrplan-Automatik und Mikrofon laufen weiter. Entsperren mit derselben PIN. Die PIN gilt nur in diesem Browser auf diesem Gerät und kommt nicht in den Export. PIN vergessen: im Entsperren-Fenster „PIN vergessen?“ – dann wird das Board ganz auf Anfang zurückgesetzt.</p>
     <p><strong>Ampel-Grenzen:</strong> Unter der Lautstärke-Anzeige stehen zwei Griffe: der gelbe legt fest, ab wann die Ampel gelb wird, der rote, ab wann sie rot wird. Zieh sie einzeln (oder tippe auf die Leiste, dann springt der nähere Griff dorthin). Die Farben der Leiste zeigen die Bereiche. Ist das Mikrofon sehr empfindlich, schieb beide weiter nach rechts; die Skala reicht seit 27.11.2026 deutlich weiter nach oben als früher.</p>
     <p><strong>Endzeit:</strong> Unter der Zeit steht immer, wann der Timer endet. Läuft er noch nicht, steht dort blasser, wann er enden würde, wenn du jetzt startest; die Uhrzeit rechnet sich laufend neu. So stellst du die Minuten passend zur Uhr ein, z. B. bis zum Klingeln.</p>
     <p><strong>Mikrofon wählen:</strong> Unter „Mikrofon“ suchst du aus, welches Eingabegerät die Lautstärke misst (z. B. das Mikrofon der Webcam statt das des Laptops). Die Wahl gilt nur auf diesem Gerät in diesem Browser und kommt nicht in den Export. Namen zeigt der Browser erst, wenn das Mikrofon einmal erlaubt ist: dafür „Mikrofone suchen“. Ist das gewählte Mikrofon nicht angeschlossen, nimmt das Board das Standard-Mikrofon.</p>
@@ -2781,6 +2785,90 @@ function bind() {
     set('');
     try { caches.keys().then(ks => { const k = ks.find(x => x.startsWith('techboard-')); if (k) set(k); }).catch(() => {}); } catch (e) {}
   })();
+  /* Board sperren (seit 27.11.2026, Wunsch Daniel): Schloss oben links neben dem Zahnrad, PIN mit 4 Ziffern wie beim Aufräumplan.
+     Gesperrt (body.blk) lässt sich nichts mehr antippen außer dem Schloss; Timer, Fahrplan-Automatik und Mikrofon laufen weiter.
+     Gespeichert nur in diesem Browser unter KEY + '.lock' = {h, on} (nur der Prüfwert der PIN), nicht im Export.
+     PIN vergessen: im Entsperren-Fenster „PIN vergessen?“ setzt das Board auf Anfang zurück (wie beim Aufräumplan). */
+  (function blkInit() {
+    const btn = document.getElementById('btnBoardLock'); if (!btn) return;
+    const LK = KEY + '.lock';
+    const get = () => { try { return JSON.parse(localStorage.getItem(LK)) || {}; } catch (e) { return {}; } };
+    const put = o => { try { localStorage.setItem(LK, JSON.stringify(o)); } catch (e) {} };
+    const T = s => (window.tbTr && window.tbTr(s)) || s;
+    async function hash(pin) {
+      const txt = 'deinTechniklehrer-board-lock|' + KEY + '|' + pin;
+      try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+      catch (e) { let h = 5381; for (let i = 0; i < txt.length; i++) h = ((h << 5) + h + txt.charCodeAt(i)) | 0; return 'f' + (h >>> 0).toString(16); }
+    }
+    const st = document.createElement('style');
+    st.textContent = 'body.blk *{pointer-events:none!important}body.blk #btnBoardLock,body.blk #btnBoardLock *,body.blk #blkDlg,body.blk #blkDlg *,body.blk .toast,body.blk #toast{pointer-events:auto!important}'
+      + '#btnBoardLock.on{background:#c62828!important;color:#fff!important;border-color:#c62828!important}#btnBoardLock:not(.on) .blk-shackle{transform:translate(4.5px,-1.5px) rotate(18deg);transform-origin:16px 10.5px}'
+      + '#blkDlg{border:0;border-radius:22px;padding:22px 22px 18px;width:min(360px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.35);background:var(--tile,#fff);color:var(--ink,#111);font:inherit}'
+      + '#blkDlg::backdrop{background:rgba(0,0,0,.45)}#blkDlg h2{margin:0 0 6px;font-size:22px}#blkDlg p{margin:6px 0;font-size:14px;color:var(--muted,#555);line-height:1.4}'
+      + '#blkDlg input{display:block;width:100%;box-sizing:border-box;margin:8px 0 2px;padding:10px 12px;font-size:28px;letter-spacing:.5em;text-align:center;border:2px solid var(--line,#ccc);border-radius:14px;background:var(--bg,#fff);color:inherit;font-variant-numeric:tabular-nums}'
+      + '#blkDlg label{display:block;font-size:13px;font-weight:700;color:var(--muted,#555);margin-top:8px}#blkDlg .blk-err{color:#c62828;font-weight:700;min-height:1.3em}'
+      + '#blkDlg .blk-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap}#blkDlg button{font:inherit;font-weight:700;font-size:15px;padding:10px 16px;border-radius:999px;border:2px solid var(--line,#ccc);background:var(--tile,#fff);color:inherit;cursor:pointer}'
+      + '#blkDlg button.pri{background:#c62828;border-color:#c62828;color:#fff}#blkDlg .blk-forgot{border:0;background:none;padding:6px 0;font-size:13px;text-decoration:underline;color:var(--muted,#555);margin-right:auto}';
+    document.head.appendChild(st);
+    const dlg = document.createElement('dialog'); dlg.id = 'blkDlg'; document.body.appendChild(dlg);
+    let toastT = 0;
+    function paint() {
+      const on = !!get().on;
+      document.body.classList.toggle('blk', on); btn.classList.toggle('on', on);
+      const l = on ? 'Board entsperren' : 'Board sperren';
+      btn.title = T(l); btn.setAttribute('aria-label', T(l)); btn.setAttribute('aria-pressed', String(on));
+    }
+    const digits = el => el.addEventListener('input', () => { el.value = el.value.replace(/\D/g, '').slice(0, 4); });
+    function openSet() {
+      dlg.innerHTML = '<h2>Board sperren</h2><p>Gesperrt lässt sich auf dem Board nichts mehr antippen, nur das Schloss oben. Timer und Fahrplan laufen weiter. Zum Entsperren brauchst du dieselbe PIN.</p>'
+        + '<label for="blkP1">PIN festlegen (4 Ziffern)</label><input id="blkP1" type="password" inputmode="numeric" maxlength="4" autocomplete="off">'
+        + '<label for="blkP2">PIN wiederholen</label><input id="blkP2" type="password" inputmode="numeric" maxlength="4" autocomplete="off">'
+        + '<div class="blk-err" id="blkErr"></div><div class="blk-row"><button type="button" id="blkNo">Abbrechen</button><button type="button" class="pri" id="blkGo">Sperren</button></div>';
+      const p1 = dlg.querySelector('#blkP1'), p2 = dlg.querySelector('#blkP2'), err = dlg.querySelector('#blkErr');
+      digits(p1); digits(p2);
+      p1.addEventListener('input', () => { if (p1.value.length === 4) p2.focus(); });
+      const go = async () => {
+        if (!/^\d{4}$/.test(p1.value)) { err.textContent = T('Bitte 4 Ziffern eingeben.'); p1.focus(); return; }
+        if (p1.value !== p2.value) { err.textContent = T('Die PINs stimmen nicht überein.'); p2.value = ''; p2.focus(); return; }
+        put({ h: await hash(p1.value), on: true }); dlg.close(); paint();
+        if (typeof toast === 'function') toast(T('Board gesperrt. Zum Entsperren oben auf das Schloss tippen.'));
+      };
+      p2.addEventListener('input', () => { if (p2.value.length === 4) go(); });
+      dlg.querySelector('#blkGo').onclick = go; dlg.querySelector('#blkNo').onclick = () => dlg.close();
+      dlg.showModal(); setTimeout(() => p1.focus(), 50);
+    }
+    function openUnlock() {
+      dlg.innerHTML = '<h2>Board entsperren</h2><p>Gib die PIN ein, mit der das Board gesperrt wurde.</p>'
+        + '<input id="blkP1" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="PIN">'
+        + '<div class="blk-err" id="blkErr"></div><div class="blk-row"><button type="button" class="blk-forgot" id="blkForgot">PIN vergessen?</button><button type="button" id="blkNo">Abbrechen</button><button type="button" class="pri" id="blkGo">Entsperren</button></div>';
+      const p1 = dlg.querySelector('#blkP1'), err = dlg.querySelector('#blkErr');
+      digits(p1);
+      const go = async () => {
+        if (!/^\d{4}$/.test(p1.value)) { err.textContent = T('Bitte 4 Ziffern eingeben.'); return; }
+        if (await hash(p1.value) !== get().h) { err.textContent = T('Falsche PIN.'); p1.value = ''; p1.focus(); return; }
+        put({}); dlg.close(); paint();
+      };
+      p1.addEventListener('input', () => { if (p1.value.length === 4) go(); });
+      dlg.querySelector('#blkGo').onclick = go; dlg.querySelector('#blkNo').onclick = () => dlg.close();
+      dlg.querySelector('#blkForgot').onclick = () => {
+        if (!confirm(T('PIN vergessen? Dann wird das Board entsperrt und ganz auf Anfang zurückgesetzt: alle Einstellungen, Fahrplan und Aufräumplan. Fortfahren?'))) return;
+        try { localStorage.removeItem(LK); localStorage.removeItem(KEY); } catch (e) {}
+        location.reload();
+      };
+      dlg.showModal(); setTimeout(() => p1.focus(), 50);
+    }
+    btn.addEventListener('click', () => { if (get().on) openUnlock(); else openSet(); });
+    // gesperrt: Tasten abfangen (außer im PIN-Fenster); Tippen ins Leere zeigt einen Hinweis
+    window.addEventListener('keydown', e => {
+      if (!document.body.classList.contains('blk') || dlg.contains(e.target)) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+    }, true);
+    document.addEventListener('click', e => {
+      if (!document.body.classList.contains('blk') || btn.contains(e.target) || dlg.contains(e.target)) return;
+      if (Date.now() - toastT > 4000 && typeof toast === 'function') { toastT = Date.now(); toast(T('Das Board ist gesperrt. Zum Entsperren oben auf das Schloss tippen.')); }
+    });
+    paint();
+  })();
   /* „Gut zu wissen“ ein- und ausklappbar, Thema oben wählbar (seit 26.11.2026, Wunsch Daniel: der Infotext war zu lang).
      Die Absätze bleiben im HTML wie bisher (<p><strong>Thema:</strong> …); das Skript baut daraus die Themenknöpfe. */
   (function gzwInit() {
@@ -3442,6 +3530,21 @@ setInterval(clock, 1000);
 const LKEY = 'techboard.lang';
 const LANGS = ['de', 'en', 'fr', 'es'];
 const D = {
+  "Board sperren": ["Lock board", "Verrouiller le tableau"],
+  "Board entsperren": ["Unlock board", "Déverrouiller le tableau"],
+  "Gesperrt lässt sich auf dem Board nichts mehr antippen, nur das Schloss oben. Timer und Fahrplan laufen weiter. Zum Entsperren brauchst du dieselbe PIN.": ["When locked, nothing on the board responds to taps except the lock at the top. Timer and plan keep running. You need the same PIN to unlock.", "Une fois verrouillé, plus rien ne réagit sur le tableau, sauf le cadenas en haut. Le minuteur et le plan continuent. Il faut le même code pour déverrouiller."],
+  "PIN festlegen (4 Ziffern)": ["Choose a PIN (4 digits)", "Choisir un code (4 chiffres)"],
+  "PIN wiederholen": ["Repeat PIN", "Répéter le code"],
+  "Sperren": ["Lock", "Verrouiller"],
+  "Entsperren": ["Unlock", "Déverrouiller"],
+  "Gib die PIN ein, mit der das Board gesperrt wurde.": ["Enter the PIN that was used to lock the board.", "Saisis le code utilisé pour verrouiller le tableau."],
+  "PIN vergessen?": ["Forgot PIN?", "Code oublié ?"],
+  "Bitte 4 Ziffern eingeben.": ["Please enter 4 digits.", "Saisis 4 chiffres."],
+  "Die PINs stimmen nicht überein.": ["The PINs do not match.", "Les codes ne correspondent pas."],
+  "Falsche PIN.": ["Wrong PIN.", "Code incorrect."],
+  "Board gesperrt. Zum Entsperren oben auf das Schloss tippen.": ["Board locked. Tap the lock at the top to unlock.", "Tableau verrouillé. Touche le cadenas en haut pour déverrouiller."],
+  "Das Board ist gesperrt. Zum Entsperren oben auf das Schloss tippen.": ["The board is locked. Tap the lock at the top to unlock.", "Le tableau est verrouillé. Touche le cadenas en haut pour déverrouiller."],
+  "PIN vergessen? Dann wird das Board entsperrt und ganz auf Anfang zurückgesetzt: alle Einstellungen, Fahrplan und Aufräumplan. Fortfahren?": ["Forgot the PIN? The board will be unlocked and fully reset: all settings, plan and tidy-up plan. Continue?", "Code oublié ? Le tableau sera déverrouillé et entièrement réinitialisé : réglages, plan et plan de rangement. Continuer ?"],
   "Grenzen der Ampel": ["Traffic light thresholds", "Seuils du feu"],
   "Gelb ab": ["Yellow from", "Jaune à partir de"],
   "Rot ab": ["Red from", "Rouge à partir de"],
@@ -3850,6 +3953,17 @@ const D = {
   'Den aktuellen Stand durch die Datei ersetzen?': ['Replace the current state with the file?', 'Remplacer l’état actuel par le fichier ?']
 };
 const ES = {
+  "Board sperren": "Bloquear el tablero",
+  "Board entsperren": "Desbloquear el tablero",
+  "Gesperrt lässt sich auf dem Board nichts mehr antippen, nur das Schloss oben. Timer und Fahrplan laufen weiter. Zum Entsperren brauchst du dieselbe PIN.": "Bloqueado, nada en el tablero responde, salvo el candado de arriba. El temporizador y el plan siguen. Para desbloquear necesitas el mismo PIN.",
+  "PIN festlegen (4 Ziffern)": "Elegir PIN (4 cifras)",
+  "Gib die PIN ein, mit der das Board gesperrt wurde.": "Introduce el PIN con el que se bloqueó el tablero.",
+  "PIN vergessen?": "¿Olvidaste el PIN?",
+  "Bitte 4 Ziffern eingeben.": "Introduce 4 cifras.",
+  "Die PINs stimmen nicht überein.": "Los PIN no coinciden.",
+  "Board gesperrt. Zum Entsperren oben auf das Schloss tippen.": "Tablero bloqueado. Toca el candado de arriba para desbloquear.",
+  "Das Board ist gesperrt. Zum Entsperren oben auf das Schloss tippen.": "El tablero está bloqueado. Toca el candado de arriba para desbloquear.",
+  "PIN vergessen? Dann wird das Board entsperrt und ganz auf Anfang zurückgesetzt: alle Einstellungen, Fahrplan und Aufräumplan. Fortfahren?": "¿Olvidaste el PIN? El tablero se desbloqueará y se reiniciará por completo: ajustes, plan y plan de recogida. ¿Continuar?",
   "Grenzen der Ampel": "Umbrales del semáforo",
   "Gelb ab": "Amarillo desde",
   "Rot ab": "Rojo desde",
